@@ -3,6 +3,31 @@ import Link from "next/link";
 import { ExternalLink, Pencil, Crown } from "lucide-react";
 import { createClient } from "@/lib/supabase/server";
 import { PLANS, type PortfolioRow } from "@/types/portfolio";
+
+const DEMO_PORTFOLIO = {
+  id: "demo",
+  slug: "demo",
+  plan: "FREE",
+  is_public: true,
+  updated_at: new Date().toISOString(),
+  content: {
+    profile: {
+      full_name: "Aissatou Diallo",
+      headline: "Développeuse Full-Stack | Conakry",
+      bio: "",
+    },
+    contacts: {
+      phone_raw: "",
+      phone_formatted: "",
+      whatsapp_number: "",
+      email: "",
+      location_text: "Dixinn, Conakry",
+    },
+    skills: ["React", "Next.js"],
+    experiences: [],
+    social_links: {},
+  },
+};
 import { signOut } from "./actions";
 import CreatePortfolio from "./CreatePortfolio";
 import UpgradeButton from "./UpgradeButton";
@@ -10,28 +35,47 @@ import UpgradeButton from "./UpgradeButton";
 export const metadata = { title: "Dashboard" };
 
 export default async function DashboardPage() {
-  const supabase = await createClient();
-  const {
-    data: { user },
-  } = await supabase.auth.getUser();
-  if (!user) redirect("/login");
+  let userEmail = "";
+  let portfolios: unknown[] | null = null;
+  let previewMode = false;
 
-  const { data: portfolios } = await supabase
-    .from("portfolios")
-    .select("id, slug, plan, is_public, updated_at, content")
-    .eq("user_id", user.id)
-    .order("updated_at", { ascending: false });
+  try {
+    const supabase = await createClient();
+    const {
+      data: { user },
+    } = await supabase.auth.getUser();
+    if (!user) redirect("/login");
+    userEmail = user.email ?? "";
+
+    const { data } = await supabase
+      .from("portfolios")
+      .select("id, slug, plan, is_public, updated_at, content")
+      .eq("user_id", user.id)
+      .order("updated_at", { ascending: false });
+    portfolios = data;
+  } catch {
+    // Supabase non configuré : aperçu de l'interface avec données démo
+    previewMode = true;
+    userEmail = "demo@guifolio.com";
+    portfolios = [DEMO_PORTFOLIO];
+  }
 
   const rootDomain = process.env.NEXT_PUBLIC_ROOT_DOMAIN ?? "guifolio.com";
 
   return (
     <main className="mx-auto max-w-5xl px-6 py-10">
+      {previewMode && (
+        <div className="mb-6 rounded-xl border border-amber-500/40 bg-amber-500/10 px-5 py-3 text-sm text-amber-200">
+          Mode aperçu — Supabase non configuré (variables d&apos;env manquantes
+          sur Vercel). Données de démonstration affichées.
+        </div>
+      )}
       <header className="flex flex-wrap items-center justify-between gap-4">
         <div>
           <h1 className="font-display text-2xl font-bold">
             Mes <span className="text-emerald-400">portfolios</span>
           </h1>
-          <p className="mt-1 text-sm text-slate-400">{user.email}</p>
+          <p className="mt-1 text-sm text-slate-400">{userEmail}</p>
         </div>
         <form action={signOut}>
           <button className="rounded-lg border border-slate-700 px-4 py-2 text-sm text-slate-300 transition hover:border-slate-500">

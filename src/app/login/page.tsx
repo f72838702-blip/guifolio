@@ -15,18 +15,25 @@ export default function LoginPage() {
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
     setState("loading");
-    const supabase = createClient();
-    const { error } = await supabase.auth.signInWithOtp({
-      email,
-      options: {
-        emailRedirectTo: `${window.location.origin}/auth/callback`,
-      },
-    });
-    if (error) {
-      setError(error.message);
+    try {
+      const supabase = createClient();
+      const { error } = await supabase.auth.signInWithOtp({
+        email,
+        options: {
+          emailRedirectTo: `${window.location.origin}/auth/callback`,
+        },
+      });
+      if (error) {
+        setError(error.message);
+        setState("error");
+      } else {
+        setState("sent");
+      }
+    } catch {
+      setError(
+        "Supabase non configuré (mode aperçu). Ajoutez les variables d'environnement sur Vercel."
+      );
       setState("error");
-    } else {
-      setState("sent");
     }
   }
 
