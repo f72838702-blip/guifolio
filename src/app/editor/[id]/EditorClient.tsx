@@ -37,9 +37,15 @@ export default function EditorClient({
     useEditorStore();
   const timer = useRef<ReturnType<typeof setTimeout> | null>(null);
   const [pub, setPub] = useState(isPublic);
+  const [showWelcome, setShowWelcome] = useState(false);
 
   useEffect(() => {
     setData(initialData);
+    // Bannière d'accueil après création (?welcome=1) — lecture côté client
+    // pour éviter le bailout Suspense de useSearchParams
+    if (new URLSearchParams(window.location.search).get("welcome") === "1") {
+      setShowWelcome(true);
+    }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
@@ -94,6 +100,26 @@ export default function EditorClient({
       <p className="mt-3 text-sm text-slate-500">
         {slug}.{rootDomain} · Plan {plan}
       </p>
+
+      {showWelcome && (
+        <div className="mt-4 rounded-xl border border-emerald-500/40 bg-emerald-500/10 p-4 text-sm">
+          <p className="font-semibold text-emerald-300">
+            🎉 Portfolio créé ! Une dernière étape : présentez-vous
+          </p>
+          <p className="mt-1 text-emerald-100/80">
+            Remplissez ci-dessous votre <strong>nom complet</strong> et votre{" "}
+            <strong>téléphone / WhatsApp</strong> — c&apos;est tout ce
+            qu&apos;il faut pour un portfolio qui convertit. La sauvegarde est
+            automatique à chaque frappe.
+          </p>
+          <button
+            onClick={() => setShowWelcome(false)}
+            className="mt-2 text-xs font-medium text-emerald-300 underline hover:text-emerald-200"
+          >
+            Compris, c&apos;est parti →
+          </button>
+        </div>
+      )}
 
       {/* Profil */}
       <section className="mt-8 space-y-4 rounded-2xl border border-slate-800 bg-slate-900/50 p-6">

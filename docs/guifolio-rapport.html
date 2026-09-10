@@ -1,0 +1,248 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<title>Guifolio — Rapport stratégique : roadmap, OSINT concurrents & fonctionnement</title>
+<style>
+  @page { size: A4; margin: 14mm 14mm 16mm 14mm; }
+  * { box-sizing: border-box; }
+  body { font-family: "Segoe UI", system-ui, sans-serif; color: #1e293b; font-size: 10.5pt; line-height: 1.55; margin: 0; }
+  h1 { font-size: 22pt; color: #064e3b; margin: 0 0 4px; }
+  h2 { font-size: 14pt; color: #065f46; border-bottom: 2px solid #10b981; padding-bottom: 4px; margin-top: 26px; page-break-after: avoid; }
+  h3 { font-size: 11.5pt; color: #0f766e; margin: 16px 0 6px; page-break-after: avoid; }
+  p { margin: 6px 0; }
+  ul, ol { margin: 6px 0 6px 0; padding-left: 22px; }
+  li { margin: 3px 0; }
+  table { border-collapse: collapse; width: 100%; margin: 10px 0; font-size: 9pt; page-break-inside: avoid; }
+  th { background: #064e3b; color: #fff; text-align: left; padding: 6px 8px; }
+  td { border: 1px solid #cbd5e1; padding: 5px 8px; vertical-align: top; }
+  tr:nth-child(even) td { background: #f0fdf4; }
+  .cover { text-align: center; padding: 120px 0 60px; }
+  .cover .logo { font-size: 34pt; font-weight: 800; color: #0f172a; }
+  .cover .logo span { color: #10b981; }
+  .cover .sub { font-size: 13pt; color: #475569; margin-top: 14px; }
+  .cover .date { margin-top: 40px; color: #64748b; font-size: 10pt; }
+  .tag { display: inline-block; background: #d1fae5; color: #065f46; border-radius: 10px; padding: 1px 9px; font-size: 8.5pt; font-weight: 600; }
+  .warn { background: #fef3c7; border-left: 4px solid #f59e0b; padding: 8px 12px; margin: 10px 0; font-size: 9.5pt; }
+  .ok { background: #d1fae5; border-left: 4px solid #10b981; padding: 8px 12px; margin: 10px 0; font-size: 9.5pt; }
+  .todo { background: #eff6ff; border-left: 4px solid #3b82f6; padding: 8px 12px; margin: 10px 0; font-size: 9.5pt; }
+  .prio { font-weight: 700; }
+  .p1 { color: #dc2626; } .p2 { color: #d97706; } .p3 { color: #059669; }
+  .srcs { font-size: 8.5pt; color: #475569; }
+  .srcs li { margin: 2px 0; }
+  .pagebreak { page-break-before: always; }
+  code { background: #f1f5f9; padding: 1px 5px; border-radius: 4px; font-size: 9pt; }
+</style>
+</head>
+<body>
+
+<div class="cover">
+  <div class="logo">Gui<span>folio</span>.com</div>
+  <div class="sub">Rapport stratégique — Roadmap restante, analyse OSINT des concurrents<br>et modèle de fonctionnement de la plateforme</div>
+  <div class="date">6 septembre 2026 · Confidentiel — usage interne · guifolio-zeta.vercel.app</div>
+</div>
+
+<div class="pagebreak"></div>
+
+<h2>1. Synthèse exécutive</h2>
+<p><strong>Guifolio</strong> transforme un CV PDF en carte de visite digitale (<code>pseudo.guifolio.com</code>) avec bouton WhatsApp, ciblant la Guinée et l'Afrique de l'Ouest, monétisé par Mobile Money (Orange Money / MTN MoMo). Le MVP est construit et déployé (Next.js 16 + Supabase + extraction IA GLM/Kimi + ISR sous-domaines wildcard).</p>
+<p><strong>Constat OSINT principal :</strong> le marché mondial du "link-in-bio / portfolio" est saturé (Linktree, Carrd, Bento, Beacons…), mais <strong>aucun acteur ne couvre spécifiquement la Guinée</strong> avec triptyque <em>IA + Mobile Money + français/WhatsApp-first</em>. En Afrique de l'Ouest, les concurrents pertinents sont SIMOON CV (CV par IA), EKAA (carte de visite digitale NFC/QR), Fenzo / AfreeLink / 2Krika (marketplaces freelance). Guifolio occupe un intersect unique : <strong>génération de portfolio par IA, hébergé sur sous-domaine, payé en GNF par OM/MTN</strong>.</p>
+
+<h2>2. Comment fonctionne une telle plateforme</h2>
+
+<h3>2.1 Architecture technique actuelle</h3>
+<ul>
+  <li><strong>Frontend/back :</strong> Next.js 16 App Router (TypeScript, Tailwind v4), hébergé Vercel Hobby (0 $). Pages publiques rendues en <em>ISR</em> (régénérées toutes les 60 s) → coût serveur quasi nul.</li>
+  <li><strong>Sous-domaines wildcard :</strong> DNS <code>*.guifolio.com</code> → le middleware Next.js détecte <code>pseudo.guifolio.com</code> et réécrit invisiblement vers <code>/p/pseudo</code>. Un seul projet Vercel sert ainsi des milliers de portfolios.</li>
+  <li><strong>Base de données :</strong> Supabase (PostgreSQL). Deux tables : <code>portfolios</code> (contenu JSONB, slug unique, plan, is_public) et <code>transactions</code>. Row Level Security : lecture publique des portfolios publics, écriture réservée au propriétaire, transactions écrites uniquement par la clé service (webhooks).</li>
+  <li><strong>Auth :</strong> magic links Supabase (pas de mot de passe à gérer, adapté à un public peu tech).</li>
+</ul>
+
+<h3>2.2 Pipeline d'extraction IA (cœur du produit)</h3>
+<ol>
+  <li>L'utilisateur uploade son CV PDF (ou colle du texte) depuis le dashboard.</li>
+  <li><code>/api/parse-cv</code> extrait le texte du PDF (<code>unpdf</code>, max 5 Mo) — route protégée par auth.</li>
+  <li>Le texte est envoyé à un LLM bon marché (GLM-4.5-Flash ou Kimi K3, API compatible OpenAI) avec un prompt d'extraction strict.</li>
+  <li>La réponse JSON est validée par Zod (schéma <code>PortfolioData</code> : profil, contacts normalisés +224 / wa.me, compétences, expériences, réseaux sociaux).</li>
+  <li>Le portfolio est pré-rempli → l'utilisateur corrige dans l'éditeur temps réel (Zustand, auto-save 1,2 s).</li>
+</ol>
+<p><strong>Coût unitaire IA :</strong> un CV ≈ 2–4k tokens → avec GLM-4.5-Flash (~0,11 $/M tokens), moins de <strong>0,001 $ par CV</strong>. Marge quasi totale.</p>
+
+<h3>2.3 Modèle économique</h3>
+<table>
+  <tr><th>Plan</th><th>Prix</th><th>Contenu</th></tr>
+  <tr><td>FREE</td><td>0 GNF</td><td>1 portfolio, sous-domaine, bouton WhatsApp, badge Guifolio (= acquisition virale gratuite)</td></tr>
+  <tr><td>PRO</td><td>50 000 GNF / an</td><td>Sans badge, import CV illimité, stats de visites, QR code carte de visite</td></tr>
+  <tr><td>VIP</td><td>120 000 GNF / an</td><td>Domaine personnalisé, thèmes premium, support prioritaire WhatsApp</td></tr>
+</table>
+<p><strong>Paiement :</strong> l'utilisateur choisit OM ou MTN, saisit son numéro → push USSD sur son téléphone → webhook signé HMAC confirme → upgrade instantané du plan. Aucun numéro de carte bancaire, aucune friction bancaire (critique en Guinée où la bancarisation est faible).</p>
+
+<h3>2.4 Boucle de croissance</h3>
+<ul>
+  <li>Chaque portfolio FREE affiche le badge « Créé avec Guifolio » → chaque visiteur est un prospect.</li>
+  <li>Le partage WhatsApp du lien <code>pseudo.guifolio.com</code> est le canal naturel (CV envoyé aux recruteurs via WhatsApp = pratique déjà établie en Guinée).</li>
+  <li>QR code sur cartes de visite papier → pont physique → digital (Pro).</li>
+</ul>
+
+<div class="pagebreak"></div>
+
+<h2>3. OSINT — Analyse des concurrents</h2>
+
+<h3>3.1 Concurrents mondiaux (link-in-bio / portfolio / one-page)</h3>
+<table>
+  <tr><th>Outil</th><th>Modèle</th><th>Prix payant</th><th>Forces</th><th>Faiblesses vs Guifolio</th></tr>
+  <tr><td><strong>Linktree</strong></td><td>Freemium</td><td>Starter 8 $/mo, Pro 15 $/mo, Premium 35 $/mo (Premium passé de 24→35 $ en 2025)</td><td>Notoriété, simplicité</td><td>Anglais, domaine custom à 35 $/mo, 12 % de commission commerce en free, aucune IA d'extraction, pas de MoMo</td></tr>
+  <tr><td><strong>Carrd</strong></td><td>Freemium</td><td>Pro Lite 9 $/an, Standard 19 $/an, Plus 49 $/an</td><td>Prix imbattable, beau design, domaine custom dès 19 $/an</td><td>Pas d'analytics natifs, pas d'IA CV, paiement carte/PayPal uniquement, tout en anglais</td></tr>
+  <tr><td><strong>Bento</strong></td><td>Freemium</td><td>Pro 5 $/mo</td><td>Grille visuelle type Notion, design premium</td><td>Positionné créateurs visuels, pas de CV/IA, pas de MoMo</td></tr>
+  <tr><td><strong>Beacons</strong></td><td>Freemium</td><td>10 / 30 / 90 $/mo</td><td>Email marketing, storefront, media kit</td><td>Free limité à 1 000 vues/mois ; trop cher & complexe pour le marché GN</td></tr>
+  <tr><td><strong>Stan Store</strong></td><td>Payant seulement</td><td>29–99 $/mo</td><td>Checkout produits digitaux excellent</td><td>Pas de free ; 29 $/mo = hors marché ouest-africain</td></tr>
+  <tr><td><strong>Bio Sites</strong> (Squarespace)</td><td>100 % gratuit</td><td>—</td><td>Gratuit, domaine custom offert</td><td>1 page par compte, pas d'IA, pas de monétisation locale</td></tr>
+  <tr><td><strong>Bio.link</strong></td><td>Freemium</td><td>0,99 $/mo</td><td>Très bon marché</td><td>Analytics faibles, pas d'IA, paiement carte</td></tr>
+  <tr><td><strong>Taplink</strong></td><td>Freemium limité</td><td>3 / 6 / 10 $/mo</td><td>Paiements & réservations intégrés, fort hors US</td><td>Free limité à 100 visiteurs/mois ; orienté Europe de l'Est</td></tr>
+  <tr><td><strong>Shorby / Komi / Hopp</strong></td><td>Payant / freemium</td><td>9–99 $/mo</td><td>Analytics, pixels, vidéo</td><td>Niches créateurs ; hors de prix pour Conakry</td></tr>
+</table>
+<p><strong>Leçon :</strong> les leaders vendent entre <strong>5 $ et 35 $/mois, en dollars, par carte bancaire, en anglais</strong>. Carrd (19 $/an) est le seul niveau de prix comparable à Guifolio (≈ 6 $/an Pro) — mais sans IA ni Mobile Money ni français. <strong>Personne ne fait « upload CV → portfolio ».</strong></p>
+
+<h3>3.2 Concurrents régionaux Afrique de l'Ouest</h3>
+<table>
+  <tr><th>Acteur</th><th>Pays</th><th>Proposition</th><th>Prix</th><th>Menace pour Guifolio</th></tr>
+  <tr><td><strong>SIMOON CV</strong></td><td>CI/SN/BF/ML/CM</td><td>Création de CV par IA en 2 min, optimisé ATS, offres d'emploi, partage recruteurs</td><td>Gratuit (modèle B2B/job board)</td><td><strong>Moyenne</strong> — le plus proche sur l'IA + CV, mais produit = PDF de CV, pas un site portfolio hébergé. Pas présent en Guinée.</td></tr>
+  <tr><td><strong>EKAA</strong></td><td>Afrique Ouest (francophone)</td><td>Réseau pro : carte de visite digitale NFC/QR, annuaire géolocalisé, vitrine, marketplace ; Mobile Money natif, WhatsApp-first, réseau d'ambassadrices (19 000 femmes entrepreneures)</td><td>N.C.</td><td><strong>Forte</strong> — chevauche la « carte de visite digitale » avec distribution terrain. Pas d'extraction CV par IA ; plus large (annuaire/marketplace) donc moins simple.</td></tr>
+  <tr><td><strong>Fenzo</strong></td><td>SN/CI</td><td>Marketplace freelance « #1 Afrique de l'Ouest », 400+ freelances vérifiés, paiement FCFA</td><td>Commission</td><td><strong>Faible</strong> — vend des missions, pas un outil d'identité. Partenaire potentiel.</td></tr>
+  <tr><td><strong>AfreeLink</strong></td><td>CM/CI/SN (+expansion)</td><td>Matching IA freelance, visio, devis, contrats droit africain, KYC</td><td>0 / 4 900 / 29 900 FCFA/mois</td><td><strong>Faible-moyenne</strong> — B2B lourd ; Guifolio est self-service à 10× moins cher.</td></tr>
+  <tr><td><strong>2Krika</strong></td><td>Côte d'Ivoire</td><td>Freelance, « réalités africaines », paiements facilités</td><td>N.C.</td><td><strong>Faible</strong> — même catégorie marketplace que Fenzo.</td></tr>
+</table>
+<div class="ok"><strong>Faille de marché confirmée :</strong> aucun acteur identifié n'est basé à Conakry ni ne couvre la Guinée. La Guinée (MTN 60 %+ du marché mobile, Orange ~30 %) est un angle mort que SIMOON CV, Fenzo et EKAA n'ont pas activé. Chariow n'a ouvert la Guinée (paiements MTN/OM en GNF) qu'en <strong>juin 2025</strong> — la fenêtre infrastructure vient littéralement de s'ouvrir.</div>
+
+<h3>3.3 Rails de paiement Mobile Money en Guinée (OSINT paiement)</h3>
+<table>
+  <tr><th>Solution</th><th>Type</th><th>Opérateurs GN</th><th>Devise</th><th>Intégration</th><th>Verdict</th></tr>
+  <tr><td><strong>Chap Chap Pay</strong></td><td>Passerelle guinéenne</td><td>OM, MTN, PayCard, Kulu, Soutra, Akiba + cartes</td><td><strong>GNF natif</strong></td><td>API REST, HMAC-SHA256, webhooks, KYC 24–48 h</td><td><span class="prio p1">Recommandé en production</span> — local, GNF, couvre tous les wallets</td></tr>
+  <tr><td><strong>Chariow</strong></td><td>E-commerce clé en main</td><td>MTN + OM auto-configurés</td><td>GNF natif</td><td>Sans code (ou code minimal)</td><td>Bien pour un lancement rapide ; Guifolio l'a déjà câblé (actuellement en mode démo faute de clé)</td></tr>
+  <tr><td><strong>LigdiCash</strong></td><td>Agrégateur 9 pays</td><td>OM Guinée (id 33), MTN Guinée (id 51)</td><td>XOF (conversion nécessaire)</td><td>API + page de redirection</td><td>Intéressant seulement pour l'expansion multi-pays UEMOA</td></tr>
+</table>
+<div class="warn"><strong>À connaître :</strong> PayDunya et CinetPay couvrent SN/CI/ML mais <strong>pas officiellement la Guinée</strong> — vérifiable avant toute expansion. L'intégration directe Orange Money API / MTN MoMo API (sans agrégateur) exige un contrat opérateur et un KYC entreprise : à prévoir à l'échelle pour réduire les commissions agrégateur (souvent 1,5–3,5 %).</div>
+
+<h3>3.4 Positionnement Guifolio (matrice)</h3>
+<table>
+  <tr><th>Critère</th><th>Linktree/Carrd</th><th>SIMOON CV</th><th>EKAA</th><th><strong>Guifolio</strong></th></tr>
+  <tr><td>Extraction CV par IA</td><td>✗</td><td>✓ (CV PDF)</td><td>✗</td><td><strong>✓ (CV → site web)</strong></td></tr>
+  <tr><td>Sous-domaine perso offert</td><td>partiel</td><td>✗</td><td>partiel</td><td><strong>✓</strong></td></tr>
+  <tr><td>Prix en GNF, Mobile Money</td><td>✗</td><td>✗</td><td>✓</td><td><strong>✓</strong></td></tr>
+  <tr><td>Français + WhatsApp-first</td><td>✗</td><td>✓</td><td>✓</td><td><strong>✓</strong></td></tr>
+  <tr><td>Basé/ciblé Guinée</td><td>✗</td><td>✗</td><td>✗</td><td><strong>✓</strong></td></tr>
+  <tr><td>Annuaire / marketplace</td><td>✗</td><td>✓ (emplois)</td><td>✓</td><td>roadmap V2</td></tr>
+</table>
+
+<div class="pagebreak"></div>
+
+<h2>4. Ce qui reste à faire — roadmap complète</h2>
+
+<h3>4.1 Blocage immédiat (sans ça, le site reste en mode aperçu)</h3>
+<div class="todo">
+<span class="prio p1">P0 — Cette semaine :</span>
+<ol>
+  <li><strong>Créer le projet Supabase</strong> → exécuter <code>supabase/schema.sql</code> → activer le provider Email (magic links).</li>
+  <li><strong>Renseigner les variables d'environnement Vercel</strong> : <code>NEXT_PUBLIC_SUPABASE_URL</code>, <code>NEXT_PUBLIC_SUPABASE_ANON_KEY</code>, <code>SUPABASE_SERVICE_ROLE_KEY</code>.</li>
+  <li><strong>Clé LLM</strong> (GLM chez Zhipu ou Kimi/Moonshot) → <code>LLM_API_KEY</code> + <code>LLM_BASE_URL</code>/<code>LLM_MODEL</code>. Sans clé, l'extraction reste en mode mock.</li>
+  <li><strong>Activer l'auto-deploy Git→Vercel</strong> (le premier push n'a pas déclenché de build ; brancher GitHub dans le dashboard Vercel).</li>
+</ol>
+</div>
+
+<h3>4.2 Paiements en production</h3>
+<div class="todo">
+<span class="prio p1">P1 :</span>
+<ol>
+  <li><strong>KYC marchand</strong> chez Chap Chap Pay (registre de commerce + CNI, validation 24–48 h) <em>ou</em> compte créateur Chariow.</li>
+  <li>Brancher <code>/api/payments/initiate</code> sur l'API choisie (le code existe, mode démo actuel = succès simulé).</li>
+  <li>Configurer l'URL du webhook <code>/api/payments/webhook</code> + secret HMAC côté agrégateur.</li>
+  <li>Tester en conditions réelles avec son propre numéro OM/MTN (petit montant).</li>
+</ol>
+</div>
+
+<h3>4.3 Domaine & distribution</h3>
+<div class="todo">
+<span class="prio p2">P1–P2 :</span>
+<ol>
+  <li><strong>Acheter guifolio.com</strong> (~10–15 $/an) et configurer le <strong>DNS wildcard</strong> <code>*.guifolio.com</code> dans Vercel.</li>
+  <li>Créer la page de destination du badge « Créé avec Guifolio » (viral loop).</li>
+  <li>OG images dynamiques par portfolio (<code>opengraph-image</code> Next.js) pour de beaux aperçus WhatsApp/Facebook — <em>levier viral majeur.</em></li>
+</ol>
+</div>
+
+<h3>4.4 Produit — features promises par les plans</h3>
+<div class="todo">
+<span class="prio p2">P2 (débloquer la valeur PRO/VIP) :</span>
+<ul>
+  <li><strong>QR code</strong> de la page (package <code>qrcode</code>, déjà fait dans waraba-basket) — plan PRO.</li>
+  <li><strong>Compteur de visites</strong> (table <code>page_views</code> ou Simple Analytics/Plausible) — plan PRO.</li>
+  <li><strong>Upload avatar</strong> vers Supabase Storage (au lieu d'URL manuelle).</li>
+  <li><strong>Thèmes</strong> (2–3 variantes : light, gold, minimal) — plan VIP.</li>
+  <li><strong>Domaine custom VIP</strong> : champ <code>custom_domain</code> + doc utilisateur (Vercel domains API).</li>
+  <li>Galerie photos / réalisations, CV PDF téléchargeable généré depuis les données, bouton « Partager » natif, formulaire de contact → message WhatsApp pré-rempli.</li>
+</ul>
+</div>
+
+<h3>4.5 Robustesse & conformité</h3>
+<div class="todo">
+<span class="prio p2">P2 :</span>
+<ul>
+  <li><strong>Rate limiting</strong> sur <code>/api/parse-cv</code> (coût LLM) — ex. 10 extractions/jour/user (Upstash Ratelimit ou champ compteur).</li>
+  <li>Validation côté LLM : retry 1 fois si JSON invalide, timeout 30 s.</li>
+  <li>Pages légales : mentions légales, politique de confidentialité (données personnelles de CV !), CGV pour les paiements.</li>
+  <li>Migration <code>middleware.ts</code> → convention <code>proxy</code> (Next 16) : <code>npx @next/codemod middleware-to-proxy</code>.</li>
+  <li>Emails transactionnels (confirmation d'upgrade) via Supabase Auth templates ou Resend.</li>
+  <li>Monitoring : Vercel Analytics + Sentry (plan gratuit).</li>
+</ul>
+</div>
+
+<h3>4.6 Go-to-market Guinée</h3>
+<div class="todo">
+<span class="prio p3">P3 :</span>
+<ul>
+  <li>Cibler d'abord : étudiants en fin de cycle (UGLC, ESMT, universités Conakry), jeunes diplômés, freelances, commerçants Instagram/WhatsApp Business.</li>
+  <li>Distribution : groupes WhatsApp/Facebook d'emploi, ambassadeurs campus (modèle EKAA validé par OSINT), démo dans les incubateurs (Sabou Hub, etc.).</li>
+  <li>Offre lancement : Pro à 25 000 GNF les 3 premiers mois.</li>
+  <li>Contenu : tutos vidéo courts « Votre CV devient un site web en 2 min » (TikTok/Instagram, français).</li>
+  <li>Partenariats B2B : écoles (pack classe entière), cabinets RH, Fenzo/AfreeLink comme canal.</li>
+</ul>
+</div>
+
+<h3>4.7 Roadmap condensée</h3>
+<table>
+  <tr><th>Horizon</th><th>Objectifs</th><th>KPI</th></tr>
+  <tr><td><strong>Semaine 1–2</strong></td><td>Supabase + clé LLM branchées, vrai compte testé de bout en bout</td><td>1er portfolio réel en ligne</td></tr>
+  <tr><td><strong>Mois 1</strong></td><td>Domaine + wildcard, paiement live (Chap Chap Pay/Chariow), QR code, OG images</td><td>50 portfolios créés, 1er paiement</td></tr>
+  <tr><td><strong>Mois 2–3</strong></td><td>Stats visites, thèmes VIP, rate limiting, pages légales</td><td>500 portfolios, 5 % conversion payante</td></tr>
+  <tr><td><strong>Mois 3–6</strong></td><td>Annuaire public des talents (SEO guinéen), expansion CI/SN via LigdiCash, appli PWA</td><td>2 000+ portfolios, expansion multi-pays</td></tr>
+</table>
+
+<div class="pagebreak"></div>
+
+<h2>5. Risques & vigilances</h2>
+<ul>
+  <li><strong>Dépendance agrégateur :</strong> commissions + disponibilité OM/MTN ; mitiger plus tard par contrats opérateurs directs.</li>
+  <li><strong>Arrivée d'un concurrent régional</strong> (SIMOON CV pourrait ajouter le portfolio web ; EKAA l'IA) — la vitesse d'occupation du marché guinéen est l'avantage défendable.</li>
+  <li><strong>Données personnelles :</strong> le contenu de CV est sensible — is_public par défaut, droit à l'effacement, mentions légales obligatoires.</li>
+  <li><strong>Pouvoir d'achat :</strong> 50 000 GNF/an ≈ 6 $ — juste au-dessus du prix psychologique ; rester flexible (promos, plan mensuel 5 000 GNF à tester).</li>
+  <li><strong>Coût LLM :</strong> négligeable par CV, mais protéger l'endpoint (rate limit + auth) contre l'abus.</li>
+</ul>
+
+<h2>6. Sources (OSINT)</h2>
+<ul class="srcs">
+  <li>Shelfy — The Best Link in Bio Tool: Complete Comparison (2026) : shelfy.today/blog/best-link-in-bio-tool</li>
+  <li>Popout — Linktree vs Carrd vs Beacons.ai (2026) : popout.page/blog/linktree-vs-carrd-vs-beaconsai-2026</li>
+  <li>linkboo — The best link-in-bio tools, compared honestly (2026) : link.boo/guides/best-link-in-bio</li>
+  <li>Shelfy — Linktree vs Carrd 2026 : shelfy.today/blog/linktree-vs-carrd</li>
+  <li>UniLink — Bento.me vs Linktree (2026) : unil.ink/blog/bento-vs-linktree-2026</li>
+  <li>Carrd — Plans Pro officiels : carrd.co/docs/pro/plans ; carrd.co/pro ; smartbiztools.io/carrd-pricing</li>
+  <li>Chap Chap Pay — Guide d'intégration : chapchappay.com/guide</li>
+  <li>LigdiCash — Opérateurs supportés : developers.ligdicash.com/reference/operateurs-supportes</li>
+  <li>Chariow — Changelog Guinée : roadmap.chariow.com ; hub.chariow.com (annonce juin 2025)</li>
+  <li>Fenzo : fenzo.org · AfreeLink : afreelink.tech · 2Krika : 2krika.com · SIMOON CV : simoon-cv.com · EKAA : e-kaa.com</li>
+</ul>
+
+<p style="margin-top:30px; text-align:center; color:#94a3b8; font-size:8.5pt;">Guifolio.com — Rapport interne généré le 06/09/2026 · Données de prix vérifiées sur sources publiques (2026) — à re-vérifier avant décision commerciale.</p>
+
+</body>
+</html>
