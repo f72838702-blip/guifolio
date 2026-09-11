@@ -52,6 +52,10 @@ export async function extractPortfolioFromText(
     body: JSON.stringify({
       model,
       temperature: 0.1,
+      // Économie : réflexion minimale (facturée en tokens de sortie)
+      // + plafond de sortie pour éviter tout dérapage de facturation
+      reasoning_effort: "low",
+      max_tokens: 3000,
       messages: [
         { role: "system", content: EXTRACTION_PROMPT },
         { role: "user", content: cvText.slice(0, 16_000) },
