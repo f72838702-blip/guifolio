@@ -16,9 +16,13 @@ export async function middleware(req: NextRequest) {
   if (host.endsWith(`.${ROOT_DOMAIN}`)) {
     const sub = host.replace(`.${ROOT_DOMAIN}`, "");
     if (!RESERVED.has(sub)) {
-      // /carte sur le sous-domaine → carte de visite digitale
+      // /carte → carte de visite · /cv → CV PDF
       if (url.pathname === "/carte") {
         url.pathname = `/c/${sub}`;
+        return NextResponse.rewrite(url);
+      }
+      if (url.pathname === "/cv") {
+        url.pathname = `/cv/${sub}`;
         return NextResponse.rewrite(url);
       }
       url.pathname = `/p/${sub}${url.pathname === "/" ? "" : url.pathname}`;
@@ -31,6 +35,10 @@ export async function middleware(req: NextRequest) {
     if (sub !== "lvh" && !RESERVED.has(sub)) {
       if (url.pathname === "/carte") {
         url.pathname = `/c/${sub}`;
+        return NextResponse.rewrite(url);
+      }
+      if (url.pathname === "/cv") {
+        url.pathname = `/cv/${sub}`;
         return NextResponse.rewrite(url);
       }
       url.pathname = `/p/${sub}${url.pathname === "/" ? "" : url.pathname}`;

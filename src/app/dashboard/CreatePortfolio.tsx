@@ -91,6 +91,11 @@ export default function CreatePortfolio() {
           Créer
         </button>
       </div>
+      <p className="mt-3 text-xs text-slate-500">
+        Pas de CV ? Aucun souci 🙂 — remplissez simplement vos infos dans
+        l&apos;éditeur : votre portfolio sera créé <strong>et</strong> vous pourrez
+        télécharger un CV professionnel en PDF, adapté à votre profil.
+      </p>
       {status && <p className="mt-3 text-sm text-emerald-300">{status}</p>}
       {error && <p className="mt-3 text-sm text-red-400">{error}</p>}
     </form>

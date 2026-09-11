@@ -12,6 +12,7 @@ import {
   Eye,
   EyeOff,
   CreditCard,
+  FileText,
 } from "lucide-react";
 import { useEditorStore } from "@/stores/editor";
 import type { Plan, PortfolioData } from "@/types/portfolio";
@@ -93,6 +94,13 @@ export default function EditorClient({
             {pub ? <Eye className="size-3.5" /> : <EyeOff className="size-3.5" />}
             {pub ? "Public" : "Privé"}
           </button>
+          <Link
+            href={`/cv/${slug}`}
+            target="_blank"
+            className="inline-flex items-center gap-1.5 rounded-lg border border-slate-700 px-3 py-1.5 text-xs text-slate-300 hover:border-slate-500"
+          >
+            <FileText className="size-3.5" /> Mon CV PDF
+          </Link>
           <Link
             href={`/p/${slug}`}
             target="_blank"

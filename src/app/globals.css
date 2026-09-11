@@ -8,3 +8,19 @@
 ::selection {
   background: rgb(16 185 129 / 0.35);
 }
+
+/* — Impression CV (page /cv/[slug]) — */
+.no-print {
+}
+@media print {
+  .no-print {
+    display: none !important;
+  }
+  body {
+    background: white !important;
+  }
+}
+@page {
+  size: A4;
+  margin: 12mm;
+}

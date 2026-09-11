@@ -6,6 +6,7 @@ import {
   Globe,
   Briefcase,
   CreditCard,
+  Download,
 } from "lucide-react";
 import type { PortfolioData, Plan } from "@/types/portfolio";
 
@@ -77,12 +78,18 @@ export default function PortfolioView({
             <MapPin className="size-3.5" /> {contacts.location_text}
           </p>
         )}
-        <div className="mt-4">
+        <div className="mt-4 flex flex-wrap justify-center gap-2.5">
           <a
             href={`/c/${slug}`}
             className="inline-flex items-center gap-1.5 rounded-full border border-emerald-500/40 bg-emerald-500/10 px-4 py-1.5 text-xs font-medium text-emerald-300 transition hover:bg-emerald-500/20"
           >
             <CreditCard className="size-3.5" /> Ma carte de visite
+          </a>
+          <a
+            href={`/cv/${slug}`}
+            className="inline-flex items-center gap-1.5 rounded-full border border-slate-700 bg-slate-900/60 px-4 py-1.5 text-xs font-medium text-slate-300 transition hover:border-slate-500"
+          >
+            <Download className="size-3.5" /> Télécharger mon CV (PDF)
           </a>
         </div>
       </header>
