@@ -17,6 +17,7 @@ import { useEditorStore } from "@/stores/editor";
 import type { Plan, PortfolioData } from "@/types/portfolio";
 import { cardThemes } from "@/types/portfolio";
 import { cardThemeStyles } from "@/lib/cardThemes";
+import AvatarUpload from "@/components/AvatarUpload";
 import { updatePortfolioContent, togglePublic } from "@/app/dashboard/actions";
 
 const inputCls =
@@ -25,12 +26,14 @@ const labelCls = "mb-1 block text-xs font-medium text-slate-400";
 
 export default function EditorClient({
   id,
+  userId,
   slug,
   plan,
   isPublic,
   initialData,
 }: {
   id: string;
+  userId: string;
   slug: string;
   plan: Plan;
   isPublic: boolean;
@@ -154,17 +157,15 @@ export default function EditorClient({
             onChange={(e) => patchProfile({ bio: e.target.value })}
           />
         </label>
-        <label className="block">
-          <span className={labelCls}>URL photo de profil</span>
-          <input
-            className={inputCls}
-            value={data.profile.avatar_url ?? ""}
-            onChange={(e) =>
-              patchProfile({ avatar_url: e.target.value || undefined })
-            }
-            placeholder="https://…"
+        <div>
+          <span className={labelCls}>Photo de profil</span>
+          <AvatarUpload
+            userId={userId}
+            currentUrl={data.profile.avatar_url}
+            onUploaded={(url) => patchProfile({ avatar_url: url })}
+            onRemoved={() => patchProfile({ avatar_url: undefined })}
           />
-        </label>
+        </div>
       </section>
 
       {/* Contacts */}

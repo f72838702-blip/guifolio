@@ -31,6 +31,7 @@ export default async function EditorPage({
   return (
     <EditorClient
       id={row.id}
+      userId={user.id}
       slug={row.slug}
       plan={row.plan}
       isPublic={row.is_public}
