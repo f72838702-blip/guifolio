@@ -1,5 +1,15 @@
 import { z } from "zod";
 
+export const cardThemes = [
+  "emeraude",
+  "nuit",
+  "guinee",
+  "sahel",
+  "ocean",
+  "royal",
+] as const;
+export type CardTheme = (typeof cardThemes)[number];
+
 export const portfolioDataSchema = z.object({
   profile: z.object({
     full_name: z.string().default(""),
@@ -33,6 +43,12 @@ export const portfolioDataSchema = z.object({
       website: z.string().optional(),
     })
     .default({}),
+  card: z
+    .object({
+      theme: z.enum(cardThemes).default("emeraude"),
+      show_portfolio: z.boolean().default(true),
+    })
+    .default({ theme: "emeraude", show_portfolio: true }),
 });
 
 export type PortfolioData = z.infer<typeof portfolioDataSchema>;
@@ -49,6 +65,7 @@ export const emptyPortfolioData: PortfolioData = {
   skills: [],
   experiences: [],
   social_links: {},
+  card: { theme: "emeraude", show_portfolio: true },
 };
 
 export type Plan = "FREE" | "PRO" | "VIP";

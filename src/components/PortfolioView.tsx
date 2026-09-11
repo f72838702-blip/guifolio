@@ -5,6 +5,7 @@ import {
   MessageCircle,
   Globe,
   Briefcase,
+  CreditCard,
 } from "lucide-react";
 import type { PortfolioData, Plan } from "@/types/portfolio";
 
@@ -76,6 +77,14 @@ export default function PortfolioView({
             <MapPin className="size-3.5" /> {contacts.location_text}
           </p>
         )}
+        <div className="mt-4">
+          <a
+            href={`/c/${slug}`}
+            className="inline-flex items-center gap-1.5 rounded-full border border-emerald-500/40 bg-emerald-500/10 px-4 py-1.5 text-xs font-medium text-emerald-300 transition hover:bg-emerald-500/20"
+          >
+            <CreditCard className="size-3.5" /> Ma carte de visite
+          </a>
+        </div>
       </header>
 
       {/* CTA contact */}

@@ -12,6 +12,7 @@ type EditorStore = {
   patch: (partial: Partial<PortfolioData>) => void;
   patchProfile: (partial: Partial<PortfolioData["profile"]>) => void;
   patchContacts: (partial: Partial<PortfolioData["contacts"]>) => void;
+  patchCard: (partial: Partial<PortfolioData["card"]>) => void;
   setSaveState: (s: SaveState) => void;
 };
 
@@ -37,6 +38,15 @@ export const useEditorStore = create<EditorStore>((set) => ({
       s.data
         ? {
             data: { ...s.data, contacts: { ...s.data.contacts, ...partial } },
+            saveState: "dirty",
+          }
+        : s
+    ),
+  patchCard: (partial) =>
+    set((s) =>
+      s.data
+        ? {
+            data: { ...s.data, card: { ...s.data.card, ...partial } },
             saveState: "dirty",
           }
         : s

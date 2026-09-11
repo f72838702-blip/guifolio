@@ -11,9 +11,12 @@ import {
   Trash2,
   Eye,
   EyeOff,
+  CreditCard,
 } from "lucide-react";
 import { useEditorStore } from "@/stores/editor";
 import type { Plan, PortfolioData } from "@/types/portfolio";
+import { cardThemes } from "@/types/portfolio";
+import { cardThemeStyles } from "@/lib/cardThemes";
 import { updatePortfolioContent, togglePublic } from "@/app/dashboard/actions";
 
 const inputCls =
@@ -33,7 +36,7 @@ export default function EditorClient({
   isPublic: boolean;
   initialData: PortfolioData;
 }) {
-  const { data, saveState, setData, patchProfile, patchContacts, patch, setSaveState } =
+  const { data, saveState, setData, patchProfile, patchContacts, patchCard, patch, setSaveState } =
     useEditorStore();
   const timer = useRef<ReturnType<typeof setTimeout> | null>(null);
   const [pub, setPub] = useState(isPublic);
@@ -211,6 +214,62 @@ export default function EditorClient({
             />
           </label>
         </div>
+      </section>
+
+      {/* Carte de visite */}
+      <section className="mt-6 space-y-4 rounded-2xl border border-emerald-500/30 bg-slate-900/50 p-6">
+        <div className="flex flex-wrap items-center justify-between gap-2">
+          <h2 className="flex items-center gap-2 font-display font-semibold">
+            <CreditCard className="size-5 text-emerald-400" />
+            Carte de visite digitale
+          </h2>
+          <Link
+            href={`/c/${slug}`}
+            target="_blank"
+            className="inline-flex items-center gap-1.5 rounded-lg bg-emerald-500/10 px-3 py-1.5 text-xs font-medium text-emerald-300 hover:bg-emerald-500/20"
+          >
+            Aperçu <ExternalLink className="size-3" />
+          </Link>
+        </div>
+        <p className="text-xs text-slate-500">
+          Votre carte reprend automatiquement vos infos Profil & Contacts ci-dessus
+          — avec QR code, boutons WhatsApp/Appel et ajout aux contacts.
+          Choisissez un design :
+        </p>
+        <div className="grid grid-cols-2 gap-3 sm:grid-cols-3">
+          {cardThemes.map((theme) => {
+            const t = cardThemeStyles[theme];
+            const active = data.card.theme === theme;
+            return (
+              <button
+                key={theme}
+                type="button"
+                onClick={() => patchCard({ theme })}
+                className={`group rounded-xl border p-2 text-left transition ${
+                  active
+                    ? "border-emerald-500 bg-emerald-500/10 ring-1 ring-emerald-500"
+                    : "border-slate-700 hover:border-slate-500"
+                }`}
+              >
+                <div className={`h-14 w-full rounded-lg ${t.swatch}`} />
+                <p className="mt-1.5 flex items-center justify-between text-xs font-medium">
+                  {t.label}
+                  {active && <Check className="size-3.5 text-emerald-400" />}
+                </p>
+                <p className="text-[10px] text-slate-500">{t.description}</p>
+              </button>
+            );
+          })}
+        </div>
+        <label className="flex items-center gap-2.5 text-sm text-slate-300">
+          <input
+            type="checkbox"
+            checked={data.card.show_portfolio}
+            onChange={(e) => patchCard({ show_portfolio: e.target.checked })}
+            className="size-4 accent-emerald-500"
+          />
+          Afficher le lien « Voir le portfolio complet » sur la carte
+        </label>
       </section>
 
       {/* Compétences */}

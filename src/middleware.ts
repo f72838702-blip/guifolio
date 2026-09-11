@@ -16,6 +16,11 @@ export async function middleware(req: NextRequest) {
   if (host.endsWith(`.${ROOT_DOMAIN}`)) {
     const sub = host.replace(`.${ROOT_DOMAIN}`, "");
     if (!RESERVED.has(sub)) {
+      // /carte sur le sous-domaine → carte de visite digitale
+      if (url.pathname === "/carte") {
+        url.pathname = `/c/${sub}`;
+        return NextResponse.rewrite(url);
+      }
       url.pathname = `/p/${sub}${url.pathname === "/" ? "" : url.pathname}`;
       return NextResponse.rewrite(url);
     }
@@ -24,6 +29,10 @@ export async function middleware(req: NextRequest) {
   if (host.includes("lvh.me")) {
     const sub = host.split(".")[0];
     if (sub !== "lvh" && !RESERVED.has(sub)) {
+      if (url.pathname === "/carte") {
+        url.pathname = `/c/${sub}`;
+        return NextResponse.rewrite(url);
+      }
       url.pathname = `/p/${sub}${url.pathname === "/" ? "" : url.pathname}`;
       return NextResponse.rewrite(url);
     }
