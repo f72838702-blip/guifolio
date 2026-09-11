@@ -35,8 +35,8 @@ export async function extractPortfolioFromText(
   cvText: string
 ): Promise<PortfolioData> {
   const apiKey = process.env.LLM_API_KEY;
-  const baseUrl = process.env.LLM_BASE_URL ?? "https://open.bigmodel.cn/api/paas/v4";
-  const model = process.env.LLM_MODEL ?? "glm-4.5-flash";
+  const baseUrl = process.env.LLM_BASE_URL ?? "https://api.z.ai/api/paas/v4";
+  const model = process.env.LLM_MODEL ?? "glm-5.3-flash";
 
   // Mode mock si pas de clé : extraction regex basique pour développer l'UI
   if (!apiKey) {
