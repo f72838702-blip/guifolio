@@ -90,7 +90,7 @@ function mockExtraction(text: string): PortfolioData {
     profile: {
       full_name: fullName,
       headline,
-      bio: `[MOCK — configurez LLM_API_KEY pour l'extraction IA] ${headline || fullName}`,
+      bio: `[MOCK — configurez LLM_API_KEY pour l'extraction automatique] ${headline || fullName}`,
     },
     contacts: {
       phone_raw: phoneMatch?.[0]?.trim() ?? "",

@@ -29,7 +29,7 @@ export default function CreatePortfolio() {
 
     const file = fileRef.current?.files?.[0];
     if (file) {
-      setStatus("Extraction IA du CV (quelques secondes)…");
+      setStatus("Lecture de votre CV (quelques secondes)…");
       const form = new FormData();
       form.append("file", file);
       const res = await fetch("/api/parse-cv", { method: "POST", body: form });
@@ -51,7 +51,7 @@ export default function CreatePortfolio() {
     >
       <h2 className="flex items-center gap-2 font-display font-semibold">
         <Sparkles className="size-5 text-emerald-400" />
-        Nouveau portfolio — importez votre CV, l&apos;IA fait le reste
+        Nouveau portfolio — importez votre CV, on fait le reste
       </h2>
       <div className="mt-4 flex flex-col gap-3 sm:flex-row">
         <div className="flex flex-1 items-center rounded-lg border border-slate-700 bg-slate-950 px-4 focus-within:border-emerald-500">

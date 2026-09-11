@@ -101,7 +101,7 @@ export const PLANS: Record<
     features: [
       "Tout Gratuit",
       "Sans badge Guifolio",
-      "Import CV PDF illimité (IA)",
+      "Import CV PDF illimité, rempli automatiquement",
       "Statistiques de visites",
       "QR code carte de visite",
     ],

@@ -45,7 +45,7 @@ export default function LandingPage() {
           className="pointer-events-none absolute -top-40 left-1/2 h-150 w-250 -translate-x-1/2 rounded-full bg-emerald-500/15 blur-3xl"
         />
         <span className="inline-flex items-center gap-2 rounded-full border border-emerald-500/30 bg-emerald-500/10 px-4 py-1.5 text-xs font-medium text-emerald-300">
-          <Sparkles className="size-3.5" /> Propulsé par l&apos;IA — fait pour la
+          <Sparkles className="size-3.5" /> Simple et rapide — fait pour la
           Guinée 🇬🇳
         </span>
         <h1 className="mx-auto mt-6 max-w-3xl font-display text-4xl font-bold leading-tight tracking-tight sm:text-6xl">
@@ -56,8 +56,8 @@ export default function LandingPage() {
           en 2 minutes
         </h1>
         <p className="mx-auto mt-6 max-w-xl text-lg text-slate-400">
-          Uploadez votre CV PDF, notre IA en extrait l&apos;essentiel et génère
-          un portfolio moderne sur{" "}
+          Envoyez votre CV PDF, on s&apos;occupe de tout : votre portfolio
+          moderne est généré automatiquement sur{" "}
           <span className="text-emerald-300">vous.guifolio.com</span> — avec
           bouton WhatsApp direct.
         </p>
@@ -80,8 +80,8 @@ export default function LandingPage() {
         {[
           {
             icon: FileText,
-            title: "Import CV par IA",
-            desc: "PDF ou texte brut — l'IA extrait nom, compétences, expériences et contacts en JSON structuré.",
+            title: "Import CV automatique",
+            desc: "PDF ou texte brut — votre nom, vos compétences, vos expériences et vos contacts sont détectés et remplis automatiquement.",
           },
           {
             icon: Globe,
