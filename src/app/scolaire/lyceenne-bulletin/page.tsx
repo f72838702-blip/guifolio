@@ -28,7 +28,7 @@ const student: StudentInfo = {
   matricule: "L2O-2025-03112",
   schoolYear: "2025-2026",
   cardNumber: "CS-2026-02286",
-  // photoUrl: ajouté quand la photo est fournie
+  photoUrl: "/scolaire/eleve-lyceenne.jpg",
 };
 
 /* Option Sciences Expérimentales — matières et coefficients

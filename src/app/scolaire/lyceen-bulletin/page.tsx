@@ -28,7 +28,7 @@ const student: StudentInfo = {
   matricule: "AST-2025-08471",
   schoolYear: "2025-2026",
   cardNumber: "CS-2026-01137",
-  // photoUrl: ajouté quand la photo est fournie
+  photoUrl: "/scolaire/eleve-lyceen.jpg",
 };
 
 /* Option Sciences Expérimentales — matières et coefficients
