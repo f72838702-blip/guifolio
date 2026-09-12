@@ -8,6 +8,23 @@ export const maxDuration = 60; // Vercel Hobby : jusqu'à 60s
 const MAX_PDF_BYTES = 5 * 1024 * 1024; // 5 Mo
 const MAX_TEXT_CHARS = 30_000;
 
+// Rate limit simple en mémoire (par instance serverless) :
+// 10 extractions / heure / utilisateur — protège le budget LLM.
+const RL_WINDOW_MS = 60 * 60 * 1000;
+const RL_MAX = 10;
+const rlBuckets = new Map<string, { count: number; resetAt: number }>();
+
+function rateLimited(userId: string): boolean {
+  const now = Date.now();
+  const bucket = rlBuckets.get(userId);
+  if (!bucket || bucket.resetAt < now) {
+    rlBuckets.set(userId, { count: 1, resetAt: now + RL_WINDOW_MS });
+    return false;
+  }
+  bucket.count += 1;
+  return bucket.count > RL_MAX;
+}
+
 export async function POST(req: NextRequest) {
   // Auth obligatoire : l'extraction coûte des tokens LLM
   const supabase = await createClient();
@@ -16,6 +33,12 @@ export async function POST(req: NextRequest) {
   } = await supabase.auth.getUser();
   if (!user) {
     return NextResponse.json({ error: "Non authentifié" }, { status: 401 });
+  }
+  if (rateLimited(user.id)) {
+    return NextResponse.json(
+      { error: "Trop de tentatives — réessayez dans une heure" },
+      { status: 429 }
+    );
   }
 
   try {
