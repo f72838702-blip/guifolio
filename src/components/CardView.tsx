@@ -1,9 +1,21 @@
 import Link from "next/link";
-import { Phone, Mail, MapPin, Sparkles, Printer } from "lucide-react";
+import {
+  Phone,
+  Mail,
+  MapPin,
+  Sparkles,
+  Printer,
+  MessageCircle,
+} from "lucide-react";
 import type { Plan, PortfolioData } from "@/types/portfolio";
 import { cardThemeStyles } from "@/lib/cardThemes";
 import CardActions from "./CardActions";
 
+/**
+ * Carte de visite digitale — badge d'accréditation premium vertical
+ * (bandeau dégradé + photo à double bordure + tuiles contact + QR encadré),
+ * décliné dans les 6 thèmes de cardThemes.
+ */
 export default function CardView({
   data,
   slug,
@@ -22,127 +34,223 @@ export default function CardView({
   const whatsapp = contacts.whatsapp_number.replace(/\D/g, "");
   const phone = contacts.phone_formatted.replace(/[\s.]/g, "");
   const mapsQuery = encodeURIComponent(contacts.location_text);
+  const initials =
+    profile.full_name
+      .split(/\s+/)
+      .filter(Boolean)
+      .slice(0, 2)
+      .map((w) => w[0]?.toUpperCase())
+      .join("") || "GF";
+
+  // Tuiles de contact façon badge (style grille stats)
+  const tiles = [
+    whatsapp
+      ? {
+          href: `https://wa.me/${whatsapp}`,
+          icon: MessageCircle,
+          label: "WhatsApp",
+          value: `+${whatsapp}`,
+          external: true,
+        }
+      : null,
+    phone
+      ? {
+          href: `tel:${phone}`,
+          icon: Phone,
+          label: "Téléphone",
+          value: contacts.phone_formatted,
+          external: false,
+        }
+      : null,
+    contacts.email
+      ? {
+          href: `mailto:${contacts.email}`,
+          icon: Mail,
+          label: "Email",
+          value: contacts.email,
+          external: false,
+        }
+      : null,
+    contacts.location_text
+      ? {
+          href: `https://maps.google.com/?q=${mapsQuery}`,
+          icon: MapPin,
+          label: "Adresse",
+          value: contacts.location_text,
+          external: true,
+        }
+      : null,
+  ].filter(Boolean) as {
+    href: string;
+    icon: typeof Phone;
+    label: string;
+    value: string;
+    external: boolean;
+  }[];
 
   return (
     <main
       className={`flex min-h-dvh flex-col items-center justify-center px-4 py-10 ${t.page}`}
     >
+      {/* ===== Badge premium ===== */}
       <div
-        className={`w-full max-w-sm rounded-3xl p-7 shadow-2xl ${t.card}`}
+        className={`w-full max-w-sm overflow-hidden rounded-[1.75rem] border-2 shadow-2xl ${t.frame} ${t.card}`}
       >
-        {/* Identité */}
-        <div className="flex flex-col items-center text-center">
+        {/* Bandeau dégradé */}
+        <div
+          className={`relative flex h-24 flex-col items-center justify-center overflow-hidden ${t.band}`}
+        >
+          {/* Filigrane initiales géantes */}
+          <span
+            className={`pointer-events-none absolute inset-0 flex items-center justify-center font-display text-7xl font-black opacity-10 ${t.bandText}`}
+            aria-hidden
+          >
+            {initials}
+          </span>
+          <p
+            className={`text-[10px] font-bold uppercase tracking-[0.35em] ${t.bandText}`}
+          >
+            Guifolio
+          </p>
+          <p className={`text-xs font-medium opacity-90 ${t.bandText}`}>
+            Carte professionnelle digitale
+          </p>
+        </div>
+
+        {/* Photo : chevauche le bandeau, double bordure blanche + accent */}
+        <div className="relative -mt-12 flex justify-center">
           {profile.avatar_url ? (
             // eslint-disable-next-line @next/next/no-img-element
             <img
               src={profile.avatar_url}
               alt={profile.full_name}
-              className={`size-24 rounded-full border-2 object-cover ${t.divider}`}
+              className={`size-24 rounded-full border-4 border-white object-cover shadow-lg ring-2 ${t.ring}`}
             />
           ) : (
             <div
-              className={`flex size-24 items-center justify-center rounded-full border-2 text-3xl font-bold ${t.divider} ${t.headline}`}
+              className={`flex size-24 items-center justify-center rounded-full border-4 border-white font-display text-2xl font-bold shadow-lg ring-2 ${t.ring} ${t.card} ${t.headline}`}
             >
-              {profile.full_name
-                .split(/\s+/)
-                .filter(Boolean)
-                .slice(0, 2)
-                .map((w) => w[0]?.toUpperCase())
-                .join("") || "?"}
+              {initials}
             </div>
           )}
-          <h1 className={`mt-4 font-display text-2xl font-bold ${t.name}`}>
+        </div>
+
+        {/* Identité */}
+        <div className="px-7 pb-7 pt-4 text-center">
+          <h1
+            className={`font-display text-xl font-extrabold uppercase tracking-wide ${t.name}`}
+          >
             {profile.full_name || "Sans nom"}
           </h1>
           {profile.headline && (
-            <p className={`mt-1 text-sm ${t.headline}`}>{profile.headline}</p>
+            <p className={`mt-1 text-sm font-semibold ${t.headline}`}>
+              {profile.headline}
+            </p>
           )}
           {contacts.location_text && (
-            <p className={`mt-1 flex items-center gap-1 text-xs ${t.text}`}>
+            <p
+              className={`mt-1.5 flex items-center justify-center gap-1 text-xs ${t.text}`}
+            >
               <MapPin className="size-3" />
               {contacts.location_text}
             </p>
           )}
-        </div>
 
-        {/* Actions principales */}
-        <div className={`mt-6 grid gap-2.5 border-t pt-6 ${t.divider}`}>
+          {/* Tuiles contact (grille stats façon badge) */}
+          {tiles.length > 0 && (
+            <div className="mt-6 grid grid-cols-2 gap-2.5">
+              {tiles.map(({ href, icon: Icon, label, value, external }) => (
+                <a
+                  key={label}
+                  href={href}
+                  {...(external ? { target: "_blank", rel: "noopener" } : {})}
+                  className={`group flex flex-col items-center gap-1.5 overflow-hidden rounded-xl p-3 transition ${t.btn}`}
+                >
+                  <span
+                    className={`flex size-8 items-center justify-center rounded-lg ${t.btnPrimary}`}
+                  >
+                    <Icon className="size-4" />
+                  </span>
+                  <span className="text-[10px] font-bold uppercase tracking-wider opacity-70">
+                    {label}
+                  </span>
+                  <span className="w-full truncate text-center text-[11px] font-medium">
+                    {value}
+                  </span>
+                </a>
+              ))}
+            </div>
+          )}
+
+          {/* Bouton WhatsApp principal si dispo */}
           {whatsapp && (
             <a
-              href={`https://wa.me/${whatsapp}`}
+              href={`https://wa.me/${whatsapp}?text=${encodeURIComponent(
+                `Bonjour ${profile.full_name}, j'ai scanné votre carte Guifolio.`
+              )}`}
               target="_blank"
               rel="noopener"
-              className={`inline-flex items-center justify-center gap-2 rounded-xl px-4 py-3.5 text-sm font-bold transition ${t.btnPrimary}`}
+              className={`mt-3 inline-flex w-full items-center justify-center gap-2 rounded-xl px-4 py-3.5 text-sm font-bold transition ${t.btnPrimary}`}
             >
-              <Phone className="size-4" />
-              WhatsApp / Appeler
+              <MessageCircle className="size-4" />
+              Discuter sur WhatsApp
             </a>
           )}
-          {!whatsapp && phone && (
-            <a
-              href={`tel:${phone}`}
-              className={`inline-flex items-center justify-center gap-2 rounded-xl px-4 py-3.5 text-sm font-bold transition ${t.btnPrimary}`}
+
+          <div className="mt-3">
+            <CardActions data={data} cardUrl={cardUrl} btnClass={t.btn} />
+            <Link
+              href={`/c/${slug}/print`}
+              className={`mt-3 inline-flex w-full items-center justify-center gap-2 rounded-xl px-4 py-2.5 text-xs font-medium transition ${t.btn}`}
             >
-              <Phone className="size-4" />
-              Appeler
-            </a>
-          )}
-          <div className="grid grid-cols-2 gap-2.5">
-            {phone && whatsapp && (
-              <a
-                href={`tel:${phone}`}
-                className={`inline-flex items-center justify-center gap-2 rounded-xl px-4 py-3 text-sm font-semibold transition ${t.btn}`}
-              >
-                <Phone className="size-4" /> Appel
-              </a>
-            )}
-            {contacts.email && (
-              <a
-                href={`mailto:${contacts.email}`}
-                className={`inline-flex items-center justify-center gap-2 rounded-xl px-4 py-3 text-sm font-semibold transition ${t.btn}`}
-              >
-                <Mail className="size-4" /> Email
-              </a>
-            )}
+              <Printer className="size-3.5" />
+              Imprimer mes cartes (10 par page A4, recto-verso)
+            </Link>
           </div>
-          <CardActions data={data} cardUrl={cardUrl} btnClass={t.btn} />
 
-          {/* Version imprimable : 10 cartes recto + QR verso sur A4 */}
-          <Link
-            href={`/c/${slug}/print`}
-            className={`mt-3 inline-flex w-full items-center justify-center gap-2 rounded-xl px-4 py-2.5 text-xs font-medium transition ${t.btn}`}
-          >
-            <Printer className="size-3.5" />
-            Imprimer mes cartes (10 par page A4, recto-verso)
-          </Link>
-        </div>
+          {/* QR encadré + portfolio */}
+          {(qrDataUrl || data.card.show_portfolio) && (
+            <div
+              className={`mt-6 flex flex-col items-center gap-3 border-t border-dashed pt-6 ${t.divider}`}
+            >
+              {qrDataUrl && (
+                <>
+                  <div
+                    className={`rounded-2xl border-2 p-1.5 shadow-inner ${t.frame} bg-white`}
+                  >
+                    {/* eslint-disable-next-line @next/next/no-img-element */}
+                    <img
+                      src={qrDataUrl}
+                      alt={`QR code vers ${cardUrl}`}
+                      width={128}
+                      height={128}
+                      className="rounded-xl"
+                    />
+                  </div>
+                  <p className={`text-[11px] font-medium ${t.text}`}>
+                    📱 Scannez pour garder mon contact
+                  </p>
+                </>
+              )}
+              {data.card.show_portfolio && (
+                <Link
+                  href={`/p/${slug}`}
+                  className={`inline-flex items-center gap-1.5 text-xs font-semibold underline underline-offset-4 ${t.headline}`}
+                >
+                  <Sparkles className="size-3" />
+                  Voir le portfolio complet
+                </Link>
+              )}
+            </div>
+          )}
 
-        {/* QR + lien portfolio */}
-        {(qrDataUrl || data.card.show_portfolio) && (
+          {/* Pied de badge */}
           <div
-            className={`mt-6 flex flex-col items-center gap-3 border-t pt-6 ${t.divider}`}
+            className={`mt-6 border-t pt-4 text-center text-[10px] tracking-wide ${t.divider} ${t.text}`}
           >
-            {qrDataUrl && (
-              // eslint-disable-next-line @next/next/no-img-element
-              <img
-                src={qrDataUrl}
-                alt={`QR code vers ${cardUrl}`}
-                width={140}
-                height={140}
-                className={`rounded-xl border p-2 ${t.qrFrame}`}
-              />
-            )}
-            {data.card.show_portfolio && (
-              <Link
-                href={`/p/${slug}`}
-                className={`inline-flex items-center gap-1.5 text-xs underline underline-offset-4 ${t.headline}`}
-              >
-                <Sparkles className="size-3" />
-                Voir le portfolio complet
-              </Link>
-            )}
+            Carte digitale officielle · valide tant que le lien est actif
           </div>
-        )}
+        </div>
       </div>
 
       {/* Branding (retiré en PRO/VIP) */}

@@ -23,6 +23,13 @@ export type CardThemeStyle = {
   footer: string;
   /** petit aperçu dégradé pour le sélecteur de l'éditeur */
   swatch: string;
+  /** liseré extérieur premium (bordure 2px de la carte) */
+  frame: string;
+  /** bandeau d'en-tête dégradé + son texte */
+  band: string;
+  bandText: string;
+  /** anneau coloré autour de la photo */
+  ring: string;
 };
 
 export const cardThemeStyles: Record<CardTheme, CardThemeStyle> = {
@@ -40,6 +47,10 @@ export const cardThemeStyles: Record<CardTheme, CardThemeStyle> = {
     qrFrame: "border-emerald-500/30 bg-white",
     footer: "text-slate-600",
     swatch: "bg-gradient-to-br from-slate-900 via-emerald-900 to-emerald-500",
+    frame: "border-emerald-400/60",
+    band: "bg-gradient-to-r from-emerald-700 via-emerald-500 to-teal-400",
+    bandText: "text-emerald-50",
+    ring: "ring-emerald-400",
   },
   nuit: {
     label: "Nuit de verre",
@@ -55,6 +66,10 @@ export const cardThemeStyles: Record<CardTheme, CardThemeStyle> = {
     qrFrame: "border-white/15 bg-white",
     footer: "text-neutral-600",
     swatch: "bg-gradient-to-br from-neutral-950 via-neutral-700 to-white",
+    frame: "border-white/25",
+    band: "bg-gradient-to-r from-neutral-800 via-neutral-600 to-neutral-800",
+    bandText: "text-white",
+    ring: "ring-white/70",
   },
   guinee: {
     label: "Guinée 🇬🇳",
@@ -70,6 +85,10 @@ export const cardThemeStyles: Record<CardTheme, CardThemeStyle> = {
     qrFrame: "border-yellow-400/40 bg-white",
     footer: "text-red-200/60",
     swatch: "bg-gradient-to-br from-red-600 via-yellow-400 to-green-600",
+    frame: "border-yellow-400/70",
+    band: "bg-gradient-to-r from-red-600 via-yellow-500 to-green-600",
+    bandText: "text-white",
+    ring: "ring-yellow-400",
   },
   sahel: {
     label: "Sahel",
@@ -85,6 +104,10 @@ export const cardThemeStyles: Record<CardTheme, CardThemeStyle> = {
     qrFrame: "border-[#e0cba8] bg-white",
     footer: "text-[#b39a7d]",
     swatch: "bg-gradient-to-br from-[#b3541e] via-[#e8c79a] to-[#f5ede1]",
+    frame: "border-[#b3541e]/60",
+    band: "bg-gradient-to-r from-[#96431a] via-[#c96a2e] to-[#e8a05c]",
+    bandText: "text-[#fffaf2]",
+    ring: "ring-[#b3541e]",
   },
   ocean: {
     label: "Océan",
@@ -100,6 +123,10 @@ export const cardThemeStyles: Record<CardTheme, CardThemeStyle> = {
     qrFrame: "border-sky-400/30 bg-white",
     footer: "text-sky-100/40",
     swatch: "bg-gradient-to-br from-sky-950 via-sky-600 to-cyan-300",
+    frame: "border-sky-400/60",
+    band: "bg-gradient-to-r from-sky-800 via-sky-500 to-cyan-400",
+    bandText: "text-white",
+    ring: "ring-sky-400",
   },
   royal: {
     label: "Royal",
@@ -115,5 +142,9 @@ export const cardThemeStyles: Record<CardTheme, CardThemeStyle> = {
     qrFrame: "border-amber-400/40 bg-white",
     footer: "text-violet-200/40",
     swatch: "bg-gradient-to-br from-[#2a0a4a] via-violet-700 to-amber-400",
+    frame: "border-amber-400/60",
+    band: "bg-gradient-to-r from-violet-900 via-violet-600 to-amber-500",
+    bandText: "text-amber-50",
+    ring: "ring-amber-400",
   },
 };
