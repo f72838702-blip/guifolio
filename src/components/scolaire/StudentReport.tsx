@@ -1,4 +1,11 @@
-import { Award, Quote, UserRound } from "lucide-react";
+import {
+  Award,
+  Quote,
+  ShieldCheck,
+  ThumbsDown,
+  ThumbsUp,
+  UserRound,
+} from "lucide-react";
 
 export type GradeLine = {
   subject: string;
@@ -6,14 +13,17 @@ export type GradeLine = {
   s1: string;
   s2: string;
   annual: string;
-  /** SVT renforcé en série SE, par ex. */
-  note?: string;
 };
 
-export type TeacherReview = {
-  teacher: string;
-  subject: string;
+export type SchoolReview = {
+  name: string;
+  /** Matière enseignée (professeur) ou poste (encadreur). */
+  detail: string;
+  date: string;
   comment: string;
+  tone: "positif" | "negatif";
+  /** true = section encadreurs (bouclier au lieu de pouce). */
+  encadreur?: boolean;
 };
 
 export type FinalResult = {
@@ -26,23 +36,27 @@ export type FinalResult = {
 
 /**
  * Compléments marketing de la carte scolaire : bulletin de notes
- * (1er / 2e semestre + moyenne annuelle), résultat final et
- * avis des professeurs. Même langage visuel que StudentCard
- * (variants "royal" / "emeraude").
+ * (1er / 2e semestre + moyenne annuelle pondérée), résultat final,
+ * avis datés des professeurs et des encadreurs (positifs et négatifs).
+ * Base de données publique de suivi des élèves, pensée pour les parents.
  */
 export default function StudentReport({
   variant = "royal",
   schoolYear,
   track,
+  totalCoef,
   grades,
   reviews,
+  encadreurs,
   result,
 }: {
   variant?: "royal" | "emeraude";
   schoolYear: string;
   track: string;
+  totalCoef: number;
   grades: GradeLine[];
-  reviews: TeacherReview[];
+  reviews: SchoolReview[];
+  encadreurs: SchoolReview[];
   result: FinalResult;
 }) {
   const royal = variant === "royal";
@@ -53,11 +67,11 @@ export default function StudentReport({
         headText: "text-amber-400",
         chip: "bg-[#1E3A8A]",
         banner: "from-[#1E3A8A] to-[#2563EB]",
-        bannerAccent: "text-amber-300",
         mentionChip: "bg-amber-400 text-slate-900",
         subHead: "bg-[#1E3A8A]/5",
         totalRow: "bg-amber-50",
         sep: "bg-amber-500",
+        reviewIcon: "text-[#1E3A8A]",
       }
     : {
         border: "border-amber-400",
@@ -65,11 +79,11 @@ export default function StudentReport({
         headText: "text-amber-300",
         chip: "bg-emerald-700",
         banner: "from-emerald-700 to-emerald-500",
-        bannerAccent: "text-amber-300",
         mentionChip: "bg-amber-300 text-slate-900",
         subHead: "bg-emerald-50",
         totalRow: "bg-amber-50",
         sep: "bg-emerald-600",
+        reviewIcon: "text-emerald-700",
       };
 
   return (
@@ -105,14 +119,7 @@ export default function StudentReport({
             <tbody>
               {grades.map((g) => (
                 <tr key={g.subject} className="border-t border-slate-100">
-                  <td className="py-2 pl-3 pr-2 font-semibold text-slate-800">
-                    {g.subject}
-                    {g.note ? (
-                      <span className="ml-1 text-[9px] font-bold uppercase text-slate-400">
-                        ({g.note})
-                      </span>
-                    ) : null}
-                  </td>
+                  <td className="py-2 pl-3 pr-2 font-semibold text-slate-800">{g.subject}</td>
                   <td className="py-2 text-center text-slate-500">{g.coef}</td>
                   <td className="py-2 text-center text-slate-600">{g.s1}</td>
                   <td className="py-2 text-center text-slate-600">{g.s2}</td>
@@ -128,10 +135,10 @@ export default function StudentReport({
                   colSpan={4}
                   className={`rounded-bl-lg py-2.5 pl-3 text-[11px] font-extrabold uppercase tracking-wider text-slate-700 ${C.totalRow}`}
                 >
-                  Moyenne générale pondérée
+                  Total coefficients : {totalCoef}
                 </td>
-                <td className={`rounded-br-lg py-2.5 pr-3 text-center text-sm font-extrabold text-slate-900 ${C.totalRow}`}>
-                  {result.average}
+                <td className={`rounded-br-lg py-2.5 pr-3 text-center text-[11px] font-extrabold uppercase text-slate-700 ${C.totalRow}`}>
+                  MG : {result.average}
                 </td>
               </tr>
             </tfoot>
@@ -165,41 +172,83 @@ export default function StudentReport({
         ) : null}
       </section>
 
-      {/* ── Avis des professeurs ─────────────────────────── */}
-      <section className="print-card rounded-[1.75rem] border-2 bg-white p-4 shadow-xl">
-        <h3 className="flex items-center gap-2 px-1 pb-3 text-xs font-extrabold uppercase tracking-widest text-slate-700">
-          <Quote className={`size-4 ${royal ? "text-[#2563EB]" : "text-emerald-600"}`} />
-          Avis des professeurs
-        </h3>
-        <div className="flex flex-col gap-2.5">
-          {reviews.map((r) => (
+      {/* ── Avis des professeurs (datés, +/-) ────────────── */}
+      <ReviewSection
+        title="Avis des professeurs"
+        icon={<Quote className={`size-4 ${C.reviewIcon}`} />}
+        footer={`Appréciations des enseignants · ${schoolYear}`}
+        items={reviews}
+        chipClass={C.chip}
+      />
+
+      {/* ── Encadreurs (datés, +/-) ──────────────────────── */}
+      <ReviewSection
+        title="Encadreurs"
+        icon={<ShieldCheck className={`size-4 ${C.reviewIcon}`} />}
+        footer={`Suivi du comportement par l'encadrement · ${schoolYear}`}
+        items={encadreurs}
+        chipClass={C.chip}
+      />
+    </div>
+  );
+}
+
+function ReviewSection({
+  title,
+  icon,
+  footer,
+  items,
+  chipClass,
+}: {
+  title: string;
+  icon: React.ReactNode;
+  footer: string;
+  items: SchoolReview[];
+  chipClass: string;
+}) {
+  return (
+    <section className="print-card rounded-[1.75rem] border-2 border-slate-200 bg-white p-4 shadow-xl">
+      <h3 className="flex items-center gap-2 px-1 pb-3 text-xs font-extrabold uppercase tracking-widest text-slate-700">
+        {icon} {title}
+      </h3>
+      <div className="flex flex-col gap-2.5">
+        {items.map((r) => {
+          const ok = r.tone === "positif";
+          return (
             <div
-              key={r.teacher + r.subject}
-              className={`rounded-xl border bg-slate-50 p-3.5 ${C.border} border-opacity-40`}
+              key={r.name + r.date}
+              className={`rounded-xl border bg-slate-50 p-3.5 border-slate-200 border-l-4 ${
+                ok ? "border-l-emerald-500" : "border-l-rose-500"
+              }`}
             >
-              <div className="flex flex-wrap items-center justify-between gap-1.5">
+              <div className="flex flex-wrap items-center justify-between gap-x-2 gap-y-1">
                 <p className="flex items-center gap-1.5 text-xs font-bold text-slate-800">
-                  <UserRound className={`size-3.5 ${royal ? "text-[#1E3A8A]" : "text-emerald-700"}`} />
-                  {r.teacher}
+                  <UserRound className="size-3.5 text-slate-500" />
+                  {r.name}
                 </p>
-                <span
-                  className={`rounded-full px-2.5 py-0.5 text-[9px] font-extrabold uppercase tracking-wider text-white ${C.chip}`}
-                >
-                  {r.subject}
-                </span>
+                <div className="flex items-center gap-1.5">
+                  <span className={`rounded-full px-2.5 py-0.5 text-[9px] font-extrabold uppercase tracking-wider text-white ${chipClass}`}>
+                    {r.detail}
+                  </span>
+                  <span className="text-[9px] font-semibold uppercase tracking-wider text-slate-400">
+                    {r.date}
+                  </span>
+                </div>
               </div>
               <p className="mt-2 text-xs italic leading-relaxed text-slate-600">
+                {ok ? (
+                  <ThumbsUp className="mr-1.5 inline size-3.5 align-[-2px] text-emerald-600" />
+                ) : (
+                  <ThumbsDown className="mr-1.5 inline size-3.5 align-[-2px] text-rose-600" />
+                )}
                 « {r.comment} »
               </p>
             </div>
-          ))}
-        </div>
-        <div className={`mx-auto mt-4 h-px w-16 ${C.sep} opacity-60`} />
-        <p className="pt-2.5 text-center text-[9px] leading-relaxed text-slate-400">
-          Bulletin et appréciations établis par le conseil de classe · {schoolYear}
-        </p>
-      </section>
-    </div>
+          );
+        })}
+      </div>
+      <p className="pt-3 text-center text-[9px] leading-relaxed text-slate-400">{footer}</p>
+    </section>
   );
 }
 
