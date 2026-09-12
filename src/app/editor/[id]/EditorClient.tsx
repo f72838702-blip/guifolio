@@ -282,6 +282,39 @@ export default function EditorClient({
             );
           })}
         </div>
+        {/* Entreprise (facultatif) */}
+        <div className="rounded-xl border border-slate-800 bg-slate-950/40 p-4">
+          <p className="text-sm font-medium text-slate-300">
+            Votre entreprise <span className="text-slate-500">(facultatif)</span>
+          </p>
+          <p className="mt-1 text-xs text-slate-500">
+            Le nom et le logo apparaîtront en haut de votre carte de visite.
+          </p>
+          <label className="mt-3 block">
+            <span className="mb-1.5 block text-xs font-medium text-slate-400">
+              Nom de l'entreprise
+            </span>
+            <input
+              type="text"
+              value={data.card.company_name}
+              onChange={(e) => patchCard({ company_name: e.target.value })}
+              placeholder="Ex. Dalmitty Market Solution"
+              className={inputCls}
+            />
+          </label>
+          <div className="mt-3">
+            <span className="mb-1.5 block text-xs font-medium text-slate-400">
+              Logo de l'entreprise
+            </span>
+            <AvatarUpload
+              userId={userId}
+              currentUrl={data.card.company_logo_url || undefined}
+              onUploaded={(url) => patchCard({ company_logo_url: url })}
+              onRemoved={() => patchCard({ company_logo_url: "" })}
+            />
+          </div>
+        </div>
+
         <label className="flex items-center gap-2.5 text-sm text-slate-300">
           <input
             type="checkbox"

@@ -73,8 +73,16 @@ export const portfolioDataSchema = z.object({
     .object({
       theme: z.enum(cardThemes).default("emeraude"),
       show_portfolio: z.boolean().default(true),
+      /** Entreprise (facultatif) — affichés sur la carte si remplis */
+      company_name: z.string().default(""),
+      company_logo_url: z.string().default(""),
     })
-    .default({ theme: "emeraude", show_portfolio: true }),
+    .default({
+      theme: "emeraude",
+      show_portfolio: true,
+      company_name: "",
+      company_logo_url: "",
+    }),
   documents: z.array(portfolioDocumentSchema).default([]),
 });
 
@@ -92,7 +100,12 @@ export const emptyPortfolioData: PortfolioData = {
   skills: [],
   experiences: [],
   social_links: {},
-  card: { theme: "emeraude", show_portfolio: true },
+  card: {
+    theme: "emeraude",
+    show_portfolio: true,
+    company_name: "",
+    company_logo_url: "",
+  },
   documents: [],
 };
 

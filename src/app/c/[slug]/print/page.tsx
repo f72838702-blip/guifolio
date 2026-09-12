@@ -107,6 +107,26 @@ export default async function CardPrintPage({ params }: Params) {
               <div
                 className={`pcolor flex h-full w-full flex-col justify-between overflow-hidden p-[3.5mm] ${t.card}`}
               >
+                {/* Entreprise (facultatif) : logo + nom en haut */}
+                {(data.card.company_logo_url || data.card.company_name) && (
+                  <div className="mb-[1mm] flex items-center justify-center gap-[1.5mm]">
+                    {data.card.company_logo_url && (
+                      // eslint-disable-next-line @next/next/no-img-element
+                      <img
+                        src={data.card.company_logo_url}
+                        alt=""
+                        className="size-[5mm] rounded bg-white/90 object-contain p-[0.5mm]"
+                      />
+                    )}
+                    {data.card.company_name && (
+                      <p
+                        className={`text-[6pt] font-bold uppercase tracking-widest ${t.headline}`}
+                      >
+                        {data.card.company_name}
+                      </p>
+                    )}
+                  </div>
+                )}
                 {/* Haut : identité — photo facultative (aucun espace vide sans photo) */}
                 {profile.avatar_url ? (
                   <div className="flex items-center gap-[3mm]">

@@ -107,14 +107,37 @@ export default function CardView({
           >
             {initials}
           </span>
-          <p
-            className={`text-[10px] font-bold uppercase tracking-[0.35em] ${t.bandText}`}
-          >
-            Guifolio
-          </p>
-          <p className={`text-xs font-medium opacity-90 ${t.bandText}`}>
-            Carte professionnelle digitale
-          </p>
+          {/* Entreprise (facultatif) ou marque Guifolio */}
+          {data.card.company_logo_url || data.card.company_name ? (
+            <div className="relative flex items-center gap-2.5 px-6">
+              {data.card.company_logo_url && (
+                // eslint-disable-next-line @next/next/no-img-element
+                <img
+                  src={data.card.company_logo_url}
+                  alt={data.card.company_name || "Logo entreprise"}
+                  className="size-9 rounded-lg bg-white/95 object-contain p-1 shadow"
+                />
+              )}
+              {data.card.company_name && (
+                <p
+                  className={`text-sm font-bold uppercase tracking-widest drop-shadow ${t.bandText}`}
+                >
+                  {data.card.company_name}
+                </p>
+              )}
+            </div>
+          ) : (
+            <>
+              <p
+                className={`text-[10px] font-bold uppercase tracking-[0.35em] ${t.bandText}`}
+              >
+                Guifolio
+              </p>
+              <p className={`text-xs font-medium opacity-90 ${t.bandText}`}>
+                Carte professionnelle digitale
+              </p>
+            </>
+          )}
         </div>
 
         {/* Photo : chevauche le bandeau, double bordure blanche + accent */}
