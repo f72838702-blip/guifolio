@@ -21,6 +21,10 @@ export async function middleware(req: NextRequest) {
         url.pathname = `/c/${sub}`;
         return NextResponse.rewrite(url);
       }
+      if (url.pathname === "/carte/impression") {
+        url.pathname = `/c/${sub}/print`;
+        return NextResponse.rewrite(url);
+      }
       if (url.pathname === "/cv") {
         url.pathname = `/cv/${sub}`;
         return NextResponse.rewrite(url);
@@ -35,6 +39,10 @@ export async function middleware(req: NextRequest) {
     if (sub !== "lvh" && !RESERVED.has(sub)) {
       if (url.pathname === "/carte") {
         url.pathname = `/c/${sub}`;
+        return NextResponse.rewrite(url);
+      }
+      if (url.pathname === "/carte/impression") {
+        url.pathname = `/c/${sub}/print`;
         return NextResponse.rewrite(url);
       }
       if (url.pathname === "/cv") {

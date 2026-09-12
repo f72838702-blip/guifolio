@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { Phone, Mail, MapPin, Sparkles } from "lucide-react";
+import { Phone, Mail, MapPin, Sparkles, Printer } from "lucide-react";
 import type { Plan, PortfolioData } from "@/types/portfolio";
 import { cardThemeStyles } from "@/lib/cardThemes";
 import CardActions from "./CardActions";
@@ -106,6 +106,15 @@ export default function CardView({
             )}
           </div>
           <CardActions data={data} cardUrl={cardUrl} btnClass={t.btn} />
+
+          {/* Version imprimable : 10 cartes recto + QR verso sur A4 */}
+          <Link
+            href={`/c/${slug}/print`}
+            className={`mt-3 inline-flex w-full items-center justify-center gap-2 rounded-xl px-4 py-2.5 text-xs font-medium transition ${t.btn}`}
+          >
+            <Printer className="size-3.5" />
+            Imprimer mes cartes (10 par page A4, recto-verso)
+          </Link>
         </div>
 
         {/* QR + lien portfolio */}
