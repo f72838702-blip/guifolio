@@ -1,5 +1,6 @@
 import { Phone, Mail, MapPin, Globe } from "lucide-react";
 import type { PortfolioData } from "@/types/portfolio";
+import { documentTypeLabels } from "@/types/portfolio";
 
 /**
  * CV professionnel A4 (imprimable / enregistrable en PDF).
@@ -8,6 +9,7 @@ import type { PortfolioData } from "@/types/portfolio";
  */
 export default function CVView({ data, slug }: { data: PortfolioData; slug: string }) {
   const { profile, contacts, skills, experiences, social_links } = data;
+  const publicDocs = data.documents.filter((d) => d.is_public);
   const rootDomain = process.env.NEXT_PUBLIC_ROOT_DOMAIN ?? "guifolio.com";
   const hasSocials = Object.values(social_links).some(Boolean);
 
@@ -104,6 +106,30 @@ export default function CVView({ data, slug }: { data: PortfolioData; slug: stri
                   className="rounded-md bg-emerald-50 px-2.5 py-1 text-xs font-medium text-emerald-800 print:border print:border-emerald-200 print:bg-white"
                 >
                   {s}
+                </li>
+              ))}
+            </ul>
+          </section>
+        )}
+
+        {/* Diplômes & certifications */}
+        {publicDocs.length > 0 && (
+          <section className="mt-6">
+            <SectionTitle>Diplômes & certifications</SectionTitle>
+            <ul className="mt-3 space-y-2">
+              {publicDocs.map((doc, i) => (
+                <li key={i} className="break-inside-avoid">
+                  <div className="flex flex-wrap items-baseline justify-between gap-x-3">
+                    <span className="font-semibold text-slate-900">
+                      {doc.title || documentTypeLabels[doc.type]}
+                      {doc.issuer && (
+                        <span className="font-normal text-slate-600"> — {doc.issuer}</span>
+                      )}
+                    </span>
+                    {doc.year && (
+                      <span className="text-xs font-medium text-slate-500">{doc.year}</span>
+                    )}
+                  </div>
                 </li>
               ))}
             </ul>

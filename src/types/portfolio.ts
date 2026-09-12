@@ -1,5 +1,31 @@
 import { z } from "zod";
 
+export const documentTypes = [
+  "DIPLOME",
+  "CERTIFICAT",
+  "ATTESTATION",
+  "AUTRE",
+] as const;
+export type DocumentType = (typeof documentTypes)[number];
+
+export const documentTypeLabels: Record<DocumentType, string> = {
+  DIPLOME: "Diplôme 🎓",
+  CERTIFICAT: "Certificat 📜",
+  ATTESTATION: "Attestation 📄",
+  AUTRE: "Autre document 📎",
+};
+
+export const portfolioDocumentSchema = z.object({
+  type: z.enum(documentTypes).default("DIPLOME"),
+  title: z.string().default(""),
+  issuer: z.string().default(""), // école / organisme
+  year: z.string().default(""),
+  image_url: z.string().default(""), // photo/scann compressé
+  is_public: z.boolean().default(true),
+});
+
+export type PortfolioDocument = z.infer<typeof portfolioDocumentSchema>;
+
 export const cardThemes = [
   "emeraude",
   "nuit",
@@ -49,6 +75,7 @@ export const portfolioDataSchema = z.object({
       show_portfolio: z.boolean().default(true),
     })
     .default({ theme: "emeraude", show_portfolio: true }),
+  documents: z.array(portfolioDocumentSchema).default([]),
 });
 
 export type PortfolioData = z.infer<typeof portfolioDataSchema>;
@@ -66,6 +93,7 @@ export const emptyPortfolioData: PortfolioData = {
   experiences: [],
   social_links: {},
   card: { theme: "emeraude", show_portfolio: true },
+  documents: [],
 };
 
 export type Plan = "FREE" | "PRO" | "VIP";

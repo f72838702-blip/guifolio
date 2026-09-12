@@ -3,50 +3,10 @@
 import { useRef, useState } from "react";
 import { Camera, ImageUp, Loader2, Trash2 } from "lucide-react";
 import { createClient } from "@/lib/supabase/client";
+import { compressImage } from "@/lib/image";
 
 const BUCKET = "avatars";
 const MAX_SIZE = 640; // px — côté le plus long après compression
-const QUALITY = 0.82; // WebP
-
-/** Compresse une image côté navigateur : redimensionne + convertit en WebP */
-async function compressImage(file: File): Promise<Blob> {
-  const bitmap = await createImageBitmap(file).catch(() => null);
-  if (!bitmap) {
-    // Fallback : image classique
-    const img = await new Promise<HTMLImageElement>((resolve, reject) => {
-      const el = new Image();
-      el.onload = () => resolve(el);
-      el.onerror = reject;
-      el.src = URL.createObjectURL(file);
-    });
-    return drawAndExport(img.width, img.height, (ctx) =>
-      ctx.drawImage(img, 0, 0)
-    );
-  }
-  return drawAndExport(bitmap.width, bitmap.height, (ctx) =>
-    ctx.drawImage(bitmap, 0, 0)
-  );
-}
-
-function drawAndExport(
-  w: number,
-  h: number,
-  draw: (ctx: CanvasRenderingContext2D) => void
-): Promise<Blob> {
-  const scale = Math.min(1, MAX_SIZE / Math.max(w, h));
-  const canvas = document.createElement("canvas");
-  canvas.width = Math.round(w * scale);
-  canvas.height = Math.round(h * scale);
-  const ctx = canvas.getContext("2d")!;
-  draw(ctx);
-  return new Promise((resolve, reject) => {
-    canvas.toBlob(
-      (blob) => (blob ? resolve(blob) : reject(new Error("Compression échouée"))),
-      "image/webp",
-      QUALITY
-    );
-  });
-}
 
 export default function AvatarUpload({
   userId,
@@ -75,7 +35,7 @@ export default function AvatarUpload({
     setError("");
     setInfo("");
     try {
-      const compressed = await compressImage(file);
+      const compressed = await compressImage(file, MAX_SIZE);
       const from = Math.round(file.size / 1024);
       const to = Math.round(compressed.size / 1024);
       setInfo(`Optimisée : ${from} Ko → ${to} Ko ✅`);

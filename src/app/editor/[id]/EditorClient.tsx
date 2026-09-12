@@ -19,6 +19,13 @@ import type { Plan, PortfolioData } from "@/types/portfolio";
 import { cardThemes } from "@/types/portfolio";
 import { cardThemeStyles } from "@/lib/cardThemes";
 import AvatarUpload from "@/components/AvatarUpload";
+import DocumentUpload from "@/components/DocumentUpload";
+import {
+  documentTypes,
+  documentTypeLabels,
+  type PortfolioDocument,
+} from "@/types/portfolio";
+import { GraduationCap } from "lucide-react";
 import { updatePortfolioContent, togglePublic } from "@/app/dashboard/actions";
 
 const inputCls =
@@ -72,6 +79,11 @@ export default function EditorClient({
 
   if (!data) return null;
   const rootDomain = process.env.NEXT_PUBLIC_ROOT_DOMAIN ?? "guifolio.com";
+
+  const updateDoc = (i: number, partial: Partial<PortfolioDocument>) =>
+    patch({
+      documents: data.documents.map((d, j) => (j === i ? { ...d, ...partial } : d)),
+    });
 
   return (
     <main className="mx-auto max-w-3xl px-5 py-8">
@@ -279,6 +291,128 @@ export default function EditorClient({
           />
           Afficher le lien « Voir le portfolio complet » sur la carte
         </label>
+      </section>
+
+      {/* Diplômes & documents */}
+      <section className="mt-6 space-y-4 rounded-2xl border border-slate-800 bg-slate-900/50 p-6">
+        <div className="flex flex-wrap items-center justify-between gap-2">
+          <h2 className="flex items-center gap-2 font-display font-semibold">
+            <GraduationCap className="size-5 text-emerald-400" />
+            Diplômes & documents numérisés
+          </h2>
+          <button
+            type="button"
+            onClick={() =>
+              patch({
+                documents: [
+                  ...data.documents,
+                  {
+                    type: "DIPLOME",
+                    title: "",
+                    issuer: "",
+                    year: "",
+                    image_url: "",
+                    is_public: true,
+                  },
+                ],
+              })
+            }
+            className="inline-flex items-center gap-1.5 rounded-lg border border-slate-700 px-3 py-1.5 text-xs text-slate-300 hover:border-emerald-500/60"
+          >
+            <Plus className="size-3.5" /> Ajouter
+          </button>
+        </div>
+        <p className="text-xs text-slate-500">
+          Photographiez ou importez vos diplômes, attestations, certificats…
+          Compression automatique, et chaque document peut être{" "}
+          <strong>public</strong> (visible sur votre page) ou{" "}
+          <strong>privé</strong> (archivé pour vous seul).
+        </p>
+
+        {data.documents.length === 0 && (
+          <p className="rounded-xl border border-dashed border-slate-700 p-4 text-center text-xs text-slate-500">
+            Aucun document pour l&apos;instant — cliquez « Ajouter » pour
+            numériser votre premier diplôme 📸
+          </p>
+        )}
+
+        {data.documents.map((doc, i) => (
+          <div
+            key={i}
+            className="space-y-3 rounded-xl border border-slate-800 bg-slate-950/60 p-4"
+          >
+            <div className="flex items-center justify-between gap-2">
+              <select
+                value={doc.type}
+                onChange={(e) =>
+                  updateDoc(i, { type: e.target.value as PortfolioDocument["type"] })
+                }
+                className="rounded-lg border border-slate-700 bg-slate-950 px-3 py-2 text-sm outline-none focus:border-emerald-500"
+              >
+                {documentTypes.map((t) => (
+                  <option key={t} value={t}>
+                    {documentTypeLabels[t]}
+                  </option>
+                ))}
+              </select>
+              <button
+                type="button"
+                onClick={() =>
+                  patch({ documents: data.documents.filter((_, j) => j !== i) })
+                }
+                className="inline-flex items-center gap-1.5 rounded-lg border border-red-500/40 px-3 py-1.5 text-xs text-red-300 hover:bg-red-500/10"
+              >
+                <Trash2 className="size-3.5" /> Supprimer
+              </button>
+            </div>
+            <div className="grid gap-3 sm:grid-cols-3">
+              <label className="block sm:col-span-1">
+                <span className={labelCls}>Titre</span>
+                <input
+                  className={inputCls}
+                  value={doc.title}
+                  onChange={(e) => updateDoc(i, { title: e.target.value })}
+                  placeholder="Licence en Comptabilité"
+                />
+              </label>
+              <label className="block">
+                <span className={labelCls}>École / Organisme</span>
+                <input
+                  className={inputCls}
+                  value={doc.issuer}
+                  onChange={(e) => updateDoc(i, { issuer: e.target.value })}
+                  placeholder="UGLC Sonfonia"
+                />
+              </label>
+              <label className="block">
+                <span className={labelCls}>Année</span>
+                <input
+                  className={inputCls}
+                  value={doc.year}
+                  onChange={(e) => updateDoc(i, { year: e.target.value })}
+                  placeholder="2017"
+                />
+              </label>
+            </div>
+            <div className="flex flex-wrap items-center justify-between gap-3">
+              <DocumentUpload
+                userId={userId}
+                currentUrl={doc.image_url || undefined}
+                onUploaded={(url) => updateDoc(i, { image_url: url })}
+                onRemoved={() => updateDoc(i, { image_url: "" })}
+              />
+              <label className="flex items-center gap-2 text-xs text-slate-400">
+                <input
+                  type="checkbox"
+                  checked={doc.is_public}
+                  onChange={(e) => updateDoc(i, { is_public: e.target.checked })}
+                  className="size-3.5 accent-emerald-500"
+                />
+                Public sur ma page
+              </label>
+            </div>
+          </div>
+        ))}
       </section>
 
       {/* Compétences */}

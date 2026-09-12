@@ -7,7 +7,9 @@ import {
   Briefcase,
   CreditCard,
   Download,
+  GraduationCap,
 } from "lucide-react";
+import { documentTypeLabels } from "@/types/portfolio";
 import type { PortfolioData, Plan } from "@/types/portfolio";
 
 // Icônes de marques (lucide-react ne les exporte plus)
@@ -50,6 +52,7 @@ export default function PortfolioView({
     { url: social_links.github, Icon: GithubIcon, label: "GitHub" },
     { url: social_links.website, Icon: Globe, label: "Site web" },
   ].filter((s) => s.url);
+  const publicDocs = data.documents.filter((d) => d.is_public);
 
   return (
     <main className="mx-auto min-h-screen max-w-2xl px-5 pb-20 pt-14">
@@ -178,6 +181,45 @@ export default function PortfolioView({
                       </p>
                     )}
                   </div>
+                </div>
+              </article>
+            ))}
+          </div>
+        </section>
+      )}
+
+      {/* Diplômes & documents publics */}
+      {publicDocs.length > 0 && (
+        <section className="mt-10">
+          <h2 className="font-display text-sm font-semibold uppercase tracking-widest text-slate-500">
+            Diplômes & documents
+          </h2>
+          <div className="mt-4 grid gap-4 sm:grid-cols-2">
+            {publicDocs.map((doc, i) => (
+              <article
+                key={i}
+                className="overflow-hidden rounded-2xl border border-slate-800 bg-slate-900/50"
+              >
+                {doc.image_url && (
+                  <a href={doc.image_url} target="_blank" rel="noopener">
+                    {/* eslint-disable-next-line @next/next/no-img-element */}
+                    <img
+                      src={doc.image_url}
+                      alt={doc.title || "Document"}
+                      className="h-36 w-full object-cover"
+                    />
+                  </a>
+                )}
+                <div className="p-4">
+                  <div className="flex items-center gap-2">
+                    <GraduationCap className="size-4 shrink-0 text-emerald-400" />
+                    <h3 className="text-sm font-semibold">{doc.title || documentTypeLabels[doc.type]}</h3>
+                  </div>
+                  <p className="mt-1 text-xs text-slate-400">
+                    {documentTypeLabels[doc.type]}
+                    {doc.issuer && ` · ${doc.issuer}`}
+                    {doc.year && ` · ${doc.year}`}
+                  </p>
                 </div>
               </article>
             ))}
