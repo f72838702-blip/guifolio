@@ -12,8 +12,8 @@ export const metadata: Metadata = {
 };
 
 const student: StudentInfo = {
-  firstName: "Mamadou Saliou",
-  lastName: "Diallo",
+  firstName: "Morgan",
+  lastName: "Guilavogui",
   school: "Lycée Almamy Samory Touré",
   schoolCity: "Dixinn, Conakry",
   className: "Terminale Sciences Exp.",
