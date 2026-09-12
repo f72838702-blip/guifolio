@@ -6,7 +6,10 @@ import { createClient } from "@/lib/supabase/server";
 import {
   portfolioDataSchema,
   emptyPortfolioData,
+  PLAN_LIMITS,
+  bestPlan,
   type PortfolioData,
+  type Plan,
 } from "@/types/portfolio";
 
 const SLUG_RE = /^[a-z0-9][a-z0-9-]{2,49}$/;
@@ -28,9 +31,29 @@ export async function createPortfolio(slug: string): Promise<
     };
   }
 
+  // Quota par plan : meilleur plan de l'utilisateur vs nombre de portfolios
+  const { data: existing } = await supabase
+    .from("portfolios")
+    .select("plan")
+    .eq("user_id", user.id);
+  const count = existing?.length ?? 0;
+  const plan: Plan = bestPlan(((existing ?? []).map((r) => r.plan) as Plan[]) ?? []);
+  const limit = PLAN_LIMITS[plan];
+  if (count >= limit) {
+    return {
+      ok: false,
+      error: `Plan ${plan} : ${limit} portfolio${limit > 1 ? "s" : ""} maximum. Passez au plan supérieur pour en créer davantage.`,
+    };
+  }
+
   const { data, error } = await supabase
     .from("portfolios")
-    .insert({ user_id: user.id, slug: cleanSlug, content: emptyPortfolioData })
+    .insert({
+      user_id: user.id,
+      slug: cleanSlug,
+      plan,
+      content: emptyPortfolioData,
+    })
     .select("id")
     .single();
 

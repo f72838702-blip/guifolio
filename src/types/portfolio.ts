@@ -70,6 +70,19 @@ export const emptyPortfolioData: PortfolioData = {
 
 export type Plan = "FREE" | "PRO" | "VIP";
 
+/** Nombre max de portfolios par utilisateur selon son meilleur plan */
+export const PLAN_LIMITS: Record<Plan, number> = {
+  FREE: 1,
+  PRO: 3,
+  VIP: 10,
+};
+
+export function bestPlan(plans: Plan[]): Plan {
+  if (plans.includes("VIP")) return "VIP";
+  if (plans.includes("PRO")) return "PRO";
+  return "FREE";
+}
+
 export type PortfolioRow = {
   id: string;
   user_id: string;
