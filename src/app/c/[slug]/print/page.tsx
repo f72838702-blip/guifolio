@@ -52,13 +52,6 @@ export default async function CardPrintPage({ params }: Params) {
 
   const { profile, contacts } = data;
   const wa = contacts.whatsapp_number.replace(/\D/g, "");
-  const initials =
-    profile.full_name
-      .split(/\s+/)
-      .filter(Boolean)
-      .slice(0, 2)
-      .map((w) => w[0]!.toUpperCase())
-      .join("") || "GF";
 
   const cells = Array.from({ length: CARDS });
 
@@ -114,31 +107,46 @@ export default async function CardPrintPage({ params }: Params) {
               <div
                 className={`pcolor flex h-full w-full flex-col justify-between overflow-hidden p-[3.5mm] ${t.card}`}
               >
-                {/* Haut : identité */}
-                <div className="flex items-center gap-[3mm]">
-                  {profile.avatar_url ? (
-                    // eslint-disable-next-line @next/next/no-img-element
+                {/* Haut : identité — photo facultative (aucun espace vide sans photo) */}
+                {profile.avatar_url ? (
+                  <div className="flex items-center gap-[3mm]">
+                    {/* eslint-disable-next-line @next/next/no-img-element */}
                     <img
                       src={profile.avatar_url}
                       alt=""
                       className="size-[11mm] shrink-0 rounded-full object-cover"
                     />
-                  ) : (
-                    <div
-                      className={`flex size-[11mm] shrink-0 items-center justify-center rounded-full text-[8pt] font-bold ${t.btnPrimary}`}
-                    >
-                      {initials}
+                    <div className="min-w-0">
+                      <p
+                        className={`truncate text-[10pt] font-bold leading-tight ${t.name}`}
+                      >
+                        {profile.full_name}
+                      </p>
+                      {profile.headline && (
+                        <p
+                          className={`text-[6.5pt] leading-snug ${t.headline}`}
+                          style={{
+                            display: "-webkit-box",
+                            WebkitLineClamp: 2,
+                            WebkitBoxOrient: "vertical",
+                            overflow: "hidden",
+                          }}
+                        >
+                          {profile.headline}
+                        </p>
+                      )}
                     </div>
-                  )}
-                  <div className="min-w-0">
+                  </div>
+                ) : (
+                  <div className="text-center">
                     <p
-                      className={`truncate text-[10pt] font-bold leading-tight ${t.name}`}
+                      className={`text-[11pt] font-bold leading-tight ${t.name}`}
                     >
                       {profile.full_name}
                     </p>
                     {profile.headline && (
                       <p
-                        className={`text-[6.5pt] leading-snug ${t.headline}`}
+                        className={`mt-[1mm] text-[7pt] leading-snug ${t.headline}`}
                         style={{
                           display: "-webkit-box",
                           WebkitLineClamp: 2,
@@ -150,7 +158,7 @@ export default async function CardPrintPage({ params }: Params) {
                       </p>
                     )}
                   </div>
-                </div>
+                )}
 
                 {/* Bas : contacts */}
                 <div
