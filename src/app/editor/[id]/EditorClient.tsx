@@ -16,7 +16,7 @@ import {
 } from "lucide-react";
 import { useEditorStore } from "@/stores/editor";
 import type { Plan, PortfolioData } from "@/types/portfolio";
-import { cardThemes } from "@/types/portfolio";
+import { cardThemes, cardLayouts, cardLayoutLabels } from "@/types/portfolio";
 import { cardThemeStyles } from "@/lib/cardThemes";
 import AvatarUpload from "@/components/AvatarUpload";
 import DocumentUpload from "@/components/DocumentUpload";
@@ -255,8 +255,35 @@ export default function EditorClient({
         <p className="text-xs text-slate-500">
           Votre carte reprend automatiquement vos infos Profil & Contacts ci-dessus
           — avec QR code, boutons WhatsApp/Appel et ajout aux contacts.
-          Choisissez un design :
+          Choisissez un modèle de carte :
         </p>
+        <div className="grid grid-cols-1 gap-3 sm:grid-cols-3">
+          {cardLayouts.map((layout) => {
+            const active = data.card.layout === layout;
+            const info = cardLayoutLabels[layout];
+            return (
+              <button
+                key={layout}
+                type="button"
+                onClick={() => patchCard({ layout })}
+                className={`rounded-xl border p-3 text-left transition ${
+                  active
+                    ? "border-emerald-500 bg-emerald-500/10 ring-1 ring-emerald-500"
+                    : "border-slate-700 hover:border-slate-500"
+                }`}
+              >
+                <p className="flex items-center justify-between text-xs font-semibold">
+                  {info.label}
+                  {active && <Check className="size-3.5 text-emerald-400" />}
+                </p>
+                <p className="mt-1 text-[11px] leading-snug text-slate-500">
+                  {info.description}
+                </p>
+              </button>
+            );
+          })}
+        </div>
+        <p className="text-xs text-slate-500">Puis les couleurs :</p>
         <div className="grid grid-cols-2 gap-3 sm:grid-cols-3">
           {cardThemes.map((theme) => {
             const t = cardThemeStyles[theme];

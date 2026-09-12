@@ -36,6 +36,27 @@ export const cardThemes = [
 ] as const;
 export type CardTheme = (typeof cardThemes)[number];
 
+/** Modèles de mise en page de la carte de visite digitale */
+export const cardLayouts = ["badge", "classique", "signature"] as const;
+export type CardLayout = (typeof cardLayouts)[number];
+export const cardLayoutLabels: Record<
+  CardLayout,
+  { label: string; description: string }
+> = {
+  badge: {
+    label: "Badge Premium",
+    description: "Bandeau coloré, photo chevauchante, tuiles de contact",
+  },
+  classique: {
+    label: "Classique Pro",
+    description: "Épuré et efficace, une action forte, logo en filigrane",
+  },
+  signature: {
+    label: "Signature",
+    description: "Éditorial minimal, typographie élégante, logo en filigrane",
+  },
+};
+
 export const portfolioDataSchema = z.object({
   profile: z.object({
     full_name: z.string().default(""),
@@ -72,6 +93,7 @@ export const portfolioDataSchema = z.object({
   card: z
     .object({
       theme: z.enum(cardThemes).default("emeraude"),
+      layout: z.enum(cardLayouts).default("badge"),
       show_portfolio: z.boolean().default(true),
       /** Entreprise (facultatif) — affichés sur la carte si remplis */
       company_name: z.string().default(""),
@@ -79,6 +101,7 @@ export const portfolioDataSchema = z.object({
     })
     .default({
       theme: "emeraude",
+      layout: "badge",
       show_portfolio: true,
       company_name: "",
       company_logo_url: "",
@@ -102,6 +125,7 @@ export const emptyPortfolioData: PortfolioData = {
   social_links: {},
   card: {
     theme: "emeraude",
+    layout: "badge",
     show_portfolio: true,
     company_name: "",
     company_logo_url: "",
