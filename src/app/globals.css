@@ -19,6 +19,21 @@
   body {
     background: white !important;
   }
+
+  /* Force l'impression des couleurs de la carte scolaire. */
+  .print-card,
+  .print-card * {
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
+  }
+
+  /* La carte : centrée, tient sur une page, sans ombre. */
+  .print-card {
+    box-shadow: none !important;
+    max-width: 16cm !important;
+    margin: 0 auto !important;
+    break-inside: avoid;
+  }
 }
 @page {
   size: A4;
