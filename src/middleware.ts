@@ -12,6 +12,31 @@ export async function middleware(req: NextRequest) {
   const host = req.headers.get("host") ?? "";
   const url = req.nextUrl.clone();
 
+  // --- Ancienne URL Vercel → redirection permanente vers guifolio.com ---
+  // (l'alias <projet>.vercel.app ne disparaît jamais tout seul : on bascule tout)
+  if (host === "guifolio-zeta.vercel.app") {
+    const m = url.pathname.match(/^\/(p|c|cv)\/([^/]+)/);
+    if (m) {
+      const [, kind, sub] = m;
+      const suffix =
+        kind === "c"
+          ? url.pathname.endsWith("/print")
+            ? "/carte/impression"
+            : "/carte"
+          : kind === "cv"
+            ? "/cv"
+            : "";
+      return NextResponse.redirect(
+        `https://${sub}.${ROOT_DOMAIN}${suffix}${url.search}`,
+        301
+      );
+    }
+    return NextResponse.redirect(
+      `https://${ROOT_DOMAIN}${url.pathname}${url.search}`,
+      301
+    );
+  }
+
   // --- Wildcard subdomain : pseudo.guifolio.com uniquement ---
   if (host.endsWith(`.${ROOT_DOMAIN}`)) {
     const sub = host.replace(`.${ROOT_DOMAIN}`, "");
