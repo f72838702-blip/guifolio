@@ -6,8 +6,8 @@
  * la CSP à appliquer via applyCsp().
  *
  * - CSP_APP   : app SaaS — nous + Supabase uniquement
- * - CSP_STATIC_SITE : sites statiques intégrés (public/<site>) qui utilisent
- *   Tailwind CDN, Lucide (unpkg) et Google Fonts
+ * - CSP_STATIC_SITE : sites statiques intégrés (public/<site>) — 100% autonome :
+ *   Tailwind, Lucide et les polices sont auto-hébergés dans leurs assets
  */
 
 const SOURCES_APP = [
@@ -25,13 +25,10 @@ const SOURCES_APP = [
 
 const SOURCES_STATIC_SITE = [
   "default-src 'self'",
-  // Tailwind CDN + Lucide (unpkg)
-  "script-src 'self' 'unsafe-inline' https://cdn.tailwindcss.com https://unpkg.com",
-  // Google Fonts (feuilles de style)
-  "style-src 'self' 'unsafe-inline' https://fonts.googleapis.com",
+  "script-src 'self' 'unsafe-inline'",
+  "style-src 'self' 'unsafe-inline'",
   "img-src 'self' https: data: blob:",
-  // Google Fonts (fichiers woff2)
-  "font-src 'self' data: https://fonts.gstatic.com",
+  "font-src 'self' data:",
   "connect-src 'self' https://*.supabase.co wss://*.supabase.co",
   "frame-ancestors 'self'",
   "base-uri 'self'",
