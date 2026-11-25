@@ -1,0 +1,311 @@
+<!DOCTYPE html>
+<html lang="fr" class="scroll-smooth">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Mamadou Thiam — Blog Réseaux &amp; Télécoms</title>
+  <meta name="description" content="Blog de Mamadou Thiam : fibre optique, réseaux mobiles 2G–5G, transmission, sécurité réseau et téléphonie en Guinée et en Afrique de l'Ouest." />
+  <meta name="author" content="Mamadou Thiam" />
+  <meta name="theme-color" content="#070B14" />
+  <meta property="og:title" content="Blog Réseaux & Télécoms — Mamadou Thiam" />
+  <meta property="og:description" content="Analyses et vulgarisation : fibre optique, 2G–5G, antennes, sécurité et VoIP." />
+  <meta property="og:type" content="website" />
+  <meta property="og:locale" content="fr_FR" />
+
+  <!-- Tailwind (auto-hébergé) -->
+  <script src="assets/tailwind.js"></script>
+  <!-- Lucide (auto-hébergé) -->
+  <script src="assets/lucide.min.js"></script>
+  <!-- Fonts (auto-hébergées) -->
+  <link href="assets/fonts/fonts.css" rel="stylesheet" />
+
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          fontFamily: {
+            sans: ['Inter', 'system-ui', 'sans-serif'],
+            display: ['Sora', 'sans-serif'],
+            mono: ['JetBrains Mono', 'monospace'],
+          },
+          colors: {
+            base: { 950: '#070B14', 900: '#0B1120', 800: '#111827', 700: '#1E293B' },
+            cyan: { 400: '#22D3EE', 500: '#06B6D4', 600: '#0891B2' },
+            blue: { 400: '#60A5FA', 500: '#3B82F6' },
+          },
+          boxShadow: {
+            glow: '0 20px 60px -20px rgba(34,211,238,0.35)',
+            card: '0 25px 60px -25px rgba(0,0,0,0.65)',
+          },
+        },
+      },
+    };
+  </script>
+
+  <style>
+    html { -webkit-font-smoothing: antialiased; }
+    html, body { overflow-x: hidden; }
+    body { font-family: 'Inter', sans-serif; }
+
+    .tech-grid {
+      background-image:
+        linear-gradient(rgba(34,211,238,0.06) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(34,211,238,0.06) 1px, transparent 1px);
+      background-size: 40px 40px;
+    }
+    .radial-fade {
+      -webkit-mask-image: radial-gradient(80% 60% at 50% 30%, #000 0%, transparent 75%);
+      mask-image: radial-gradient(80% 60% at 50% 30%, #000 0%, transparent 75%);
+    }
+    .orb { position: absolute; border-radius: 9999px; filter: blur(80px); opacity: .5; pointer-events: none; }
+
+    .text-gradient {
+      background: linear-gradient(120deg, #22D3EE 0%, #60A5FA 50%, #3B82F6 100%);
+      -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent;
+    }
+
+    .card-hover { transition: transform .35s cubic-bezier(0.16,1,0.3,1), border-color .35s, box-shadow .35s; }
+    .card-hover:hover { transform: translateY(-4px); border-color: rgba(34,211,238,0.35); box-shadow: 0 20px 60px -20px rgba(34,211,238,0.22); }
+
+    .nav-blur { backdrop-filter: saturate(180%) blur(16px); -webkit-backdrop-filter: saturate(180%) blur(16px); }
+    .focus-ring:focus-visible { outline: 2px solid #22D3EE; outline-offset: 3px; border-radius: .5rem; }
+
+    /* Corps d'article replié/déplié */
+    .blog-body { display: none; }
+    .blog-body.open { display: block; animation: fadeUp .35s ease both; }
+    @keyframes fadeUp { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: none; } }
+    .blog-body p + p { margin-top: 1rem; }
+    .chev-rot { transform: rotate(180deg); }
+
+    #article-open { scroll-margin-top: 90px; }
+  </style>
+</head>
+
+<body class="bg-base-950 text-slate-300 antialiased selection:bg-cyan-500/30 selection:text-cyan-300">
+
+  <!-- Background grid + orbes (conteneur clippé) -->
+  <div class="fixed inset-0 tech-grid radial-fade pointer-events-none opacity-60" aria-hidden="true"></div>
+  <div class="fixed inset-0 overflow-hidden pointer-events-none" aria-hidden="true">
+    <div class="orb w-[420px] h-[420px] bg-cyan-500/20 -top-20 -left-20"></div>
+    <div class="orb w-[380px] h-[380px] bg-blue-500/20 top-1/3 -right-24"></div>
+  </div>
+
+  <!-- Barre du haut -->
+  <header class="fixed top-0 inset-x-0 z-50">
+    <div class="nav-blur bg-base-950/70 border-b border-white/5">
+      <nav class="max-w-5xl mx-auto px-5 h-16 flex items-center justify-between">
+        <a href="index.html" class="flex items-center gap-2.5 group focus-ring">
+          <span class="grid place-items-center w-9 h-9 rounded-lg bg-gradient-to-br from-cyan-400 to-blue-500 text-base-950 font-display font-bold text-sm shadow-glow">MT</span>
+          <span class="font-display font-semibold text-white text-base tracking-tight">Mamadou Thiam</span>
+        </a>
+        <div class="flex items-center gap-3">
+          <a href="carte.html" class="hidden sm:inline-flex items-center gap-2 text-sm font-medium text-slate-300 hover:text-cyan-300 transition focus-ring">
+            <i data-lucide="contact" class="w-4 h-4"></i> Carte de visite
+          </a>
+          <a href="index.html" class="inline-flex items-center gap-2 text-sm font-medium text-slate-300 hover:text-cyan-300 transition focus-ring">
+            <i data-lucide="arrow-left" class="w-4 h-4"></i> Portfolio
+          </a>
+        </div>
+      </nav>
+    </div>
+  </header>
+
+  <main class="relative max-w-3xl mx-auto px-5 pt-28 pb-16">
+
+    <!-- Hero -->
+    <section class="text-center mb-12">
+      <p class="font-mono text-[11px] text-cyan-400/90 uppercase tracking-widest mb-3">// blog réseaux &amp; télécoms</p>
+      <h1 class="font-display text-3xl sm:text-4xl font-bold text-white tracking-tight">Le <span class="text-gradient">blog</span> technique</h1>
+      <p class="mt-4 text-slate-400 max-w-xl mx-auto leading-relaxed">
+        Fibre optique, réseaux mobiles, transmission et sécurité — des articles simples
+        et concrets, pensés pour les curieux comme pour les professionnels de Guinée et d'ailleurs.
+      </p>
+    </section>
+
+    <!-- ============ LISTE DES ARTICLES ============ -->
+    <div class="space-y-6">
+
+      <!-- Article 1 -->
+      <article id="article-1" class="card-hover rounded-2xl border border-white/10 bg-white/[0.03] overflow-hidden">
+        <div class="p-6 sm:p-7">
+          <div class="flex flex-wrap items-center gap-3 text-xs mb-3">
+            <span class="font-mono px-2.5 py-1 rounded-md bg-cyan-500/10 border border-cyan-500/30 text-cyan-300 font-bold uppercase tracking-wider">fibre optique</span>
+            <span class="flex items-center gap-1.5 text-slate-500"><i data-lucide="calendar" class="w-3.5 h-3.5"></i> 14 février 2025</span>
+            <span class="flex items-center gap-1.5 text-slate-500"><i data-lucide="clock" class="w-3.5 h-3.5"></i> 6 min</span>
+          </div>
+          <h2 class="font-display text-xl sm:text-2xl font-bold text-white leading-snug">Fibre optique en Guinée : où en est vraiment le raccordement FTTH&nbsp;?</h2>
+          <p class="mt-3 text-slate-400 leading-relaxed">Le câble ACE relie Conakry à l'Europe depuis des années, mais entre le débarcadère et la prise murale de l'abonné, il y a tout un chemin. Petit décryptage d'une chaîne encore trop souvent interrompue.</p>
+          <div id="body-1" class="blog-body mt-5 pt-5 border-t border-white/10 text-slate-400 leading-relaxed text-[15px]">
+            <p><strong class="text-white">C'est quoi, le FTTH&nbsp;?</strong>« Fiber To The Home » signifie que la fibre arrive jusqu'au logement, sans section en cuivre. Le signal lumineux traverse plusieurs dizaines de kilomètres avec très peu d'atténuation, ce qui permet des débits symétriques et une latence stable — un vrai plus pour la visioconférence, le jeu en ligne et le télétravail.</p>
+            <p><strong class="text-white">La chaîne guinéenne.</strong>Le trafic international passe par les câbles sous-marins (ACE notamment) débarquant à Conakry. Ensuite viennent les réseaux de collecte nationaux, la distribution dans les quartiers, puis le raccordement final. Chaque maillon mal épissé ou mal protégé ajoute des pertes, et une seule cassure prive parfois tout un quartier de connexion.</p>
+            <p><strong class="text-white">Les vrais points de casse.</strong>Sur le terrain, on croise surtout&nbsp;: des épissures réalisées à la hâte sans soudureuse bien calibrée, des câbles aériens accrochés aux poteaux électriques exposés aux intempéries, et des coupures involontaires lors de travaux de voirie. La documentation précise des routes de câbles reste l'exception, ce qui rend les interventions longues.</p>
+            <p><strong class="text-white">Ce qui peut changer la donne.</strong>La normalisation des prises et des boîtiers, la formation renforcée des techniciens au mesurage OTDR, et la cartographie numérique des réseaux. Un simple rapport OTDR bien archivé transforme une journée de recherche de panne en intervention de trente minutes.</p>
+            <p class="text-sm text-slate-500 pt-2">— Mamadou Thiam, technicien / ingénieur junior réseaux &amp; télécoms (ESMT)</p>
+          </div>
+          <button onclick="toggleArticle(1, this)" class="mt-4 inline-flex items-center gap-2 text-sm font-bold text-cyan-400 hover:text-cyan-300 transition focus-ring" aria-expanded="false">
+            <span data-label>Lire l'article</span><i data-chevron data-lucide="chevron-down" class="w-4 h-4 transition-transform"></i>
+          </button>
+        </div>
+      </article>
+
+      <!-- Article 2 -->
+      <article id="article-2" class="card-hover rounded-2xl border border-white/10 bg-white/[0.03] overflow-hidden">
+        <div class="p-6 sm:p-7">
+          <div class="flex flex-wrap items-center gap-3 text-xs mb-3">
+            <span class="font-mono px-2.5 py-1 rounded-md bg-blue-500/10 border border-blue-500/30 text-blue-300 font-bold uppercase tracking-wider">réseaux mobiles</span>
+            <span class="flex items-center gap-1.5 text-slate-500"><i data-lucide="calendar" class="w-3.5 h-3.5"></i> 9 juillet 2024</span>
+            <span class="flex items-center gap-1.5 text-slate-500"><i data-lucide="clock" class="w-3.5 h-3.5"></i> 8 min</span>
+          </div>
+          <h2 class="font-display text-xl sm:text-2xl font-bold text-white leading-snug">2G, 3G, 4G, 5G&nbsp;: enfin comprendre ce qui change à chaque génération</h2>
+          <p class="mt-3 text-slate-400 leading-relaxed">On les voit s'afficher dans la barre d'état sans trop savoir ce qu'elles veulent dire. Chaque génération a pourtant résolu un problème précis — et chacune laisse des traces dans les réseaux d'aujourd'hui.</p>
+          <div id="body-2" class="blog-body mt-5 pt-5 border-t border-white/10 text-slate-400 leading-relaxed text-[15px]">
+            <p><strong class="text-white">2G (GSM) — l'ère de la voix.</strong>Lancée dans les années 90, la 2G numérisait la voix et introduisait le SMS. Son héritage&nbsp;: la bande de fréquences de 900 MHz, excellente pour couvrir de grandes zones avec peu d'antennes — c'est pourquoi la 2G survit encore en zone rurale et porte toujours les machines à souscription M2M.</p>
+            <p><strong class="text-white">3G (UMTS/HSPA) — l'arrivée de la donnée.</strong>Première vraie expérience internet mobile, même modeste. Sa contribution durable&nbsp;: l'architecture cœur réseau repensée et le concept de « soft handover ». Beaucoup d'opérateurs l'ont déjà éteinte pour réutiliser ses fréquences en 4G.</p>
+            <p><strong class="text-white">4G (LTE) — le réseau tout IP.</strong>Tout passe par des paquets, voc compris (VoLTE). Les débits grimpent d'un facteur 10 grâce à l'OFDMA et aux antennes MIMO. En Guinée, c'est aujourd'hui le socle de l'internet mobile&nbsp;; le déploiement se concentre sur la capitalisation des sites existants et l'ajout de porteuses.</p>
+            <p><strong class="text-white">5G — trois usages, pas un seul.</strong>On parle de eMBB (très haut débit), URLLC (latence de l'ordre de la milliseconde pour l'industrie) et mMTC (un million d'objets connectés au km²). Sa particularité technique&nbsp;: le network slicing, qui découpe une même infrastructure physique en réseaux virtuels dédiés. Le signal mmWave reste court-portée&nbsp;; le vrai travail se joue dans le cœur réseau virtualisé (NFV/SDN) — le terrain d'apprentissage des jeunes ingénieurs télécoms.</p>
+            <p class="text-sm text-slate-500 pt-2">— Mamadou Thiam</p>
+          </div>
+          <button onclick="toggleArticle(2, this)" class="mt-4 inline-flex items-center gap-2 text-sm font-bold text-cyan-400 hover:text-cyan-300 transition focus-ring" aria-expanded="false">
+            <span data-label>Lire l'article</span><i data-chevron data-lucide="chevron-down" class="w-4 h-4 transition-transform"></i>
+          </button>
+        </div>
+      </article>
+
+      <!-- Article 3 -->
+      <article id="article-3" class="card-hover rounded-2xl border border-white/10 bg-white/[0.03] overflow-hidden">
+        <div class="p-6 sm:p-7">
+          <div class="flex flex-wrap items-center gap-3 text-xs mb-3">
+            <span class="font-mono px-2.5 py-1 rounded-md bg-cyan-500/10 border border-cyan-500/30 text-cyan-300 font-bold uppercase tracking-wider">télécoms</span>
+            <span class="flex items-center gap-1.5 text-slate-500"><i data-lucide="calendar" class="w-3.5 h-3.5"></i> 27 octobre 2024</span>
+            <span class="flex items-center gap-1.5 text-slate-500"><i data-lucide="clock" class="w-3.5 h-3.5"></i> 5 min</span>
+          </div>
+          <h2 class="font-display text-xl sm:text-2xl font-bold text-white leading-snug">Antennes relais&nbsp;: pourquoi la qualité de votre appel dépend du paramétrage</h2>
+          <p class="mt-3 text-slate-400 leading-relaxed">Votre appel saute au même endroit chaque jour&nbsp;? Ce n'est presque jamais « la faute à l'antenne ». Explication d'un métier invisible&nbsp;: l'optimisation réseau.</p>
+          <div id="body-3" class="blog-body mt-5 pt-5 border-t border-white/10 text-slate-400 leading-relaxed text-[15px]">
+            <p><strong class="text-white">Une antenne n'est pas une ampoule.</strong>Elle ne « rayonne » pas uniformément&nbsp;: ses émetteurs sont orientés secteur par secteur (souvent trois secteurs à 120°), avec une inclinaison (tilt) et une puissance soigneusement choisies. Une inclinaison trop faible renvoie le signal au-delà des usagers prévus&nbsp;; trop forte, il s'écrase à ses pieds.</p>
+            <p><strong class="text-white">L'art du KPI.</strong>Les ingénieurs d'optimisation vivent avec des indicateurs&nbsp;: taux d'appels échoués (CSSR), qualité du signal (C/I), débit moyen, taux de handover réussi. Chaque matin, les compteurs de la veille sont analysés site par site. Un site « en rouge » déclenche une enquête&nbsp;: sonde terrain, mesure drive test, ajustement de puissance ou d'orthogonalité de codes.</p>
+            <p><strong class="text-white">Le voisinage compte.</strong>Le réseau est un ensemble&nbsp;: descendre la puissance d'un site pour « réduire les nuisances » peut créer un trou de couverture que trois autres sites doivent compenser. Le paramétrage se joue toujours à l'échelle d'un cluster de sites, jamais d'un site isolé.</p>
+            <p><strong class="text-white">Et l'humain&nbsp;?</strong>Heure de pointe, marchés, matches — la charge varie. Les plans de capacité anticipent les pics&nbsp;; sans eux, un quartier peut être bien couvert et pourtant saturé le week-end. La prochaine fois qu'un appel résiste, remerciez l'ingénieur qui a réglé votre secteur un samedi matin.</p>
+            <p class="text-sm text-slate-500 pt-2">— Mamadou Thiam</p>
+          </div>
+          <button onclick="toggleArticle(3, this)" class="mt-4 inline-flex items-center gap-2 text-sm font-bold text-cyan-400 hover:text-cyan-300 transition focus-ring" aria-expanded="false">
+            <span data-label>Lire l'article</span><i data-chevron data-lucide="chevron-down" class="w-4 h-4 transition-transform"></i>
+          </button>
+        </div>
+      </article>
+
+      <!-- Article 4 -->
+      <article id="article-4" class="card-hover rounded-2xl border border-white/10 bg-white/[0.03] overflow-hidden">
+        <div class="p-6 sm:p-7">
+          <div class="flex flex-wrap items-center gap-3 text-xs mb-3">
+            <span class="font-mono px-2.5 py-1 rounded-md bg-blue-500/10 border border-blue-500/30 text-blue-300 font-bold uppercase tracking-wider">sécurité réseau</span>
+            <span class="flex items-center gap-1.5 text-slate-500"><i data-lucide="calendar" class="w-3.5 h-3.5"></i> 3 mai 2025</span>
+            <span class="flex items-center gap-1.5 text-slate-500"><i data-lucide="clock" class="w-3.5 h-3.5"></i> 7 min</span>
+          </div>
+          <h2 class="font-display text-xl sm:text-2xl font-bold text-white leading-snug">Wi-Fi d'entreprise&nbsp;: 7 réflexes pour un réseau sans faille</h2>
+          <p class="mt-3 text-slate-400 leading-relaxed">Le Wi-Fi est la porte d'entrée favorite des intrus, précisément parce qu'on l'installe vite et qu'on l'oublie. Sept réflexes simples séparent un réseau sérieux d'un réseau ouvert à tous.</p>
+          <div id="body-4" class="blog-body mt-5 pt-5 border-t border-white/10 text-slate-400 leading-relaxed text-[15px]">
+            <p><strong class="text-white">1. Bannir le WPA2-psk partagé.</strong>Un seul mot de passe communiqué à tout le personnel signifie qu'une seule fuite compromet tout. Passer au WPA-Enterprise (802.1X) donne à chacun ses identifiants révocables en une minute.</p>
+            <p><strong class="text-white">2. Un SSID invité isolé.</strong>Les visiteurs doivent être cloisonnés sur un réseau séparé, sans accès à la LAN, avec isolation client activée. Le routeur invité qui « fait le café » sans segmentation est une invitation ouverte.</p>
+            <p><strong class="text-white">3. Cartographier avant d'ajouter.</strong>Ajouter un point d'accès sans étude de couverture crée des chevauchements destructifs qui écrasent le débit au lieu de l'améliorer. Un simple relevé au téléphone (chaînes 2,4/5 GHz) révèle déjà l'essentiel.</p>
+            <p><strong class="text-white">4. Gérer les chaînes et les puissances.</strong>Deux APs voisins sur la même chaîne se disputent l'air. Un plan de fréquences (1/6/11 en 2,4 GHz) et des puissances modérées valent mieux qu'un mur d'émission.</p>
+            <p><strong class="text-white">5. Séparer les VLAN.</strong>Imprimantes, caméras, caisses, PC du personnel&nbsp;: des VLAN dédiés avec filtrage entre eux limitent la propagation d'une intrusion. Le switch géré est le meilleur ami du technicien.</p>
+            <p><strong class="text-white">6. Mettre à jour les firmwares.</strong>Les points d'accès contiennent des vulnérabilités corrigées en amont&nbsp;; un parc non mis à jour depuis trois ans est un risque documenté en ligne. Une routine trimestrielle suffit.</p>
+            <p><strong class="text-white">7. Surveiller.</strong>L'interface d'administration du contrôleur Wi-Fi indique déjà des anomalies&nbsp;: client inconnu, pic de retransmissions, AP hors ligne. Les regarder chaque semaine fait partie du métier.</p>
+            <p class="text-sm text-slate-500 pt-2">— Mamadou Thiam</p>
+          </div>
+          <button onclick="toggleArticle(4, this)" class="mt-4 inline-flex items-center gap-2 text-sm font-bold text-cyan-400 hover:text-cyan-300 transition focus-ring" aria-expanded="false">
+            <span data-label>Lire l'article</span><i data-chevron data-lucide="chevron-down" class="w-4 h-4 transition-transform"></i>
+          </button>
+        </div>
+      </article>
+
+      <!-- Article 5 -->
+      <article id="article-5" class="card-hover rounded-2xl border border-white/10 bg-white/[0.03] overflow-hidden">
+        <div class="p-6 sm:p-7">
+          <div class="flex flex-wrap items-center gap-3 text-xs mb-3">
+            <span class="font-mono px-2.5 py-1 rounded-md bg-cyan-500/10 border border-cyan-500/30 text-cyan-300 font-bold uppercase tracking-wider">voip &amp; transmission</span>
+            <span class="flex items-center gap-1.5 text-slate-500"><i data-lucide="calendar" class="w-3.5 h-3.5"></i> 21 septembre 2025</span>
+            <span class="flex items-center gap-1.5 text-slate-500"><i data-lucide="clock" class="w-3.5 h-3.5"></i> 6 min</span>
+          </div>
+          <h2 class="font-display text-xl sm:text-2xl font-bold text-white leading-snug">La VoIP transforme la téléphonie d'entreprise en Afrique de l'Ouest</h2>
+          <p class="mt-3 text-slate-400 leading-relaxed">Le PABX cuivré vieillit pendant que la fibre s'installe. Pour beaucoup d'entreprises de la sous-région, migrer vers la VoIP n'est plus une question de mode mais de comptabilité.</p>
+          <div id="body-5" class="blog-body mt-5 pt-5 border-t border-white/10 text-slate-400 leading-relaxed text-[15px]">
+            <p><strong class="text-white">Le principe en une phrase.</strong>La voix devient des paquets comme les autres&nbsp;: le téléphone (ou le softphone) encode la parole, l'envoie sur le réseau IP, et un serveur de téléphonie (PBX IP, type Asterisk ou équivalent cloud) route les appels vers l'intérieur comme vers l'extérieur.</p>
+            <p><strong class="text-white">Ce que ça change pour une PME.</strong>Un seul câblage pour la data et la voix, des postes déplacés en branchant simplement, des bureaux distants qui s'appellent gratuitement via le VPN, des standards automatiques, messageries vocales par e-mail et files d'attente. Le coût des communications inter-sites fond, surtout entre pays de la sous-région.</p>
+            <p><strong class="text-white">Les prérequis, honnêtement.</strong>La VoIP pardonne mal un réseau approximatif. Il faut&nbsp;: des VLAN voix dédiés avec QoS (DSCP EF), une latence maîtrisée (objectif sous 150 ms bout en bout), de la gigue sous 30 ms et une alimentation secourue pour les postes critiques. Sur du WiFi, viser 802.11n minimum et réserver le SSID voix.</p>
+            <p><strong class="text-white">Le rôle du technicien télécom.</strong>C'est lui qui dimensionne les bande passantes, règle les codecs (G.711 pour la qualité, G.729 pour économiser la liaison), configure les trunks SIP vers l'opérateur et documente la matrice des flux. Un déploiement VoIP réussi, c'est d'abord un travail de réseau&nbsp;— exactement la compétence qu'on apprend à l'ESMT.</p>
+            <p class="text-sm text-slate-500 pt-2">— Mamadou Thiam</p>
+          </div>
+          <button onclick="toggleArticle(5, this)" class="mt-4 inline-flex items-center gap-2 text-sm font-bold text-cyan-400 hover:text-cyan-300 transition focus-ring" aria-expanded="false">
+            <span data-label>Lire l'article</span><i data-chevron data-lucide="chevron-down" class="w-4 h-4 transition-transform"></i>
+          </button>
+        </div>
+      </article>
+
+      <!-- Article 6 -->
+      <article id="article-6" class="card-hover rounded-2xl border border-white/10 bg-white/[0.03] overflow-hidden">
+        <div class="p-6 sm:p-7">
+          <div class="flex flex-wrap items-center gap-3 text-xs mb-3">
+            <span class="font-mono px-2.5 py-1 rounded-md bg-blue-500/10 border border-blue-500/30 text-blue-300 font-bold uppercase tracking-wider">parcours &amp; métier</span>
+            <span class="flex items-center gap-1.5 text-slate-500"><i data-lucide="calendar" class="w-3.5 h-3.5"></i> 16 janvier 2026</span>
+            <span class="flex items-center gap-1.5 text-slate-500"><i data-lucide="clock" class="w-3.5 h-3.5"></i> 5 min</span>
+          </div>
+          <h2 class="font-display text-xl sm:text-2xl font-bold text-white leading-snug">De la licence 1 à la licence 3&nbsp;: ce que l'ESMT m'a vraiment appris</h2>
+          <p class="mt-3 text-slate-400 leading-relaxed">Trois ans de formation en Réseaux &amp; Télécommunications à l'ESMT de Conakry&nbsp;: ce que valent les cours, ce que change le terrain, et mes conseils aux étudiants qui préparent leur rentrée.</p>
+          <div id="body-6" class="blog-body mt-5 pt-5 border-t border-white/10 text-slate-400 leading-relaxed text-[15px]">
+            <p><strong class="text-white">Le socle&nbsp;: comprendre avant d'appuyer.</strong>La première force de la formation, c'est la rigueur des bases&nbsp;: modèle OSI couche par couche, adressage IP sans calculatrice, signal analogique et numérique. Ce vocabulaire commun change tout ensuite — un problème de VLAN ne se résout pas comme un problème de fibre, et savoir nommer la couche concernée, c'est déjà la moitié du diagnostic.</p>
+            <p><strong class="text-white">Les TP, là où tout devient concret.</strong>Câbler une baie de brassage, épisser une fibre et lire une courbe OTDR, configurer un routeur Cisco en CLI, mesurer un vrai bilan de lien radio&nbsp;: c'est en TP que la théorie devient compétences. Mon conseil le plus important&nbsp;: ne jamais sortir d'un TP sans avoir compris chaque ligne de configuration, pas seulement copié celle du voisin.</p>
+            <p><strong class="text-white">Le projet de licence, une mini-carrière.</strong>Notre projet fibre optique (étude, dimensionnement, chiffrage) ressemble à ce que demandera un premier employeur&nbsp;: méthodologie, contraintes réelles, justification des choix. Le présenter proprement à l'écrit comme à l'oral est un entraînement direct à la vie professionnelle.</p>
+            <p><strong class="text-white">Pour les étudiants qui commencent.</strong>Trois réflexes&nbsp;: documentez chaque TP (un cahier de labo devient une arme en entretien), montez un lab virtuel chez vous (Packet Tracer, GNS3), et apprenez l'anglais technique — les documentations des constructeurs ne traduisent pas tout. Le métier de réseaux &amp; télécoms est exigeant, mais chaque problème résolu est une satisfaction immédiate&nbsp;: le lien se fait, le trafic passe, et c'est vous qui savez pourquoi.</p>
+            <p class="text-sm text-slate-500 pt-2">— Mamadou Thiam, licence 3 Réseaux &amp; Télécoms, ESMT Conakry</p>
+          </div>
+          <button onclick="toggleArticle(6, this)" class="mt-4 inline-flex items-center gap-2 text-sm font-bold text-cyan-400 hover:text-cyan-300 transition focus-ring" aria-expanded="false">
+            <span data-label>Lire l'article</span><i data-chevron data-lucide="chevron-down" class="w-4 h-4 transition-transform"></i>
+          </button>
+        </div>
+      </article>
+
+    </div>
+
+    <!-- CTA -->
+    <section class="mt-12 text-center">
+      <div class="card-hover rounded-2xl border border-cyan-500/30 bg-cyan-500/5 p-7">
+        <h2 class="font-display text-lg font-bold text-white">Un projet réseau&nbsp;? Un stage à pourvoir&nbsp;?</h2>
+        <p class="mt-2 text-sm text-slate-400">Je suis disponible pour un stage ou une collaboration. Parlons-en.</p>
+        <div class="mt-5 flex flex-wrap items-center justify-center gap-3">
+          <a href="https://wa.me/224610187986?text=Bonjour%20Mamadou%2C%20j%27ai%20lu%20votre%20blog." target="_blank" rel="noopener"
+             class="inline-flex items-center gap-2 px-5 py-3 rounded-full bg-[#25D366] text-base-950 font-bold hover:scale-105 active:scale-95 transition focus-ring">
+            <i data-lucide="message-circle" class="w-4 h-4"></i> WhatsApp
+          </a>
+          <a href="carte.html" class="inline-flex items-center gap-2 px-5 py-3 rounded-full bg-white/5 text-white font-semibold border border-white/10 hover:border-cyan-500/50 hover:text-cyan-300 transition focus-ring">
+            <i data-lucide="contact" class="w-4 h-4"></i> Ma carte de visite
+          </a>
+          <a href="index.html#contact" class="inline-flex items-center gap-2 px-5 py-3 rounded-full bg-gradient-to-r from-cyan-400 to-blue-500 text-base-950 font-bold hover:shadow-glow transition focus-ring">
+            <i data-lucide="send" class="w-4 h-4"></i> Me contacter
+          </a>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <script src="assets/lucide.min.js" onerror="this.remove()"></script>
+  <script>
+    lucide.createIcons();
+
+    function toggleArticle(n, btn) {
+      const body = document.getElementById('body-' + n);
+      const open = body.classList.toggle('open');
+      btn.setAttribute('aria-expanded', open ? 'true' : 'false');
+      btn.querySelector('[data-label]').textContent = open ? 'Réduire l’article' : 'Lire l’article';
+      const chev = btn.querySelector('[data-chevron]');
+      if (chev) chev.classList.toggle('chev-rot', open);
+      if (open) {
+        document.getElementById('article-' + n).scrollIntoView({ behavior: 'smooth', block: 'start' });
+      }
+    }
+  </script>
+</body>
+</html>
