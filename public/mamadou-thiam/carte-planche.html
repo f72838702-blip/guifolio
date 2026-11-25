@@ -1,0 +1,461 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Planche 10 cartes — Mamadou Thiam (A4 recto/verso)</title>
+  <meta name="description" content="Planche imprimable A4 : 10 cartes de visite paysage (recto) + 10 QR codes (verso), thème dark tech du portfolio." />
+  <meta name="author" content="Mamadou Thiam" />
+
+  <!-- Fonts (auto-hébergées) -->
+  <link href="assets/fonts/fonts.css" rel="stylesheet" />
+
+  <style>
+    /* Base = rendu écran ; précision impression en mm */
+    :root {
+      --base-950: #070B14;
+      --base-900: #0B1120;
+      --cyan: #22D3EE;
+      --blue: #60A5FA;
+      --slate-300: #CBD5E1;
+      --slate-400: #94A3B8;
+      --slate-500: #64748B;
+    }
+    * { box-sizing: border-box; }
+    html { -webkit-font-smoothing: antialiased; }
+    body {
+      margin: 0; padding: 0;
+      font-family: 'Inter', sans-serif;
+      background: #111827;
+      color: var(--slate-300);
+    }
+    h1 { font-family: 'Sora', sans-serif; }
+
+    /* Note écran (masquée à l'impression) */
+    .screen-note {
+      max-width: 210mm; margin: 24px auto 16px auto; padding: 14px 18px;
+      background: #0B1120; border: 1px solid rgba(34,211,238,.35); border-radius: 10px;
+      font-size: 13px; line-height: 1.6;
+    }
+    .screen-note b { color: #22D3EE; }
+    .screen-note .mono { font-family: 'JetBrains Mono', monospace; font-size: 11px; color: #94A3B8; }
+
+    /* ===== Feuilles A4 ===== */
+    .sheet {
+      width: 210mm; height: 297mm;
+      margin: 0 auto 16px auto;
+      padding: 8mm 9mm;
+      background: var(--base-950);
+      position: relative; overflow: hidden;
+      box-shadow: 0 10px 40px rgba(0,0,0,.5);
+    }
+    .sheet-head {
+      display: flex; justify-content: space-between; align-items: center;
+      padding-bottom: 2mm; margin-bottom: 2mm;
+      border-bottom: 0.2mm solid rgba(34,211,238,.25);
+    }
+    .sheet-head .brand {
+      display: flex; align-items: center; gap: 2mm;
+      font-family: 'Sora', sans-serif; font-weight: 600; font-size: 8pt; color: #fff;
+    }
+    .sheet-head .logo {
+      width: 6mm; height: 6mm; border-radius: 1.4mm; flex: none;
+      background: linear-gradient(135deg, #22D3EE, #3B82F6);
+      color: #070B14; font-weight: 700; font-size: 6pt;
+      display: flex; align-items: center; justify-content: center;
+    }
+    .sheet-head .meta {
+      font-family: 'JetBrains Mono', monospace; font-size: 5.5pt; color: var(--slate-500);
+      text-transform: uppercase; letter-spacing: 0.2mm;
+    }
+
+    /* Grille 2 × 5 */
+    .grid10 {
+      display: grid;
+      grid-template-columns: repeat(2, 85mm);
+      grid-auto-rows: 54mm;
+      column-gap: 22mm; row-gap: 1.6mm;
+      justify-content: center;
+    }
+
+    /* ===== Carte (recto) ===== */
+    .card {
+      position: relative; overflow: hidden;
+      width: 85mm; height: 54mm;
+      background: var(--base-900);
+      border: 0.2mm solid rgba(34,211,238,.5);
+      border-radius: 2.5mm;
+      padding: 3mm;
+      display: flex; flex-direction: column; gap: 1.5mm;
+      -webkit-print-color-adjust: exact; print-color-adjust: exact;
+    }
+    .card .grid-bg {
+      position: absolute; inset: 0; opacity: .35; pointer-events: none;
+      background-image:
+        linear-gradient(rgba(34,211,238,.07) .2mm, transparent .2mm),
+        linear-gradient(90deg, rgba(34,211,238,.07) .2mm, transparent .2mm);
+      background-size: 8mm 8mm;
+    }
+    .card .id-row { position: relative; display: flex; gap: 2.5mm; align-items: flex-start; }
+    .card .photo {
+      width: 15mm; height: 15mm; flex: none; object-fit: cover; object-position: top;
+      border-radius: 2mm; border: 0.25mm solid rgba(34,211,238,.55);
+    }
+    .card .id-text { min-width: 0; flex: 1; }
+    .card .name {
+      font-family: 'Sora', sans-serif; font-weight: 700; font-size: 9.5pt; color: #fff;
+      letter-spacing: -0.1mm; line-height: 1.15;
+    }
+    .card .name span { color: var(--cyan); }
+    .card .title { font-size: 5.2pt; color: var(--slate-400); line-height: 1.35; margin-top: 0.8mm; }
+    .card .status {
+      display: inline-block; margin-top: 1mm;
+      font-family: 'JetBrains Mono', monospace; font-size: 4pt; font-weight: 700;
+      color: var(--cyan); text-transform: uppercase; letter-spacing: 0.15mm;
+      border: 0.2mm solid rgba(34,211,238,.4); border-radius: 2mm; padding: 0.5mm 1.5mm;
+      background: rgba(34,211,238,.08);
+    }
+    .card .qr-front {
+      width: 13mm; height: 13mm; flex: none; align-self: center;
+      background: #fff; border-radius: 1.5mm; padding: 0.7mm;
+    }
+    .card .qr-front img { width: 100%; height: 100%; display: block; }
+
+    .card .contacts {
+      position: relative;
+      border-top: 0.2mm solid rgba(148,163,184,.3);
+      padding-top: 1.4mm; margin-top: auto;
+      display: grid; grid-template-columns: 1fr 1fr; gap: 0.6mm 3mm;
+      font-size: 5pt; color: var(--slate-300); line-height: 1.4;
+    }
+    .card .contacts b { color: #fff; font-weight: 700; }
+    .card .contacts .lab {
+      font-family: 'JetBrains Mono', monospace; font-size: 3.6pt;
+      color: var(--slate-500); text-transform: uppercase; letter-spacing: 0.15mm;
+    }
+    .card .contacts .item span { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; display: inline-block; max-width: 100%; }
+    .card .contacts .foot {
+      grid-column: 1 / -1;
+      font-family: 'JetBrains Mono', monospace; font-size: 3.8pt; color: var(--cyan);
+      letter-spacing: 0.1mm;
+    }
+
+    /* ===== Verso (QR seul) ===== */
+    .qrback {
+      width: 85mm; height: 54mm;
+      background: var(--base-900);
+      border: 0.2mm solid rgba(34,211,238,.5);
+      border-radius: 2.5mm;
+      display: flex; flex-direction: column; align-items: center; justify-content: center;
+      gap: 1.6mm;
+      -webkit-print-color-adjust: exact; print-color-adjust: exact;
+    }
+    .qrback img { width: 30mm; height: 30mm; background: #fff; border-radius: 2mm; padding: 1mm; }
+    .qrback .scan {
+      font-family: 'JetBrains Mono', monospace; font-size: 4.2pt; color: var(--slate-500);
+      text-transform: uppercase; letter-spacing: 0.25mm;
+    }
+    .qrback .url {
+      font-family: 'JetBrains Mono', monospace; font-size: 6pt; font-weight: 600; color: var(--cyan);
+    }
+    .qrback .who {
+      font-family: 'Sora', sans-serif; font-size: 5.5pt; font-weight: 600; color: #fff;
+    }
+
+    /* ===== Écran : aperçu réduit ===== */
+    @media screen {
+      body { padding: 0 16mm; }
+      .sheet { transform-origin: top center; }
+      @media (max-width: 850px) {
+        .sheet { transform: scale(.42); margin-bottom: -160px; }
+      }
+    }
+
+    /* ===== Impression ===== */
+    @page { size: A4 portrait; margin: 0; }
+    @media print {
+      body { background: #fff; }
+      * { -webkit-print-color-adjust: exact !important; print-color-adjust: exact !important; }
+      .screen-note { display: none; }
+      .sheet { margin: 0; box-shadow: none; page-break-after: always; }
+      .sheet:last-child { page-break-after: auto; }
+    }
+  </style>
+</head>
+
+<body>
+
+  <div class="screen-note">
+    <b>Planche d'impression — 10 cartes de visite (recto/verso)</b><br />
+    Page 1 : 10 cartes <b>paysage 85 × 54 mm</b> (2 × 5). Page 2 : les 10 QR codes pour le <b>verso</b>.
+    Imprimer en <b>A4, marges « aucune », échelle 100 %, graphiques d'arrière-plan activés</b>, recto-verso (retournement bord long).
+    Découper le long des liserés cyan.<br />
+    <span class="mono">fichier prêt à imprimer : assets/carte-planche-10.pdf — mamadou-thiam.guifolio.com</span>
+  </div>
+
+  <!-- ============ FEUILLE 1 : RECTO — 10 CARTES ============ -->
+  <section class="sheet">
+    <div class="sheet-head">
+      <div class="brand"><span class="logo">MT</span>Mamadou Thiam — Cartes de visite</div>
+      <div class="meta">recto · planche 1/2 · 10 ex · 85×54mm</div>
+    </div>
+
+    <div class="grid10">
+      <!-- 10 cartes identiques -->
+      <!-- Carte -->
+      <div class="card"><div class="grid-bg"></div>
+        <div class="id-row">
+          <img class="photo" src="assets/mamadou-thiam.jpg" alt="" />
+          <div class="id-text">
+            <div class="name">Mamadou <span>Thiam</span></div>
+            <div class="title">Technicien / Ingénieur Junior —<br />Réseaux &amp; Télécommunications</div>
+            <span class="status">disponible stage &amp; projets</span>
+          </div>
+          <div class="qr-front"><img src="assets/qr-carte.png" alt="" /></div>
+        </div>
+        <div class="contacts">
+          <div class="item"><span class="lab">tél</span><br /><b>+224 610-18-79-86</b></div>
+          <div class="item"><span class="lab">e-mail</span><br /><b>mamadouthiam646@gmail.com</b></div>
+          <div class="item"><span class="lab">linkedin</span><br /><span>mamadou-thiam-709002368</span></div>
+          <div class="item"><span class="lab">lieu</span><br /><b>Conakry, Guinée</b></div>
+          <div class="foot">mamadou-thiam.guifolio.com</div>
+        </div>
+      </div>
+      <div class="card"><div class="grid-bg"></div>
+        <div class="id-row">
+          <img class="photo" src="assets/mamadou-thiam.jpg" alt="" />
+          <div class="id-text">
+            <div class="name">Mamadou <span>Thiam</span></div>
+            <div class="title">Technicien / Ingénieur Junior —<br />Réseaux &amp; Télécommunications</div>
+            <span class="status">disponible stage &amp; projets</span>
+          </div>
+          <div class="qr-front"><img src="assets/qr-carte.png" alt="" /></div>
+        </div>
+        <div class="contacts">
+          <div class="item"><span class="lab">tél</span><br /><b>+224 610-18-79-86</b></div>
+          <div class="item"><span class="lab">e-mail</span><br /><b>mamadouthiam646@gmail.com</b></div>
+          <div class="item"><span class="lab">linkedin</span><br /><span>mamadou-thiam-709002368</span></div>
+          <div class="item"><span class="lab">lieu</span><br /><b>Conakry, Guinée</b></div>
+          <div class="foot">mamadou-thiam.guifolio.com</div>
+        </div>
+      </div>
+      <div class="card"><div class="grid-bg"></div>
+        <div class="id-row">
+          <img class="photo" src="assets/mamadou-thiam.jpg" alt="" />
+          <div class="id-text">
+            <div class="name">Mamadou <span>Thiam</span></div>
+            <div class="title">Technicien / Ingénieur Junior —<br />Réseaux &amp; Télécommunications</div>
+            <span class="status">disponible stage &amp; projets</span>
+          </div>
+          <div class="qr-front"><img src="assets/qr-carte.png" alt="" /></div>
+        </div>
+        <div class="contacts">
+          <div class="item"><span class="lab">tél</span><br /><b>+224 610-18-79-86</b></div>
+          <div class="item"><span class="lab">e-mail</span><br /><b>mamadouthiam646@gmail.com</b></div>
+          <div class="item"><span class="lab">linkedin</span><br /><span>mamadou-thiam-709002368</span></div>
+          <div class="item"><span class="lab">lieu</span><br /><b>Conakry, Guinée</b></div>
+          <div class="foot">mamadou-thiam.guifolio.com</div>
+        </div>
+      </div>
+      <div class="card"><div class="grid-bg"></div>
+        <div class="id-row">
+          <img class="photo" src="assets/mamadou-thiam.jpg" alt="" />
+          <div class="id-text">
+            <div class="name">Mamadou <span>Thiam</span></div>
+            <div class="title">Technicien / Ingénieur Junior —<br />Réseaux &amp; Télécommunications</div>
+            <span class="status">disponible stage &amp; projets</span>
+          </div>
+          <div class="qr-front"><img src="assets/qr-carte.png" alt="" /></div>
+        </div>
+        <div class="contacts">
+          <div class="item"><span class="lab">tél</span><br /><b>+224 610-18-79-86</b></div>
+          <div class="item"><span class="lab">e-mail</span><br /><b>mamadouthiam646@gmail.com</b></div>
+          <div class="item"><span class="lab">linkedin</span><br /><span>mamadou-thiam-709002368</span></div>
+          <div class="item"><span class="lab">lieu</span><br /><b>Conakry, Guinée</b></div>
+          <div class="foot">mamadou-thiam.guifolio.com</div>
+        </div>
+      </div>
+      <div class="card"><div class="grid-bg"></div>
+        <div class="id-row">
+          <img class="photo" src="assets/mamadou-thiam.jpg" alt="" />
+          <div class="id-text">
+            <div class="name">Mamadou <span>Thiam</span></div>
+            <div class="title">Technicien / Ingénieur Junior —<br />Réseaux &amp; Télécommunications</div>
+            <span class="status">disponible stage &amp; projets</span>
+          </div>
+          <div class="qr-front"><img src="assets/qr-carte.png" alt="" /></div>
+        </div>
+        <div class="contacts">
+          <div class="item"><span class="lab">tél</span><br /><b>+224 610-18-79-86</b></div>
+          <div class="item"><span class="lab">e-mail</span><br /><b>mamadouthiam646@gmail.com</b></div>
+          <div class="item"><span class="lab">linkedin</span><br /><span>mamadou-thiam-709002368</span></div>
+          <div class="item"><span class="lab">lieu</span><br /><b>Conakry, Guinée</b></div>
+          <div class="foot">mamadou-thiam.guifolio.com</div>
+        </div>
+      </div>
+      <div class="card"><div class="grid-bg"></div>
+        <div class="id-row">
+          <img class="photo" src="assets/mamadou-thiam.jpg" alt="" />
+          <div class="id-text">
+            <div class="name">Mamadou <span>Thiam</span></div>
+            <div class="title">Technicien / Ingénieur Junior —<br />Réseaux &amp; Télécommunications</div>
+            <span class="status">disponible stage &amp; projets</span>
+          </div>
+          <div class="qr-front"><img src="assets/qr-carte.png" alt="" /></div>
+        </div>
+        <div class="contacts">
+          <div class="item"><span class="lab">tél</span><br /><b>+224 610-18-79-86</b></div>
+          <div class="item"><span class="lab">e-mail</span><br /><b>mamadouthiam646@gmail.com</b></div>
+          <div class="item"><span class="lab">linkedin</span><br /><span>mamadou-thiam-709002368</span></div>
+          <div class="item"><span class="lab">lieu</span><br /><b>Conakry, Guinée</b></div>
+          <div class="foot">mamadou-thiam.guifolio.com</div>
+        </div>
+      </div>
+      <div class="card"><div class="grid-bg"></div>
+        <div class="id-row">
+          <img class="photo" src="assets/mamadou-thiam.jpg" alt="" />
+          <div class="id-text">
+            <div class="name">Mamadou <span>Thiam</span></div>
+            <div class="title">Technicien / Ingénieur Junior —<br />Réseaux &amp; Télécommunications</div>
+            <span class="status">disponible stage &amp; projets</span>
+          </div>
+          <div class="qr-front"><img src="assets/qr-carte.png" alt="" /></div>
+        </div>
+        <div class="contacts">
+          <div class="item"><span class="lab">tél</span><br /><b>+224 610-18-79-86</b></div>
+          <div class="item"><span class="lab">e-mail</span><br /><b>mamadouthiam646@gmail.com</b></div>
+          <div class="item"><span class="lab">linkedin</span><br /><span>mamadou-thiam-709002368</span></div>
+          <div class="item"><span class="lab">lieu</span><br /><b>Conakry, Guinée</b></div>
+          <div class="foot">mamadou-thiam.guifolio.com</div>
+        </div>
+      </div>
+      <div class="card"><div class="grid-bg"></div>
+        <div class="id-row">
+          <img class="photo" src="assets/mamadou-thiam.jpg" alt="" />
+          <div class="id-text">
+            <div class="name">Mamadou <span>Thiam</span></div>
+            <div class="title">Technicien / Ingénieur Junior —<br />Réseaux &amp; Télécommunications</div>
+            <span class="status">disponible stage &amp; projets</span>
+          </div>
+          <div class="qr-front"><img src="assets/qr-carte.png" alt="" /></div>
+        </div>
+        <div class="contacts">
+          <div class="item"><span class="lab">tél</span><br /><b>+224 610-18-79-86</b></div>
+          <div class="item"><span class="lab">e-mail</span><br /><b>mamadouthiam646@gmail.com</b></div>
+          <div class="item"><span class="lab">linkedin</span><br /><span>mamadou-thiam-709002368</span></div>
+          <div class="item"><span class="lab">lieu</span><br /><b>Conakry, Guinée</b></div>
+          <div class="foot">mamadou-thiam.guifolio.com</div>
+        </div>
+      </div>
+      <div class="card"><div class="grid-bg"></div>
+        <div class="id-row">
+          <img class="photo" src="assets/mamadou-thiam.jpg" alt="" />
+          <div class="id-text">
+            <div class="name">Mamadou <span>Thiam</span></div>
+            <div class="title">Technicien / Ingénieur Junior —<br />Réseaux &amp; Télécommunications</div>
+            <span class="status">disponible stage &amp; projets</span>
+          </div>
+          <div class="qr-front"><img src="assets/qr-carte.png" alt="" /></div>
+        </div>
+        <div class="contacts">
+          <div class="item"><span class="lab">tél</span><br /><b>+224 610-18-79-86</b></div>
+          <div class="item"><span class="lab">e-mail</span><br /><b>mamadouthiam646@gmail.com</b></div>
+          <div class="item"><span class="lab">linkedin</span><br /><span>mamadou-thiam-709002368</span></div>
+          <div class="item"><span class="lab">lieu</span><br /><b>Conakry, Guinée</b></div>
+          <div class="foot">mamadou-thiam.guifolio.com</div>
+        </div>
+      </div>
+      <div class="card"><div class="grid-bg"></div>
+        <div class="id-row">
+          <img class="photo" src="assets/mamadou-thiam.jpg" alt="" />
+          <div class="id-text">
+            <div class="name">Mamadou <span>Thiam</span></div>
+            <div class="title">Technicien / Ingénieur Junior —<br />Réseaux &amp; Télécommunications</div>
+            <span class="status">disponible stage &amp; projets</span>
+          </div>
+          <div class="qr-front"><img src="assets/qr-carte.png" alt="" /></div>
+        </div>
+        <div class="contacts">
+          <div class="item"><span class="lab">tél</span><br /><b>+224 610-18-79-86</b></div>
+          <div class="item"><span class="lab">e-mail</span><br /><b>mamadouthiam646@gmail.com</b></div>
+          <div class="item"><span class="lab">linkedin</span><br /><span>mamadou-thiam-709002368</span></div>
+          <div class="item"><span class="lab">lieu</span><br /><b>Conakry, Guinée</b></div>
+          <div class="foot">mamadou-thiam.guifolio.com</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ FEUILLE 2 : VERSO — 10 QR ============ -->
+  <section class="sheet">
+    <div class="sheet-head">
+      <div class="brand"><span class="logo">MT</span>Mamadou Thiam — Versos QR</div>
+      <div class="meta">verso · planche 2/2 · 10 qr · pile recto-verso</div>
+    </div>
+
+    <div class="grid10">
+      <div class="qrback">
+        <img src="assets/qr-carte.png" alt="" />
+        <div class="scan">scan — portfolio &amp; contact</div>
+        <div class="url">mamadou-thiam.guifolio.com</div>
+        <div class="who">Mamadou Thiam · Réseaux &amp; Télécoms</div>
+      </div>
+      <div class="qrback">
+        <img src="assets/qr-carte.png" alt="" />
+        <div class="scan">scan — portfolio &amp; contact</div>
+        <div class="url">mamadou-thiam.guifolio.com</div>
+        <div class="who">Mamadou Thiam · Réseaux &amp; Télécoms</div>
+      </div>
+      <div class="qrback">
+        <img src="assets/qr-carte.png" alt="" />
+        <div class="scan">scan — portfolio &amp; contact</div>
+        <div class="url">mamadou-thiam.guifolio.com</div>
+        <div class="who">Mamadou Thiam · Réseaux &amp; Télécoms</div>
+      </div>
+      <div class="qrback">
+        <img src="assets/qr-carte.png" alt="" />
+        <div class="scan">scan — portfolio &amp; contact</div>
+        <div class="url">mamadou-thiam.guifolio.com</div>
+        <div class="who">Mamadou Thiam · Réseaux &amp; Télécoms</div>
+      </div>
+      <div class="qrback">
+        <img src="assets/qr-carte.png" alt="" />
+        <div class="scan">scan — portfolio &amp; contact</div>
+        <div class="url">mamadou-thiam.guifolio.com</div>
+        <div class="who">Mamadou Thiam · Réseaux &amp; Télécoms</div>
+      </div>
+      <div class="qrback">
+        <img src="assets/qr-carte.png" alt="" />
+        <div class="scan">scan — portfolio &amp; contact</div>
+        <div class="url">mamadou-thiam.guifolio.com</div>
+        <div class="who">Mamadou Thiam · Réseaux &amp; Télécoms</div>
+      </div>
+      <div class="qrback">
+        <img src="assets/qr-carte.png" alt="" />
+        <div class="scan">scan — portfolio &amp; contact</div>
+        <div class="url">mamadou-thiam.guifolio.com</div>
+        <div class="who">Mamadou Thiam · Réseaux &amp; Télécoms</div>
+      </div>
+      <div class="qrback">
+        <img src="assets/qr-carte.png" alt="" />
+        <div class="scan">scan — portfolio &amp; contact</div>
+        <div class="url">mamadou-thiam.guifolio.com</div>
+        <div class="who">Mamadou Thiam · Réseaux &amp; Télécoms</div>
+      </div>
+      <div class="qrback">
+        <img src="assets/qr-carte.png" alt="" />
+        <div class="scan">scan — portfolio &amp; contact</div>
+        <div class="url">mamadou-thiam.guifolio.com</div>
+        <div class="who">Mamadou Thiam · Réseaux &amp; Télécoms</div>
+      </div>
+      <div class="qrback">
+        <img src="assets/qr-carte.png" alt="" />
+        <div class="scan">scan — portfolio &amp; contact</div>
+        <div class="url">mamadou-thiam.guifolio.com</div>
+        <div class="who">Mamadou Thiam · Réseaux &amp; Télécoms</div>
+      </div>
+    </div>
+  </section>
+
+</body>
+</html>
