@@ -1,5 +1,6 @@
-import { createServerClient } from "@supabase/ssr";
+﻿import { createServerClient } from "@supabase/ssr";
 import { NextRequest, NextResponse } from "next/server";
+import { CSP_APP, CSP_STATIC_SITE } from "@/lib/csp";
 
 const ROOT_DOMAIN = process.env.NEXT_PUBLIC_ROOT_DOMAIN ?? "guifolio.com";
 const RESERVED = new Set(["www", "app", "api", "admin"]);
@@ -10,24 +11,47 @@ const STATIC_SITES: Record<string, string> = {
   "mamadou-thiam": "/mamadou-thiam",
 };
 
+// Site statique concerné par cette requête ? (hostname sous-domaine, ou chemin par sécurité)
+function staticSiteFor(req: NextRequest): string | undefined {
+  const host = (req.headers.get("host") ?? "").split(":")[0];
+  const path = req.nextUrl.pathname;
+  for (const [sub, base] of Object.entries(STATIC_SITES)) {
+    if (host === `${sub}.${ROOT_DOMAIN}`) return base;
+    if (path === base || path.startsWith(`${base}/`)) return base;
+  }
+  return undefined;
+}
+
+// CSP = stricte pour l'app SaaS, assouplie pour les sites statiques hébergés
+function applyCsp(res: NextResponse, req: NextRequest) {
+  res.headers.set(
+    "Content-Security-Policy",
+    staticSiteFor(req) ? CSP_STATIC_SITE : CSP_APP
+  );
+}
+
 /**
  * 1. Wildcard DNS : pseudo.guifolio.com → /p/pseudo (rewrite invisible)
  *    + sites statiques : mamadou-thiam.guifolio.com → /mamadou-thiam/index.html
  * 2. Refresh de session Supabase (magic link cookies)
  */
+
 /**
  * Réécrit une requête d'un sous-domaine site statique :
  *  /            → <base>/index.html
  *  /assets/*    → <base>/assets/* (chemins relatifs du site)
  *  n'importe quoi d'autre → <base>/index.html (fallback page unique)
  */
-function staticSiteRewrite(url: URL, base: string) {
+function staticSiteRewrite(req: NextRequest, base: string) {
+  const url = req.nextUrl.clone();
   if (url.pathname.startsWith("/assets/")) {
     url.pathname = `${base}${url.pathname}`;
   } else {
     url.pathname = `${base}/index.html`;
   }
-  return NextResponse.rewrite(url);
+  const res = NextResponse.rewrite(url);
+  applyCsp(res, req);
+  return res;
 }
 
 export async function middleware(req: NextRequest) {
@@ -73,7 +97,7 @@ export async function middleware(req: NextRequest) {
     const sub = host.replace(`.${ROOT_DOMAIN}`, "");
     if (!RESERVED.has(sub)) {
       if (STATIC_SITES[sub]) {
-        return staticSiteRewrite(url, STATIC_SITES[sub]);
+        return staticSiteRewrite(req, STATIC_SITES[sub]);
       }
       // /carte → carte de visite · /cv → CV PDF
       if (url.pathname === "/carte") {
@@ -97,7 +121,7 @@ export async function middleware(req: NextRequest) {
     const sub = host.split(".")[0];
     if (sub !== "lvh" && !RESERVED.has(sub)) {
       if (STATIC_SITES[sub]) {
-        return staticSiteRewrite(url, STATIC_SITES[sub]);
+        return staticSiteRewrite(req, STATIC_SITES[sub]);
       }
       if (url.pathname === "/carte") {
         url.pathname = `/c/${sub}`;
@@ -130,7 +154,9 @@ export async function middleware(req: NextRequest) {
 
   // --- Session Supabase (ignorée si env non configurées : preview UI) ---
   if (!process.env.NEXT_PUBLIC_SUPABASE_URL || !process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY) {
-    return NextResponse.next({ request: req });
+    const res = NextResponse.next({ request: req });
+    applyCsp(res, req);
+    return res;
   }
 
   let res = NextResponse.next({ request: req });
@@ -153,6 +179,7 @@ export async function middleware(req: NextRequest) {
     }
   );
   await supabase.auth.getUser();
+  applyCsp(res, req);
   return res;
 }
 

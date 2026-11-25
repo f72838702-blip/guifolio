@@ -1,34 +1,9 @@
 import type { NextConfig } from "next";
 
-// CSP stricte : ressources = nous + Supabase (app SaaS)
-const cspGuifolio = [
-  "default-src 'self'",
-  "script-src 'self' 'unsafe-inline'",
-  "style-src 'self' 'unsafe-inline'",
-  "img-src 'self' https: data: blob:", // Storage Supabase + QR data: URI
-  "font-src 'self' data:",
-  "connect-src 'self' https://*.supabase.co wss://*.supabase.co",
-  "frame-ancestors 'self'",
-  "base-uri 'self'",
-  "form-action 'self'",
-  "object-src 'none'",
-];
-
-// CSP assouplie pour les sites statiques intégrés (public/mamadou-thiam, ...) :
-// ils utilisent Tailwind CDN, Lucide (unpkg) et Google Fonts
-const cspStatic = [
-  "default-src 'self'",
-  "script-src 'self' 'unsafe-inline' https://cdn.tailwindcss.com https://unpkg.com",
-  "style-src 'self' 'unsafe-inline' https://fonts.googleapis.com",
-  "img-src 'self' https: data: blob:",
-  "font-src 'self' data: https://fonts.gstatic.com",
-  "connect-src 'self' https://*.supabase.co wss://*.supabase.co",
-  "frame-ancestors 'self'",
-  "base-uri 'self'",
-  "form-action 'self'",
-  "object-src 'none'",
-];
-
+// Note : la CSP n'est PAS définie ici car next.config headers() est évalué AVANT
+// le middleware, sur le chemin d'entrée (pas le chemin réécrit) — impossible de
+// brancher sur le hostname. Le middleware applique CSP_APP ou CSP_STATIC_SITE
+// selon la requête : voir src/lib/csp.ts.
 const securityHeaders = [
   // Empêche le navigateur de deviner le type MIME (anti-XSS)
   { key: "X-Content-Type-Options", value: "nosniff" },
@@ -46,29 +21,12 @@ const securityHeaders = [
     key: "Permissions-Policy",
     value: "camera=(self), microphone=(), geolocation=(), payment=()",
   },
-  // Content Security Policy : ressources autorisées = nous + Supabase
-  {
-    key: "Content-Security-Policy",
-    value: cspGuifolio.join("; "),
-  },
 ];
-
-// Mêmes headers, CSP assouplie (sites statiques hébergés)
-const staticSiteHeaders = securityHeaders.map((h) =>
-  h.key === "Content-Security-Policy"
-    ? { key: h.key, value: cspStatic.join("; ") }
-    : h
-);
 
 const nextConfig: NextConfig = {
   turbopack: { root: __dirname },
   async headers() {
-    return [
-      // Tout l'app SaaS (sauf les dossiers de sites statiques)
-      { source: "/((?!mamadou-thiam).*)", headers: securityHeaders },
-      // Sites statiques hébergés : CSP assouplie
-      { source: "/mamadou-thiam/:path*", headers: staticSiteHeaders },
-    ];
+    return [{ source: "/:path*", headers: securityHeaders }];
   },
 };
 
