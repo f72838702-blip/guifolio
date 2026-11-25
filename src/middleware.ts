@@ -38,16 +38,18 @@ function applyCsp(res: NextResponse, req: NextRequest) {
 
 /**
  * Réécrit une requête d'un sous-domaine site statique :
- *  /            → <base>/index.html
- *  /assets/*    → <base>/assets/* (chemins relatifs du site)
+ *  /                → <base>/index.html
+ *  /carte.html etc. → <base>/carte.html (fichier réel : extension ou /assets/*)
  *  n'importe quoi d'autre → <base>/index.html (fallback page unique)
  */
 function staticSiteRewrite(req: NextRequest, base: string) {
   const url = req.nextUrl.clone();
-  if (url.pathname.startsWith("/assets/")) {
-    url.pathname = `${base}${url.pathname}`;
-  } else {
+  const p = url.pathname;
+  if (p === "/" || p === "" || !/\.[a-z0-9]+$/i.test(p)) {
     url.pathname = `${base}/index.html`;
+  } else {
+    // Fichier réel (ex : /carte.html, /assets/x.png) → chemin relatif du site
+    url.pathname = `${base}${p}`;
   }
   const res = NextResponse.rewrite(url);
   applyCsp(res, req);
