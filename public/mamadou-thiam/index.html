@@ -60,6 +60,7 @@
 
   <style>
     html { -webkit-font-smoothing: antialiased; }
+    html, body { overflow-x: hidden; }
     body { font-family: 'Inter', sans-serif; }
 
     /* Tech grid background */
@@ -202,10 +203,10 @@
 
             <div class="mt-8 flex flex-wrap items-center gap-3.5">
               <a href="#" id="cv-btn" class="inline-flex items-center gap-2 px-6 py-3.5 rounded-full bg-gradient-to-r from-cyan-400 to-blue-500 text-base-950 font-bold hover:shadow-glow transition focus-ring">
-                <i data-lucide="download" class="w-4.5 h-4.5"></i> Télécharger le CV
+                <i data-lucide="download" class="w-4 h-4"></i> Télécharger le CV
               </a>
               <a href="#contact" class="inline-flex items-center gap-2 px-6 py-3.5 rounded-full bg-white/5 text-white font-semibold border border-white/10 hover:border-cyan-500/50 hover:text-cyan-300 transition focus-ring">
-                <i data-lucide="mail" class="w-4.5 h-4.5"></i> Me contacter
+                <i data-lucide="mail" class="w-4 h-4"></i> Me contacter
               </a>
               <a href="https://linkedin.com/in/mamadou-thiam-709002368" target="_blank" rel="noopener" class="inline-flex items-center justify-center w-12 h-12 rounded-full bg-white/5 text-white border border-white/10 hover:border-cyan-500/50 hover:text-cyan-300 transition focus-ring" aria-label="LinkedIn">
                 <i data-lucide="linkedin" class="w-5 h-5"></i>
@@ -334,15 +335,15 @@
             </div>
             <div class="space-y-4">
               <div>
-                <div class="flex justify-between text-sm mb-1.5"><span class="text-slate-300">TCP/IP</span><span class="font-mono text-xs text-cyan-400">avancé</span></div>
+                <div class="flex justify-between text-sm mb-1.5"><span class="text-slate-300 min-w-0 pr-2 break-words">TCP/IP</span><span class="font-mono text-xs text-cyan-400 shrink-0 whitespace-nowrap">avancé</span></div>
                 <div class="h-1.5 rounded-full bg-white/10 overflow-hidden"><div class="bar-fill h-full rounded-full bg-gradient-to-r from-cyan-400 to-blue-500" style="--w:85%"></div></div>
               </div>
               <div>
-                <div class="flex justify-between text-sm mb-1.5"><span class="text-slate-300">DHCP / DNS</span><span class="font-mono text-xs text-cyan-400">solide</span></div>
+                <div class="flex justify-between text-sm mb-1.5"><span class="text-slate-300 min-w-0 pr-2 break-words">DHCP / DNS</span><span class="font-mono text-xs text-cyan-400 shrink-0 whitespace-nowrap">solide</span></div>
                 <div class="h-1.5 rounded-full bg-white/10 overflow-hidden"><div class="bar-fill h-full rounded-full bg-gradient-to-r from-cyan-400 to-blue-500" style="--w:78%"></div></div>
               </div>
               <div>
-                <div class="flex justify-between text-sm mb-1.5"><span class="text-slate-300">NAT</span><span class="font-mono text-xs text-cyan-400">solide</span></div>
+                <div class="flex justify-between text-sm mb-1.5"><span class="text-slate-300 min-w-0 pr-2 break-words">NAT</span><span class="font-mono text-xs text-cyan-400 shrink-0 whitespace-nowrap">solide</span></div>
                 <div class="h-1.5 rounded-full bg-white/10 overflow-hidden"><div class="bar-fill h-full rounded-full bg-gradient-to-r from-cyan-400 to-blue-500" style="--w:72%"></div></div>
               </div>
             </div>
@@ -354,11 +355,11 @@
               <span class="grid place-items-center w-10 h-10 rounded-lg bg-blue-500/15 text-blue-400"><i data-lucide="radio-tower" class="w-5 h-5"></i></span>
               <h3 class="font-display font-bold text-white">Réseaux mobiles</h3>
             </div>
-            <div class="grid grid-cols-4 gap-3 text-center">
-              <div class="rounded-lg bg-white/5 border border-white/10 py-3"><div class="font-display font-bold text-cyan-400">2G</div><div class="text-[10px] text-slate-500 mt-0.5">GSM</div></div>
-              <div class="rounded-lg bg-white/5 border border-white/10 py-3"><div class="font-display font-bold text-cyan-400">3G</div><div class="text-[10px] text-slate-500 mt-0.5">UMTS</div></div>
-              <div class="rounded-lg bg-white/5 border border-white/10 py-3"><div class="font-display font-bold text-blue-400">4G</div><div class="text-[10px] text-slate-500 mt-0.5">LTE</div></div>
-              <div class="rounded-lg bg-gradient-to-br from-cyan-500/20 to-blue-500/20 border border-cyan-500/40 py-3"><div class="font-display font-bold text-white">5G</div><div class="text-[10px] text-cyan-300 mt-0.5">NR</div></div>
+            <div class="grid grid-cols-4 gap-2 sm:gap-3 text-center">
+              <div class="rounded-lg bg-white/5 border border-white/10 py-2.5 sm:py-3"><div class="font-display font-bold text-cyan-400">2G</div><div class="text-[10px] text-slate-500 mt-0.5">GSM</div></div>
+              <div class="rounded-lg bg-white/5 border border-white/10 py-2.5 sm:py-3"><div class="font-display font-bold text-cyan-400">3G</div><div class="text-[10px] text-slate-500 mt-0.5">UMTS</div></div>
+              <div class="rounded-lg bg-white/5 border border-white/10 py-2.5 sm:py-3"><div class="font-display font-bold text-blue-400">4G</div><div class="text-[10px] text-slate-500 mt-0.5">LTE</div></div>
+              <div class="rounded-lg bg-gradient-to-br from-cyan-500/20 to-blue-500/20 border border-cyan-500/40 py-2.5 sm:py-3"><div class="font-display font-bold text-white">5G</div><div class="text-[10px] text-cyan-300 mt-0.5">NR</div></div>
             </div>
             <p class="text-sm text-slate-400 mt-5 leading-relaxed">Architectures, transmission et antennes des systèmes opérateurs mobiles.</p>
           </div>
@@ -379,11 +380,11 @@
             </div>
             <div class="mt-5 space-y-4">
               <div>
-                <div class="flex justify-between text-sm mb-1.5"><span class="text-slate-300">Cisco Packet Tracer</span><span class="font-mono text-xs text-cyan-400">bon</span></div>
+                <div class="flex justify-between text-sm mb-1.5"><span class="text-slate-300 min-w-0 pr-2 break-words">Cisco Packet Tracer</span><span class="font-mono text-xs text-cyan-400 shrink-0 whitespace-nowrap">bon</span></div>
                 <div class="h-1.5 rounded-full bg-white/10 overflow-hidden"><div class="bar-fill h-full rounded-full bg-gradient-to-r from-cyan-400 to-blue-500" style="--w:75%"></div></div>
               </div>
               <div>
-                <div class="flex justify-between text-sm mb-1.5"><span class="text-slate-300">Fibre optique (soudure / tests)</span><span class="font-mono text-xs text-cyan-400">pratique</span></div>
+                <div class="flex justify-between text-sm mb-1.5"><span class="text-slate-300 min-w-0 pr-2 break-words">Fibre optique (soudure / tests)</span><span class="font-mono text-xs text-cyan-400 shrink-0 whitespace-nowrap">pratique</span></div>
                 <div class="h-1.5 rounded-full bg-white/10 overflow-hidden"><div class="bar-fill h-full rounded-full bg-gradient-to-r from-cyan-400 to-blue-500" style="--w:80%"></div></div>
               </div>
             </div>
@@ -397,15 +398,15 @@
             </div>
             <div class="space-y-4">
               <div>
-                <div class="flex justify-between text-sm mb-1.5"><span class="text-slate-300">Français</span><span class="font-mono text-xs text-cyan-400">courant</span></div>
+                <div class="flex justify-between text-sm mb-1.5"><span class="text-slate-300 min-w-0 pr-2 break-words">Français</span><span class="font-mono text-xs text-cyan-400 shrink-0 whitespace-nowrap">courant</span></div>
                 <div class="h-1.5 rounded-full bg-white/10 overflow-hidden"><div class="bar-fill h-full rounded-full bg-gradient-to-r from-cyan-400 to-blue-500" style="--w:90%"></div></div>
               </div>
               <div>
-                <div class="flex justify-between text-sm mb-1.5"><span class="text-slate-300">Poular</span><span class="font-mono text-xs text-cyan-400">maternelle</span></div>
+                <div class="flex justify-between text-sm mb-1.5"><span class="text-slate-300 min-w-0 pr-2 break-words">Poular</span><span class="font-mono text-xs text-cyan-400 shrink-0 whitespace-nowrap">maternelle</span></div>
                 <div class="h-1.5 rounded-full bg-white/10 overflow-hidden"><div class="bar-fill h-full rounded-full bg-gradient-to-r from-cyan-400 to-blue-500" style="--w:100%"></div></div>
               </div>
               <div>
-                <div class="flex justify-between text-sm mb-1.5"><span class="text-slate-300">Anglais</span><span class="font-mono text-xs text-cyan-400">notions</span></div>
+                <div class="flex justify-between text-sm mb-1.5"><span class="text-slate-300 min-w-0 pr-2 break-words">Anglais</span><span class="font-mono text-xs text-cyan-400 shrink-0 whitespace-nowrap">notions</span></div>
                 <div class="h-1.5 rounded-full bg-white/10 overflow-hidden"><div class="bar-fill h-full rounded-full bg-gradient-to-r from-cyan-400 to-blue-500" style="--w:35%"></div></div>
               </div>
             </div>
@@ -438,73 +439,72 @@
         </div>
 
         <!-- Timeline -->
-        <div class="relative tl">
-          <div class="space-y-10 md:space-y-0">
+        <div class="relative tl space-y-10 md:space-y-12">
 
             <!-- L3 -->
-            <article class="md:grid md:grid-cols-2 md:gap-8 reveal" data-type="academique">
-              <div class="md:text-right md:pr-10 pl-20 md:pl-0 pb-4 md:pb-0">
-                <div class="md:hidden absolute left-0 mt-1 grid place-items-center w-12 h-12 rounded-full bg-cyan-500/15 text-cyan-400 border-4 border-base-950"><i data-lucide="book-open" class="w-5 h-5"></i></div>
-                <span class="font-mono text-xs font-bold uppercase tracking-widest text-cyan-400">2025 — 2026</span>
-                <h3 class="font-display text-xl font-bold text-white mt-2">Licence 3 Réseaux &amp; Télécoms</h3>
-                <p class="text-sm text-slate-500 mt-0.5">ESMT — École Supérieure Multinationale des Télécommunications</p>
-              </div>
-              <div class="hidden md:block"></div>
-              <div class="md:col-start-2 md:pl-10 pl-20 md:pl-10 md:-mt-24 mt-0 relative">
-                <div class="hidden md:grid absolute left-0 top-1 -translate-x-1/2 place-items-center w-12 h-12 rounded-full bg-cyan-500/15 text-cyan-400 border-4 border-base-950" style="left:-1.5rem"><i data-lucide="book-open" class="w-5 h-5"></i></div>
-                <div class="card-hover bg-white/[0.03] rounded-2xl p-6 border border-white/10">
-                  <span class="inline-block px-2.5 py-1 rounded-full bg-emerald-500/15 text-emerald-300 text-xs font-bold mb-2">Obtenu</span>
-                  <p class="text-sm text-slate-400 leading-relaxed">Licence validée — approfondissement des infrastructures télécoms, transmission, fibre optique et architectures opérateurs.</p>
+            <article class="tl-item relative reveal" data-type="academique">
+              <span class="absolute left-0 top-1 z-10 grid place-items-center w-12 h-12 rounded-full bg-cyan-500/15 text-cyan-400 border-4 border-base-950 md:left-1/2 md:top-2 md:-translate-x-1/2" aria-hidden="true"><i data-lucide="book-open" class="w-5 h-5"></i></span>
+              <div class="pl-20 flex flex-col md:pl-0 md:grid md:grid-cols-2 md:gap-14">
+                <div class="order-1 md:text-right">
+                  <span class="font-mono text-xs font-bold uppercase tracking-widest text-cyan-400">2025 — 2026</span>
+                  <h3 class="font-display text-xl font-bold text-white mt-2">Licence 3 Réseaux &amp; Télécoms</h3>
+                  <p class="text-sm text-slate-500 mt-0.5">ESMT — École Supérieure Multinationale des Télécommunications</p>
+                </div>
+                <div class="order-2 mt-4 md:mt-0">
+                  <div class="card-hover bg-white/[0.03] rounded-2xl p-6 border border-white/10 h-full">
+                    <span class="inline-block px-2.5 py-1 rounded-full bg-emerald-500/15 text-emerald-300 text-xs font-bold mb-2">Obtenu</span>
+                    <p class="text-sm text-slate-400 leading-relaxed">Licence validée — approfondissement des infrastructures télécoms, transmission, fibre optique et architectures opérateurs.</p>
+                  </div>
                 </div>
               </div>
             </article>
 
             <!-- Projet fibre -->
-            <article class="md:grid md:grid-cols-2 md:gap-8 reveal" data-type="projet">
-              <div class="md:text-right md:pr-10 pl-20 md:pl-0 md:order-2 pb-4 md:pb-0">
-                <div class="md:hidden absolute left-0 mt-1 grid place-items-center w-12 h-12 rounded-full bg-blue-500/15 text-blue-400 border-4 border-base-950"><i data-lucide="cable" class="w-5 h-5"></i></div>
-                <span class="font-mono text-xs font-bold uppercase tracking-widest text-cyan-400">Projet académique · ESMT</span>
-                <h3 class="font-display text-xl font-bold text-white mt-2">Fibre optique — liaisons &amp; mesures</h3>
-                <p class="text-sm text-slate-500 mt-0.5">Réalisation pratique</p>
-              </div>
-              <div class="hidden md:block md:order-1"></div>
-              <div class="md:col-start-1 md:row-start-1 md:pr-10 pl-20 md:pl-0 md:text-right relative md:-mt-24">
-                <div class="hidden md:grid absolute right-0 top-1 translate-x-1/2 place-items-center w-12 h-12 rounded-full bg-blue-500/15 text-blue-400 border-4 border-base-950" style="right:-1.5rem"><i data-lucide="cable" class="w-5 h-5"></i></div>
-                <div class="card-hover bg-white/[0.03] rounded-2xl p-6 border border-white/10 md:ml-auto md:max-w-md">
-                  <ul class="space-y-2.5 text-sm text-slate-400">
-                    <li class="flex gap-2.5 md:flex-row-reverse md:text-right"><i data-lucide="check-circle-2" class="w-4.5 h-4.5 text-cyan-400 shrink-0 mt-0.5"></i> Étude théorique des liaisons optiques.</li>
-                    <li class="flex gap-2.5 md:flex-row-reverse md:text-right"><i data-lucide="check-circle-2" class="w-4.5 h-4.5 text-cyan-400 shrink-0 mt-0.5"></i> Raccordement et soudures de fibres optiques.</li>
-                    <li class="flex gap-2.5 md:flex-row-reverse md:text-right"><i data-lucide="check-circle-2" class="w-4.5 h-4.5 text-cyan-400 shrink-0 mt-0.5"></i> Mesures, tests et analyse de l'atténuation et de la qualité du lien.</li>
-                  </ul>
+            <article class="tl-item relative reveal" data-type="projet">
+              <span class="absolute left-0 top-1 z-10 grid place-items-center w-12 h-12 rounded-full bg-blue-500/15 text-blue-400 border-4 border-base-950 md:left-1/2 md:top-2 md:-translate-x-1/2" aria-hidden="true"><i data-lucide="cable" class="w-5 h-5"></i></span>
+              <div class="pl-20 flex flex-col md:pl-0 md:grid md:grid-cols-2 md:gap-14">
+                <div class="order-1 md:order-2">
+                  <span class="font-mono text-xs font-bold uppercase tracking-widest text-cyan-400">Projet académique · ESMT</span>
+                  <h3 class="font-display text-xl font-bold text-white mt-2">Fibre optique — liaisons &amp; mesures</h3>
+                  <p class="text-sm text-slate-500 mt-0.5">Réalisation pratique</p>
+                </div>
+                <div class="order-2 md:order-1 mt-4 md:mt-0">
+                  <div class="card-hover bg-white/[0.03] rounded-2xl p-6 border border-white/10 h-full md:max-w-md md:ml-auto">
+                    <ul class="space-y-2.5 text-sm text-slate-400">
+                      <li class="flex gap-2.5"><i data-lucide="check-circle-2" class="w-4 h-4 text-cyan-400 shrink-0 mt-0.5"></i><span class="min-w-0">Étude théorique des liaisons optiques.</span></li>
+                      <li class="flex gap-2.5"><i data-lucide="check-circle-2" class="w-4 h-4 text-cyan-400 shrink-0 mt-0.5"></i><span class="min-w-0">Raccordement et soudures de fibres optiques.</span></li>
+                      <li class="flex gap-2.5"><i data-lucide="check-circle-2" class="w-4 h-4 text-cyan-400 shrink-0 mt-0.5"></i><span class="min-w-0">Mesures, tests et analyse de l'atténuation et de la qualité du lien.</span></li>
+                    </ul>
+                  </div>
                 </div>
               </div>
             </article>
 
             <!-- Certifs BB -->
-            <article class="md:grid md:grid-cols-2 md:gap-8 reveal" data-type="projet">
-              <div class="md:text-right md:pr-10 pl-20 md:pl-0 pb-4 md:pb-0">
-                <div class="md:hidden absolute left-0 mt-1 grid place-items-center w-12 h-12 rounded-full bg-cyan-500/15 text-cyan-400 border-4 border-base-950"><i data-lucide="award" class="w-5 h-5"></i></div>
-                <span class="font-mono text-xs font-bold uppercase tracking-widest text-cyan-400">2026</span>
-                <h3 class="font-display text-xl font-bold text-white mt-2">Building Business — Certifications</h3>
-                <p class="text-sm text-slate-500 mt-0.5">Formation certifiante</p>
-              </div>
-              <div class="hidden md:block"></div>
-              <div class="md:col-start-2 md:pl-10 pl-20 md:pl-10 md:-mt-24 mt-0 relative">
-                <div class="hidden md:grid absolute left-0 top-1 -translate-x-1/2 place-items-center w-12 h-12 rounded-full bg-cyan-500/15 text-cyan-400 border-4 border-base-950" style="left:-1.5rem"><i data-lucide="award" class="w-5 h-5"></i></div>
-                <div class="card-hover bg-white/[0.03] rounded-2xl p-6 border border-white/10">
-                  <div class="space-y-3 text-sm">
-                    <div class="flex items-start gap-3 p-3 rounded-lg bg-white/5">
-                      <i data-lucide="badge-check" class="w-5 h-5 text-cyan-400 shrink-0 mt-0.5"></i>
-                      <div>
-                        <p class="text-white font-semibold">Leadership, coaching &amp; gestion de projet</p>
-                        <p class="font-mono text-xs text-slate-500 mt-0.5">Certificat N° 195/BB/DG/SFQ/2026</p>
+            <article class="tl-item relative reveal" data-type="projet">
+              <span class="absolute left-0 top-1 z-10 grid place-items-center w-12 h-12 rounded-full bg-cyan-500/15 text-cyan-400 border-4 border-base-950 md:left-1/2 md:top-2 md:-translate-x-1/2" aria-hidden="true"><i data-lucide="award" class="w-5 h-5"></i></span>
+              <div class="pl-20 flex flex-col md:pl-0 md:grid md:grid-cols-2 md:gap-14">
+                <div class="order-1 md:text-right">
+                  <span class="font-mono text-xs font-bold uppercase tracking-widest text-cyan-400">2026</span>
+                  <h3 class="font-display text-xl font-bold text-white mt-2">Building Business — Certifications</h3>
+                  <p class="text-sm text-slate-500 mt-0.5">Formation certifiante</p>
+                </div>
+                <div class="order-2 mt-4 md:mt-0">
+                  <div class="card-hover bg-white/[0.03] rounded-2xl p-6 border border-white/10 h-full">
+                    <div class="space-y-3 text-sm">
+                      <div class="flex items-start gap-3 p-3 rounded-lg bg-white/5">
+                        <i data-lucide="badge-check" class="w-5 h-5 text-cyan-400 shrink-0 mt-0.5"></i>
+                        <div class="min-w-0">
+                          <p class="text-white font-semibold">Leadership, coaching &amp; gestion de projet</p>
+                          <p class="font-mono text-xs text-slate-500 mt-0.5 break-all">Certificat N° 195/BB/DG/SFQ/2026</p>
+                        </div>
                       </div>
-                    </div>
-                    <div class="flex items-start gap-3 p-3 rounded-lg bg-white/5">
-                      <i data-lucide="badge-check" class="w-5 h-5 text-blue-400 shrink-0 mt-0.5"></i>
-                      <div>
-                        <p class="text-white font-semibold">Entrepreneuriat &amp; création d'entreprise</p>
-                        <p class="font-mono text-xs text-slate-500 mt-0.5">Certificat N° 324/BB/DG/SFQ/2026</p>
+                      <div class="flex items-start gap-3 p-3 rounded-lg bg-white/5">
+                        <i data-lucide="badge-check" class="w-5 h-5 text-blue-400 shrink-0 mt-0.5"></i>
+                        <div class="min-w-0">
+                          <p class="text-white font-semibold">Entrepreneuriat &amp; création d'entreprise</p>
+                          <p class="font-mono text-xs text-slate-500 mt-0.5 break-all">Certificat N° 324/BB/DG/SFQ/2026</p>
+                        </div>
                       </div>
                     </div>
                   </div>
@@ -513,57 +513,56 @@
             </article>
 
             <!-- L2 -->
-            <article class="md:grid md:grid-cols-2 md:gap-8 reveal" data-type="academique">
-              <div class="md:text-right md:pr-10 pl-20 md:pl-0 md:order-2 pb-4 md:pb-0">
-                <div class="md:hidden absolute left-0 mt-1 grid place-items-center w-12 h-12 rounded-full bg-blue-500/15 text-blue-400 border-4 border-base-950"><i data-lucide="book-open" class="w-5 h-5"></i></div>
-                <span class="font-mono text-xs font-bold uppercase tracking-widest text-cyan-400">2024 — 2025</span>
-                <h3 class="font-display text-xl font-bold text-white mt-2">Licence 2 Réseaux &amp; Télécoms</h3>
-                <p class="text-sm text-slate-500 mt-0.5">ESMT</p>
-              </div>
-              <div class="hidden md:block md:order-1"></div>
-              <div class="md:col-start-1 md:row-start-1 md:pr-10 pl-20 md:pl-0 md:text-right relative md:-mt-24">
-                <div class="hidden md:grid absolute right-0 top-1 translate-x-1/2 place-items-center w-12 h-12 rounded-full bg-blue-500/15 text-blue-400 border-4 border-base-950" style="right:-1.5rem"><i data-lucide="book-open" class="w-5 h-5"></i></div>
-                <div class="card-hover bg-white/[0.03] rounded-2xl p-6 border border-white/10 md:ml-auto md:max-w-md">
-                  <p class="text-sm text-slate-400 leading-relaxed">Fondamentaux des réseaux, protocoles et introduction aux systèmes de transmission.</p>
+            <article class="tl-item relative reveal" data-type="academique">
+              <span class="absolute left-0 top-1 z-10 grid place-items-center w-12 h-12 rounded-full bg-blue-500/15 text-blue-400 border-4 border-base-950 md:left-1/2 md:top-2 md:-translate-x-1/2" aria-hidden="true"><i data-lucide="book-open" class="w-5 h-5"></i></span>
+              <div class="pl-20 flex flex-col md:pl-0 md:grid md:grid-cols-2 md:gap-14">
+                <div class="order-1 md:order-2">
+                  <span class="font-mono text-xs font-bold uppercase tracking-widest text-cyan-400">2024 — 2025</span>
+                  <h3 class="font-display text-xl font-bold text-white mt-2">Licence 2 Réseaux &amp; Télécoms</h3>
+                  <p class="text-sm text-slate-500 mt-0.5">ESMT</p>
+                </div>
+                <div class="order-2 md:order-1 mt-4 md:mt-0">
+                  <div class="card-hover bg-white/[0.03] rounded-2xl p-6 border border-white/10 h-full md:max-w-md md:ml-auto">
+                    <p class="text-sm text-slate-400 leading-relaxed">Fondamentaux des réseaux, protocoles et introduction aux systèmes de transmission.</p>
+                  </div>
                 </div>
               </div>
             </article>
 
             <!-- L1 -->
-            <article class="md:grid md:grid-cols-2 md:gap-8 reveal" data-type="academique">
-              <div class="md:text-right md:pr-10 pl-20 md:pl-0 pb-4 md:pb-0">
-                <div class="md:hidden absolute left-0 mt-1 grid place-items-center w-12 h-12 rounded-full bg-cyan-500/15 text-cyan-400 border-4 border-base-950"><i data-lucide="cpu" class="w-5 h-5"></i></div>
-                <span class="font-mono text-xs font-bold uppercase tracking-widest text-cyan-400">2023 — 2024</span>
-                <h3 class="font-display text-xl font-bold text-white mt-2">Licence 1 Génie Informatique</h3>
-                <p class="text-sm text-slate-500 mt-0.5">Université Nongo Conakry</p>
-              </div>
-              <div class="hidden md:block"></div>
-              <div class="md:col-start-2 md:pl-10 pl-20 md:pl-10 md:-mt-24 mt-0 relative">
-                <div class="hidden md:grid absolute left-0 top-1 -translate-x-1/2 place-items-center w-12 h-12 rounded-full bg-cyan-500/15 text-cyan-400 border-4 border-base-950" style="left:-1.5rem"><i data-lucide="cpu" class="w-5 h-5"></i></div>
-                <div class="card-hover bg-white/[0.03] rounded-2xl p-6 border border-white/10">
-                  <p class="text-sm text-slate-400 leading-relaxed">Université Nongo Conakry (UNC)</p>
+            <article class="tl-item relative reveal" data-type="academique">
+              <span class="absolute left-0 top-1 z-10 grid place-items-center w-12 h-12 rounded-full bg-cyan-500/15 text-cyan-400 border-4 border-base-950 md:left-1/2 md:top-2 md:-translate-x-1/2" aria-hidden="true"><i data-lucide="cpu" class="w-5 h-5"></i></span>
+              <div class="pl-20 flex flex-col md:pl-0 md:grid md:grid-cols-2 md:gap-14">
+                <div class="order-1 md:text-right">
+                  <span class="font-mono text-xs font-bold uppercase tracking-widest text-cyan-400">2023 — 2024</span>
+                  <h3 class="font-display text-xl font-bold text-white mt-2">Licence 1 Génie Informatique</h3>
+                  <p class="text-sm text-slate-500 mt-0.5">Université Nongo Conakry</p>
+                </div>
+                <div class="order-2 mt-4 md:mt-0">
+                  <div class="card-hover bg-white/[0.03] rounded-2xl p-6 border border-white/10 h-full">
+                    <p class="text-sm text-slate-400 leading-relaxed">Université Nongo Conakry (UNC)</p>
+                  </div>
                 </div>
               </div>
             </article>
 
             <!-- Bac -->
-            <article class="md:grid md:grid-cols-2 md:gap-8 reveal" data-type="academique">
-              <div class="md:text-right md:pr-10 pl-20 md:pl-0 md:order-2 pb-4 md:pb-0">
-                <div class="md:hidden absolute left-0 mt-1 grid place-items-center w-12 h-12 rounded-full bg-blue-500/15 text-blue-400 border-4 border-base-950"><i data-lucide="graduation-cap" class="w-5 h-5"></i></div>
-                <span class="font-mono text-xs font-bold uppercase tracking-widest text-cyan-400">2023</span>
-                <h3 class="font-display text-xl font-bold text-white mt-2">Baccalauréat Sciences Mathématiques</h3>
-                <p class="text-sm text-slate-500 mt-0.5">Guinée</p>
-              </div>
-              <div class="hidden md:block md:order-1"></div>
-              <div class="md:col-start-1 md:row-start-1 md:pr-10 pl-20 md:pl-0 md:text-right relative md:-mt-24">
-                <div class="hidden md:grid absolute right-0 top-1 translate-x-1/2 place-items-center w-12 h-12 rounded-full bg-blue-500/15 text-blue-400 border-4 border-base-950" style="right:-1.5rem"><i data-lucide="graduation-cap" class="w-5 h-5"></i></div>
-                <div class="card-hover bg-white/[0.03] rounded-2xl p-6 border border-white/10 md:ml-auto md:max-w-md">
-                  <p class="text-sm text-slate-400 leading-relaxed">Baccalauréat scientifique — socle mathématique pour les études d'ingénierie.</p>
+            <article class="tl-item relative reveal" data-type="academique">
+              <span class="absolute left-0 top-1 z-10 grid place-items-center w-12 h-12 rounded-full bg-blue-500/15 text-blue-400 border-4 border-base-950 md:left-1/2 md:top-2 md:-translate-x-1/2" aria-hidden="true"><i data-lucide="graduation-cap" class="w-5 h-5"></i></span>
+              <div class="pl-20 flex flex-col md:pl-0 md:grid md:grid-cols-2 md:gap-14">
+                <div class="order-1 md:order-2">
+                  <span class="font-mono text-xs font-bold uppercase tracking-widest text-cyan-400">2023</span>
+                  <h3 class="font-display text-xl font-bold text-white mt-2">Baccalauréat Sciences Mathématiques</h3>
+                  <p class="text-sm text-slate-500 mt-0.5">Guinée</p>
+                </div>
+                <div class="order-2 md:order-1 mt-4 md:mt-0">
+                  <div class="card-hover bg-white/[0.03] rounded-2xl p-6 border border-white/10 h-full md:max-w-md md:ml-auto">
+                    <p class="text-sm text-slate-400 leading-relaxed">Baccalauréat scientifique — socle mathématique pour les études d'ingénierie.</p>
+                  </div>
                 </div>
               </div>
             </article>
 
-          </div>
         </div>
       </div>
     </section>
@@ -666,10 +665,10 @@
               <textarea id="message" name="message" rows="5" required placeholder="Votre message..." class="w-full px-4 py-3 rounded-xl border border-white/10 bg-base-900/60 text-sm text-white placeholder-slate-600 focus:border-cyan-500 focus:ring-2 focus:ring-cyan-500/20 outline-none transition resize-none"></textarea>
             </div>
             <button type="submit" class="mt-6 w-full inline-flex items-center justify-center gap-2 px-6 py-3.5 rounded-full bg-gradient-to-r from-cyan-400 to-blue-500 text-base-950 font-bold hover:shadow-glow transition focus-ring">
-              <i data-lucide="send" class="w-4.5 h-4.5"></i> Envoyer
+              <i data-lucide="send" class="w-4 h-4"></i> Envoyer
             </button>
             <p id="form-msg" class="mt-4 text-sm text-center text-cyan-300 font-medium hidden flex items-center justify-center gap-2">
-              <i data-lucide="check-circle-2" class="w-4.5 h-4.5"></i> Message prêt — vérifiez votre client mail.
+              <i data-lucide="check-circle-2" class="w-4 h-4"></i> Message prêt — vérifiez votre client mail.
             </p>
           </form>
         </div>
