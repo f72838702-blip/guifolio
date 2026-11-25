@@ -731,12 +731,8 @@
     document.getElementById('year').textContent = new Date().getFullYear();
 
     const navbar = document.getElementById('navbar');
-    const waFab = document.getElementById('wa-fab');
-    waFab.style.opacity = '0'; waFab.style.transform = 'translateY(12px)'; waFab.style.transition = 'opacity .4s ease, transform .4s ease';
     const onScroll = () => {
       navbar.classList.toggle('shadow-card', window.scrollY > 20);
-      const show = window.scrollY > 400;
-      waFab.style.opacity = show ? '1' : '0'; waFab.style.transform = show ? 'translateY(0)' : 'translateY(12px)';
     };
     window.addEventListener('scroll', onScroll, { passive: true }); onScroll();
 
