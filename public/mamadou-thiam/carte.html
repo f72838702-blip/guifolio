@@ -73,7 +73,8 @@
     .focus-ring:focus-visible { outline: 2px solid #22D3EE; outline-offset: 3px; border-radius: .5rem; }
 
     @media print {
-      body { background: #fff !important; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+      * { -webkit-print-color-adjust: exact !important; print-color-adjust: exact !important; }
+      body { background: #fff !important; }
       .no-print { display: none !important; }
       #card {
         width: 90mm; margin: 10mm auto 0 auto;
@@ -200,6 +201,10 @@
       <a href="assets/mamadou-thiam.vcf" download="Mamadou-Thiam.vcf"
          class="inline-flex items-center gap-2 px-5 py-3 rounded-full bg-gradient-to-r from-cyan-400 to-blue-500 text-base-950 font-bold hover:shadow-glow transition focus-ring">
         <i data-lucide="download" class="w-4 h-4"></i> Enregistrer le contact
+      </a>
+      <a href="assets/carte-mamadou-thiam.pdf" download="Carte-Mamadou-Thiam.pdf"
+         class="inline-flex items-center gap-2 px-5 py-3 rounded-full bg-white/5 text-white font-semibold border border-white/10 hover:border-cyan-500/50 hover:text-cyan-300 transition focus-ring">
+        <i data-lucide="file-down" class="w-4 h-4"></i> Carte PDF
       </a>
       <button onclick="window.print()" class="inline-flex items-center gap-2 px-5 py-3 rounded-full bg-white/5 text-white font-semibold border border-white/10 hover:border-cyan-500/50 hover:text-cyan-300 transition focus-ring">
         <i data-lucide="printer" class="w-4 h-4"></i> Imprimer
