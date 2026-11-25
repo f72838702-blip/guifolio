@@ -4,10 +4,32 @@ import { NextRequest, NextResponse } from "next/server";
 const ROOT_DOMAIN = process.env.NEXT_PUBLIC_ROOT_DOMAIN ?? "guifolio.com";
 const RESERVED = new Set(["www", "app", "api", "admin"]);
 
+// Sites statiques intégrés (dossiers sous public/) servis tels quels sur leur sous-domaine
+// ex : mamadou-thiam.guifolio.com → public/mamadou-thiam/
+const STATIC_SITES: Record<string, string> = {
+  "mamadou-thiam": "/mamadou-thiam",
+};
+
 /**
  * 1. Wildcard DNS : pseudo.guifolio.com → /p/pseudo (rewrite invisible)
+ *    + sites statiques : mamadou-thiam.guifolio.com → /mamadou-thiam/index.html
  * 2. Refresh de session Supabase (magic link cookies)
  */
+/**
+ * Réécrit une requête d'un sous-domaine site statique :
+ *  /            → <base>/index.html
+ *  /assets/*    → <base>/assets/* (chemins relatifs du site)
+ *  n'importe quoi d'autre → <base>/index.html (fallback page unique)
+ */
+function staticSiteRewrite(url: URL, base: string) {
+  if (url.pathname.startsWith("/assets/")) {
+    url.pathname = `${base}${url.pathname}`;
+  } else {
+    url.pathname = `${base}/index.html`;
+  }
+  return NextResponse.rewrite(url);
+}
+
 export async function middleware(req: NextRequest) {
   const host = req.headers.get("host") ?? "";
   const url = req.nextUrl.clone();
@@ -15,6 +37,15 @@ export async function middleware(req: NextRequest) {
   // --- Ancienne URL Vercel → redirection permanente vers guifolio.com ---
   // (l'alias <projet>.vercel.app ne disparaît jamais tout seul : on bascule tout)
   if (host === "guifolio-zeta.vercel.app") {
+    // Sites statiques → leur sous-domaine dédié
+    for (const sub of Object.keys(STATIC_SITES)) {
+      if (
+        url.pathname === `/${sub}` ||
+        url.pathname.startsWith(`/${sub}/`)
+      ) {
+        return NextResponse.redirect(`https://${sub}.${ROOT_DOMAIN}`, 301);
+      }
+    }
     const m = url.pathname.match(/^\/(p|c|cv)\/([^/]+)/);
     if (m) {
       const [, kind, sub] = m;
@@ -41,6 +72,9 @@ export async function middleware(req: NextRequest) {
   if (host.endsWith(`.${ROOT_DOMAIN}`)) {
     const sub = host.replace(`.${ROOT_DOMAIN}`, "");
     if (!RESERVED.has(sub)) {
+      if (STATIC_SITES[sub]) {
+        return staticSiteRewrite(url, STATIC_SITES[sub]);
+      }
       // /carte → carte de visite · /cv → CV PDF
       if (url.pathname === "/carte") {
         url.pathname = `/c/${sub}`;
@@ -62,6 +96,9 @@ export async function middleware(req: NextRequest) {
   if (host.includes("lvh.me")) {
     const sub = host.split(".")[0];
     if (sub !== "lvh" && !RESERVED.has(sub)) {
+      if (STATIC_SITES[sub]) {
+        return staticSiteRewrite(url, STATIC_SITES[sub]);
+      }
       if (url.pathname === "/carte") {
         url.pathname = `/c/${sub}`;
         return NextResponse.rewrite(url);
@@ -76,6 +113,18 @@ export async function middleware(req: NextRequest) {
       }
       url.pathname = `/p/${sub}${url.pathname === "/" ? "" : url.pathname}`;
       return NextResponse.rewrite(url);
+    }
+  }
+
+  // --- Site statique demandé sur le domaine racine → sous-domaine dédié ---
+  if (host === ROOT_DOMAIN) {
+    for (const sub of Object.keys(STATIC_SITES)) {
+      if (
+        url.pathname === `/${sub}` ||
+        url.pathname.startsWith(`/${sub}/`)
+      ) {
+        return NextResponse.redirect(`https://${sub}.${ROOT_DOMAIN}`, 301);
+      }
     }
   }
 
