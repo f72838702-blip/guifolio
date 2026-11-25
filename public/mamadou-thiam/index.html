@@ -1,0 +1,809 @@
+<!DOCTYPE html>
+<html lang="fr" class="scroll-smooth">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Mamadou Thiam — Réseaux & Télécommunications</title>
+  <meta name="description" content="Portfolio de Mamadou Thiam, Technicien / Ingénieur Junior en Réseaux & Télécommunications à Conakry. Fibre optique, réseaux mobiles 2G–5G, protocoles TCP/IP, Cisco Packet Tracer." />
+  <meta name="author" content="Mamadou Thiam" />
+  <meta name="theme-color" content="#070B14" />
+
+  <meta property="og:title" content="Mamadou Thiam — Réseaux & Télécommunications" />
+  <meta property="og:description" content="Technicien/Ingénieur Junior en Réseaux & Télécommunications. Déploiement et fiabilité des infrastructures numériques." />
+  <meta property="og:type" content="website" />
+  <meta property="og:locale" content="fr_FR" />
+
+  <!-- Tailwind -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <!-- Lucide -->
+  <script src="https://unpkg.com/lucide@latest"></script>
+  <!-- Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Sora:wght@400;500;600;700;800&family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet" />
+
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          fontFamily: {
+            sans: ['Inter', 'system-ui', 'sans-serif'],
+            display: ['Sora', 'sans-serif'],
+            mono: ['JetBrains Mono', 'monospace'],
+          },
+          colors: {
+            base: { 950: '#070B14', 900: '#0B1120', 800: '#111827', 700: '#1E293B' },
+            cyan: { 400: '#22D3EE', 500: '#06B6D4', 600: '#0891B2' },
+            blue: { 400: '#60A5FA', 500: '#3B82F6' },
+          },
+          boxShadow: {
+            glow: '0 0 40px -8px rgba(34,211,238,0.35)',
+            glowsoft: '0 0 60px -20px rgba(59,130,246,0.4)',
+            card: '0 8px 40px -16px rgba(0,0,0,0.6)',
+          },
+          keyframes: {
+            float: { '0%,100%': { transform: 'translateY(0)' }, '50%': { transform: 'translateY(-10px)' } },
+            pulseglow: { '0%,100%': { opacity: '0.4' }, '50%': { opacity: '1' } },
+            sweep: { '0%': { transform: 'translateX(-100%)' }, '100%': { transform: 'translateX(100%)' } },
+            signal: { '0%': { transform: 'scaleX(0)', opacity: '0' }, '50%': { opacity: '1' }, '100%': { transform: 'scaleX(1)', opacity: '0' } },
+            gridmove: { '0%': { backgroundPosition: '0 0' }, '100%': { backgroundPosition: '40px 40px' } },
+          },
+          animation: {
+            float: 'float 6s ease-in-out infinite',
+            pulseglow: 'pulseglow 3s ease-in-out infinite',
+            sweep: 'sweep 3s ease-in-out infinite',
+            gridmove: 'gridmove 8s linear infinite',
+          },
+        },
+      },
+    };
+  </script>
+
+  <style>
+    html { -webkit-font-smoothing: antialiased; }
+    body { font-family: 'Inter', sans-serif; }
+
+    /* Tech grid background */
+    .tech-grid {
+      background-image:
+        linear-gradient(rgba(34,211,238,0.06) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(34,211,238,0.06) 1px, transparent 1px);
+      background-size: 40px 40px;
+    }
+    .radial-fade {
+      -webkit-mask-image: radial-gradient(80% 60% at 50% 30%, #000 0%, transparent 75%);
+      mask-image: radial-gradient(80% 60% at 50% 30%, #000 0%, transparent 75%);
+    }
+
+    /* Glow orbs */
+    .orb { position: absolute; border-radius: 9999px; filter: blur(80px); opacity: .5; pointer-events: none; }
+
+    /* Gradient text */
+    .text-gradient {
+      background: linear-gradient(120deg, #22D3EE 0%, #60A5FA 50%, #3B82F6 100%);
+      -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent;
+    }
+
+    /* Reveal */
+    .reveal { opacity: 0; transform: translateY(28px); transition: opacity .8s cubic-bezier(0.16,1,0.3,1), transform .8s cubic-bezier(0.16,1,0.3,1); }
+    .reveal.is-visible { opacity: 1; transform: translateY(0); }
+    .rd1 { transition-delay: .08s; } .rd2 { transition-delay: .16s; } .rd3 { transition-delay: .24s; } .rd4 { transition-delay: .32s; }
+
+    /* Card */
+    .card-hover { transition: transform .35s cubic-bezier(0.16,1,0.3,1), border-color .35s, box-shadow .35s; }
+    .card-hover:hover { transform: translateY(-6px); border-color: rgba(34,211,238,0.4); box-shadow: 0 20px 60px -20px rgba(34,211,238,0.25); }
+
+    /* Nav blur */
+    .nav-blur { backdrop-filter: saturate(180%) blur(16px); -webkit-backdrop-filter: saturate(180%) blur(16px); }
+
+    /* Timeline */
+    .tl::before { content: ''; position: absolute; left: 1.5rem; top: 0; bottom: 0; width: 2px;
+      background: linear-gradient(180deg, #22D3EE 0%, #3B82F6 60%, transparent 100%); }
+    @media (min-width: 768px) { .tl::before { left: 50%; transform: translateX(-50%); } }
+
+    /* Skill bar */
+    .bar-fill { width: 0; transition: width 1.3s cubic-bezier(0.16,1,0.3,1); }
+    .bar-fill.is-visible { width: var(--w); }
+
+    /* Chips */
+    .chip { transition: all .25s ease; }
+    .chip[data-active="true"] { background: rgba(34,211,238,0.15); border-color: rgba(34,211,238,0.5); color: #22D3EE; }
+
+    /* Scanline sweep on hover for photo */
+    .scan { position: relative; overflow: hidden; }
+    .scan::after { content: ''; position: absolute; inset: 0; background: linear-gradient(90deg, transparent, rgba(34,211,238,0.18), transparent); transform: translateX(-100%); }
+    .scan:hover::after { animation: sweep 1.2s ease; }
+
+    .focus-ring:focus-visible { outline: 2px solid #22D3EE; outline-offset: 3px; border-radius: .5rem; }
+
+    ::-webkit-scrollbar { width: 10px; height: 10px; }
+    ::-webkit-scrollbar-track { background: #070B14; }
+    ::-webkit-scrollbar-thumb { background: #1E293B; border-radius: 8px; border: 2px solid #070B14; }
+    ::-webkit-scrollbar-thumb:hover { background: #0891B2; }
+
+    @media (prefers-reduced-motion: reduce) {
+      .reveal { opacity: 1 !important; transform: none !important; }
+      .bar-fill { transition: none !important; }
+      .animate-float, .animate-pulseglow, .animate-sweep, .animate-gridmove { animation: none !important; }
+    }
+  </style>
+</head>
+
+<body class="bg-base-950 text-slate-300 antialiased selection:bg-cyan-500/30 selection:text-cyan-300">
+
+  <!-- Background grid + orbs -->
+  <div class="fixed inset-0 tech-grid radial-fade animate-gridmove pointer-events-none opacity-60" aria-hidden="true"></div>
+  <div class="orb w-[420px] h-[420px] bg-cyan-500/20 -top-20 -left-20" aria-hidden="true"></div>
+  <div class="orb w-[380px] h-[380px] bg-blue-500/20 top-1/3 -right-24" aria-hidden="true"></div>
+
+  <!-- ============ NAV ============ -->
+  <header id="navbar" class="fixed top-0 inset-x-0 z-50 transition-all duration-300">
+    <div class="nav-blur bg-base-950/70 border-b border-white/5">
+      <nav class="max-w-7xl mx-auto px-5 sm:px-8 h-16 flex items-center justify-between">
+        <a href="#hero" class="flex items-center gap-2.5 group focus-ring">
+          <span class="grid place-items-center w-9 h-9 rounded-lg bg-gradient-to-br from-cyan-400 to-blue-500 text-base-950 font-display font-bold text-sm shadow-glow">MT</span>
+          <span class="font-display font-semibold text-white text-base tracking-tight hidden sm:block">Mamadou Thiam</span>
+        </a>
+
+        <ul class="hidden md:flex items-center gap-7 text-sm font-medium text-slate-400">
+          <li><a href="#about" class="hover:text-cyan-400 transition focus-ring">À propos</a></li>
+          <li><a href="#skills" class="hover:text-cyan-400 transition focus-ring">Compétences</a></li>
+          <li><a href="#parcours" class="hover:text-cyan-400 transition focus-ring">Parcours</a></li>
+          <li><a href="#references" class="hover:text-cyan-400 transition focus-ring">Références</a></li>
+        </ul>
+
+        <div class="flex items-center gap-3">
+          <a href="#contact" class="hidden sm:inline-flex items-center gap-2 px-4 py-2 rounded-full bg-gradient-to-r from-cyan-400 to-blue-500 text-base-950 text-sm font-bold hover:shadow-glow transition focus-ring">
+            <i data-lucide="send" class="w-4 h-4"></i> Me contacter
+          </a>
+          <button id="menu-btn" aria-label="Ouvrir le menu" class="md:hidden grid place-items-center w-10 h-10 rounded-lg border border-white/10 text-white focus-ring">
+            <i data-lucide="menu" class="w-5 h-5"></i>
+          </button>
+        </div>
+      </nav>
+    </div>
+
+    <div id="mobile-menu" class="md:hidden hidden bg-base-900/95 border-b border-white/5 shadow-card backdrop-blur">
+      <ul class="px-5 py-4 space-y-1 text-slate-300 font-medium">
+        <li><a href="#about" class="block py-2.5 px-3 rounded-lg hover:bg-white/5">À propos</a></li>
+        <li><a href="#skills" class="block py-2.5 px-3 rounded-lg hover:bg-white/5">Compétences</a></li>
+        <li><a href="#parcours" class="block py-2.5 px-3 rounded-lg hover:bg-white/5">Parcours</a></li>
+        <li><a href="#references" class="block py-2.5 px-3 rounded-lg hover:bg-white/5">Références</a></li>
+        <li><a href="#contact" class="mt-2 inline-flex items-center gap-2 px-4 py-2.5 rounded-full bg-gradient-to-r from-cyan-400 to-blue-500 text-base-950 text-sm font-bold w-full justify-center">Me contacter</a></li>
+      </ul>
+    </div>
+  </header>
+
+  <main class="relative">
+    <!-- ============ HERO ============ -->
+    <section id="hero" class="pt-28 sm:pt-36 pb-20 relative overflow-hidden">
+      <div class="max-w-7xl mx-auto px-5 sm:px-8">
+        <div class="grid lg:grid-cols-12 gap-10 lg:gap-8 items-center">
+
+          <div class="lg:col-span-7 order-2 lg:order-1">
+            <div class="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-white/5 border border-cyan-500/30 text-cyan-300 text-xs font-mono font-medium mb-6">
+              <span class="relative flex h-2 w-2">
+                <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-cyan-400 opacity-75"></span>
+                <span class="relative inline-flex rounded-full h-2 w-2 bg-cyan-400"></span>
+              </span>
+              &lt; available_for_internship /&gt;
+            </div>
+
+            <h1 class="font-display text-4xl sm:text-5xl lg:text-6xl font-bold leading-[1.05] text-white tracking-tight">
+              Bâtir et fiabiliser les <span class="text-gradient">infrastructures numériques</span> de demain.
+            </h1>
+
+            <p class="mt-5 font-mono text-cyan-400/90 text-sm sm:text-base">
+              Mamadou Thiam <span class="text-slate-600">//</span> Réseaux &amp; Télécommunications
+            </p>
+
+            <p class="mt-4 text-lg text-slate-400 max-w-2xl leading-relaxed">
+              Technicien / Ingénieur Junior spécialisé dans l'installation, la configuration et la maintenance des infrastructures réseaux et télécoms — fibre optique, transmission, antennes et systèmes opérateurs 2G–5G.
+            </p>
+
+            <div class="mt-8 flex flex-wrap items-center gap-3.5">
+              <a href="#" id="cv-btn" class="inline-flex items-center gap-2 px-6 py-3.5 rounded-full bg-gradient-to-r from-cyan-400 to-blue-500 text-base-950 font-bold hover:shadow-glow transition focus-ring">
+                <i data-lucide="download" class="w-4.5 h-4.5"></i> Télécharger le CV
+              </a>
+              <a href="#contact" class="inline-flex items-center gap-2 px-6 py-3.5 rounded-full bg-white/5 text-white font-semibold border border-white/10 hover:border-cyan-500/50 hover:text-cyan-300 transition focus-ring">
+                <i data-lucide="mail" class="w-4.5 h-4.5"></i> Me contacter
+              </a>
+              <a href="https://linkedin.com/in/mamadou-thiam-709002368" target="_blank" rel="noopener" class="inline-flex items-center justify-center w-12 h-12 rounded-full bg-white/5 text-white border border-white/10 hover:border-cyan-500/50 hover:text-cyan-300 transition focus-ring" aria-label="LinkedIn">
+                <i data-lucide="linkedin" class="w-5 h-5"></i>
+              </a>
+              <a href="https://www.facebook.com/profile.php?id=100067116497992" target="_blank" rel="noopener" class="inline-flex items-center justify-center w-12 h-12 rounded-full bg-white/5 text-white border border-white/10 hover:border-[#1877F2]/60 hover:text-[#1877F2] transition focus-ring" aria-label="Facebook">
+                <i data-lucide="facebook" class="w-5 h-5"></i>
+              </a>
+            </div>
+
+            <!-- Tech tags -->
+            <div class="mt-10 flex flex-wrap gap-2">
+              <span class="font-mono text-xs px-3 py-1.5 rounded-md bg-white/5 border border-white/10 text-slate-400">TCP/IP</span>
+              <span class="font-mono text-xs px-3 py-1.5 rounded-md bg-white/5 border border-white/10 text-slate-400">Fibre optique</span>
+              <span class="font-mono text-xs px-3 py-1.5 rounded-md bg-white/5 border border-white/10 text-slate-400">2G / 3G / 4G / 5G</span>
+              <span class="font-mono text-xs px-3 py-1.5 rounded-md bg-white/5 border border-white/10 text-slate-400">Cisco Packet Tracer</span>
+              <span class="font-mono text-xs px-3 py-1.5 rounded-md bg-white/5 border border-white/10 text-slate-400">Linux / Windows</span>
+            </div>
+          </div>
+
+          <!-- Photo -->
+          <div class="lg:col-span-5 order-1 lg:order-2 flex justify-center lg:justify-end">
+            <div class="relative reveal is-visible rd2">
+              <div class="absolute -inset-3 rounded-2xl bg-gradient-to-br from-cyan-500/30 to-blue-500/30 blur-2xl"></div>
+              <div class="scan relative w-72 h-80 sm:w-80 sm:h-96 rounded-2xl overflow-hidden bg-base-800 border border-cyan-500/30 shadow-glow">
+                <img src="assets/mamadou-thiam.jpg" alt="Mamadou Thiam — Technicien / Ingénieur Junior en Réseaux & Télécommunications" class="w-full h-full object-cover object-top" loading="eager" />
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- signal wave decorative -->
+        <div class="hidden sm:flex items-end gap-1 mt-16 h-10 opacity-40" aria-hidden="true">
+          <span class="w-1 bg-cyan-400 rounded-full" style="height:30%"></span>
+          <span class="w-1 bg-cyan-400 rounded-full" style="height:55%"></span>
+          <span class="w-1 bg-cyan-400 rounded-full" style="height:80%"></span>
+          <span class="w-1 bg-blue-400 rounded-full" style="height:100%"></span>
+          <span class="w-1 bg-cyan-400 rounded-full" style="height:70%"></span>
+          <span class="w-1 bg-cyan-400 rounded-full" style="height:45%"></span>
+          <span class="w-1 bg-cyan-400 rounded-full" style="height:60%"></span>
+          <span class="w-1 bg-blue-400 rounded-full" style="height:90%"></span>
+          <span class="w-1 bg-cyan-400 rounded-full" style="height:35%"></span>
+          <span class="w-1 bg-cyan-400 rounded-full" style="height:65%"></span>
+          <span class="w-1 bg-cyan-400 rounded-full" style="height:25%"></span>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============ ABOUT ============ -->
+    <section id="about" class="py-20 sm:py-28 relative">
+      <div class="max-w-7xl mx-auto px-5 sm:px-8">
+        <div class="grid lg:grid-cols-12 gap-12 items-start">
+          <div class="lg:col-span-5 reveal">
+            <span class="inline-flex items-center gap-2 text-cyan-400 text-xs font-mono font-bold uppercase tracking-widest">
+              <span class="h-px w-8 bg-cyan-400"></span> 01 · à propos
+            </span>
+            <h2 class="font-display text-3xl sm:text-4xl font-bold text-white mt-4 leading-tight">
+              Passionné par les systèmes des <span class="text-gradient">opérateurs télécoms</span>.
+            </h2>
+            <p class="mt-6 text-slate-400 leading-relaxed">
+              Titulaire d'une Licence 3 en Réseaux et Télécommunications, je me spécialise dans l'installation, la configuration et la maintenance des infrastructures réseaux et télécoms. Mon objectif : contribuer au déploiement et à la fiabilité des infrastructures numériques.
+            </p>
+            <p class="mt-4 text-slate-400 leading-relaxed">
+              De la <span class="text-cyan-300">fibre optique</span> aux antennes mobiles, en passant par la configuration des protocoles réseaux, je m'intéresse à toute la chaîne de transmission qui relie les utilisateurs aux réseaux des opérateurs.
+            </p>
+
+            <!-- mini stats -->
+            <div class="mt-8 grid grid-cols-3 gap-4">
+              <div class="rounded-xl bg-white/5 border border-white/10 p-4">
+                <div class="font-display text-2xl font-bold text-cyan-400">L3</div>
+                <div class="text-xs text-slate-500 mt-1">Obtenu · ESMT</div>
+              </div>
+              <div class="rounded-xl bg-white/5 border border-white/10 p-4">
+                <div class="font-display text-2xl font-bold text-blue-400">2</div>
+                <div class="text-xs text-slate-500 mt-1">Certifs. BB 2026</div>
+              </div>
+              <div class="rounded-xl bg-white/5 border border-white/10 p-4">
+                <div class="font-display text-2xl font-bold text-white">5G</div>
+                <div class="text-xs text-slate-500 mt-1">Réseaux mobiles</div>
+              </div>
+            </div>
+          </div>
+
+          <!-- focus areas -->
+          <div class="lg:col-span-7 grid sm:grid-cols-2 gap-4">
+            <div class="reveal card-hover bg-white/[0.03] rounded-2xl p-6 border border-white/10">
+              <span class="grid place-items-center w-11 h-11 rounded-xl bg-cyan-500/15 text-cyan-400 mb-4"><i data-lucide="cable" class="w-5 h-5"></i></span>
+              <h3 class="font-display font-bold text-white text-lg">Fibre optique</h3>
+              <p class="text-sm text-slate-400 mt-2 leading-relaxed">Soudure, raccordement, réflectométrie et tests d'atténuation. Analyse de la qualité du lien optique.</p>
+            </div>
+            <div class="reveal rd1 card-hover bg-white/[0.03] rounded-2xl p-6 border border-white/10">
+              <span class="grid place-items-center w-11 h-11 rounded-xl bg-blue-500/15 text-blue-400 mb-4"><i data-lucide="radio-tower" class="w-5 h-5"></i></span>
+              <h3 class="font-display font-bold text-white text-lg">Réseaux mobiles</h3>
+              <p class="text-sm text-slate-400 mt-2 leading-relaxed">Compréhension des architectures 2G, 3G, 4G et 5G — transmission, antennes et systèmes opérateurs.</p>
+            </div>
+            <div class="reveal rd2 card-hover bg-white/[0.03] rounded-2xl p-6 border border-white/10">
+              <span class="grid place-items-center w-11 h-11 rounded-xl bg-cyan-500/15 text-cyan-400 mb-4"><i data-lucide="network" class="w-5 h-5"></i></span>
+              <h3 class="font-display font-bold text-white text-lg">Protocoles & routage</h3>
+              <p class="text-sm text-slate-400 mt-2 leading-relaxed">TCP/IP, DHCP, DNS, NAT. Simulation et configuration avec Cisco Packet Tracer.</p>
+            </div>
+            <div class="reveal rd3 card-hover bg-white/[0.03] rounded-2xl p-6 border border-white/10">
+              <span class="grid place-items-center w-11 h-11 rounded-xl bg-blue-500/15 text-blue-400 mb-4"><i data-lucide="briefcase" class="w-5 h-5"></i></span>
+              <h3 class="font-display font-bold text-white text-lg">Gestion de projet</h3>
+              <p class="text-sm text-slate-400 mt-2 leading-relaxed">Leadership, coaching et entrepreneuriat — certifié Building Business 2026.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============ SKILLS ============ -->
+    <section id="skills" class="py-20 sm:py-28 relative">
+      <div class="max-w-7xl mx-auto px-5 sm:px-8">
+        <div class="text-center max-w-2xl mx-auto mb-14 reveal">
+          <span class="inline-flex items-center gap-2 text-cyan-400 text-xs font-mono font-bold uppercase tracking-widest">
+            <span class="h-px w-8 bg-cyan-400"></span> 02 · compétences <span class="h-px w-8 bg-cyan-400"></span>
+          </span>
+          <h2 class="font-display text-3xl sm:text-4xl font-bold text-white mt-4">Stack technique &amp; savoir-faire</h2>
+        </div>
+
+        <div class="grid md:grid-cols-2 gap-5">
+          <!-- Protocoles -->
+          <div class="reveal card-hover bg-white/[0.03] rounded-2xl p-6 border border-white/10">
+            <div class="flex items-center gap-3 mb-5">
+              <span class="grid place-items-center w-10 h-10 rounded-lg bg-cyan-500/15 text-cyan-400"><i data-lucide="server" class="w-5 h-5"></i></span>
+              <h3 class="font-display font-bold text-white">Protocoles réseaux</h3>
+            </div>
+            <div class="space-y-4">
+              <div>
+                <div class="flex justify-between text-sm mb-1.5"><span class="text-slate-300">TCP/IP</span><span class="font-mono text-xs text-cyan-400">avancé</span></div>
+                <div class="h-1.5 rounded-full bg-white/10 overflow-hidden"><div class="bar-fill h-full rounded-full bg-gradient-to-r from-cyan-400 to-blue-500" style="--w:85%"></div></div>
+              </div>
+              <div>
+                <div class="flex justify-between text-sm mb-1.5"><span class="text-slate-300">DHCP / DNS</span><span class="font-mono text-xs text-cyan-400">solide</span></div>
+                <div class="h-1.5 rounded-full bg-white/10 overflow-hidden"><div class="bar-fill h-full rounded-full bg-gradient-to-r from-cyan-400 to-blue-500" style="--w:78%"></div></div>
+              </div>
+              <div>
+                <div class="flex justify-between text-sm mb-1.5"><span class="text-slate-300">NAT</span><span class="font-mono text-xs text-cyan-400">solide</span></div>
+                <div class="h-1.5 rounded-full bg-white/10 overflow-hidden"><div class="bar-fill h-full rounded-full bg-gradient-to-r from-cyan-400 to-blue-500" style="--w:72%"></div></div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Réseaux mobiles -->
+          <div class="reveal rd1 card-hover bg-white/[0.03] rounded-2xl p-6 border border-white/10">
+            <div class="flex items-center gap-3 mb-5">
+              <span class="grid place-items-center w-10 h-10 rounded-lg bg-blue-500/15 text-blue-400"><i data-lucide="radio-tower" class="w-5 h-5"></i></span>
+              <h3 class="font-display font-bold text-white">Réseaux mobiles</h3>
+            </div>
+            <div class="grid grid-cols-4 gap-3 text-center">
+              <div class="rounded-lg bg-white/5 border border-white/10 py-3"><div class="font-display font-bold text-cyan-400">2G</div><div class="text-[10px] text-slate-500 mt-0.5">GSM</div></div>
+              <div class="rounded-lg bg-white/5 border border-white/10 py-3"><div class="font-display font-bold text-cyan-400">3G</div><div class="text-[10px] text-slate-500 mt-0.5">UMTS</div></div>
+              <div class="rounded-lg bg-white/5 border border-white/10 py-3"><div class="font-display font-bold text-blue-400">4G</div><div class="text-[10px] text-slate-500 mt-0.5">LTE</div></div>
+              <div class="rounded-lg bg-gradient-to-br from-cyan-500/20 to-blue-500/20 border border-cyan-500/40 py-3"><div class="font-display font-bold text-white">5G</div><div class="text-[10px] text-cyan-300 mt-0.5">NR</div></div>
+            </div>
+            <p class="text-sm text-slate-400 mt-5 leading-relaxed">Architectures, transmission et antennes des systèmes opérateurs mobiles.</p>
+          </div>
+
+          <!-- Outils -->
+          <div class="reveal rd2 card-hover bg-white/[0.03] rounded-2xl p-6 border border-white/10">
+            <div class="flex items-center gap-3 mb-5">
+              <span class="grid place-items-center w-10 h-10 rounded-lg bg-cyan-500/15 text-cyan-400"><i data-lucide="wrench" class="w-5 h-5"></i></span>
+              <h3 class="font-display font-bold text-white">Outils &amp; technologies</h3>
+            </div>
+            <div class="flex flex-wrap gap-2">
+              <span class="font-mono text-xs px-3 py-1.5 rounded-md bg-white/5 border border-white/10 text-slate-300">Cisco Packet Tracer</span>
+              <span class="font-mono text-xs px-3 py-1.5 rounded-md bg-white/5 border border-white/10 text-slate-300">Fibre optique</span>
+              <span class="font-mono text-xs px-3 py-1.5 rounded-md bg-white/5 border border-white/10 text-slate-300">Réflectométrie</span>
+              <span class="font-mono text-xs px-3 py-1.5 rounded-md bg-white/5 border border-white/10 text-slate-300">Soudure fibre</span>
+              <span class="font-mono text-xs px-3 py-1.5 rounded-md bg-white/5 border border-white/10 text-slate-300">Windows</span>
+              <span class="font-mono text-xs px-3 py-1.5 rounded-md bg-white/5 border border-white/10 text-slate-300">Linux (bases)</span>
+            </div>
+            <div class="mt-5 space-y-4">
+              <div>
+                <div class="flex justify-between text-sm mb-1.5"><span class="text-slate-300">Cisco Packet Tracer</span><span class="font-mono text-xs text-cyan-400">bon</span></div>
+                <div class="h-1.5 rounded-full bg-white/10 overflow-hidden"><div class="bar-fill h-full rounded-full bg-gradient-to-r from-cyan-400 to-blue-500" style="--w:75%"></div></div>
+              </div>
+              <div>
+                <div class="flex justify-between text-sm mb-1.5"><span class="text-slate-300">Fibre optique (soudure / tests)</span><span class="font-mono text-xs text-cyan-400">pratique</span></div>
+                <div class="h-1.5 rounded-full bg-white/10 overflow-hidden"><div class="bar-fill h-full rounded-full bg-gradient-to-r from-cyan-400 to-blue-500" style="--w:80%"></div></div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Soft skills / langues -->
+          <div class="reveal rd3 card-hover bg-white/[0.03] rounded-2xl p-6 border border-white/10">
+            <div class="flex items-center gap-3 mb-5">
+              <span class="grid place-items-center w-10 h-10 rounded-lg bg-blue-500/15 text-blue-400"><i data-lucide="users" class="w-5 h-5"></i></span>
+              <h3 class="font-display font-bold text-white">Soft skills &amp; langues</h3>
+            </div>
+            <div class="space-y-4">
+              <div>
+                <div class="flex justify-between text-sm mb-1.5"><span class="text-slate-300">Français</span><span class="font-mono text-xs text-cyan-400">courant</span></div>
+                <div class="h-1.5 rounded-full bg-white/10 overflow-hidden"><div class="bar-fill h-full rounded-full bg-gradient-to-r from-cyan-400 to-blue-500" style="--w:90%"></div></div>
+              </div>
+              <div>
+                <div class="flex justify-between text-sm mb-1.5"><span class="text-slate-300">Poular</span><span class="font-mono text-xs text-cyan-400">maternelle</span></div>
+                <div class="h-1.5 rounded-full bg-white/10 overflow-hidden"><div class="bar-fill h-full rounded-full bg-gradient-to-r from-cyan-400 to-blue-500" style="--w:100%"></div></div>
+              </div>
+              <div>
+                <div class="flex justify-between text-sm mb-1.5"><span class="text-slate-300">Anglais</span><span class="font-mono text-xs text-cyan-400">notions</span></div>
+                <div class="h-1.5 rounded-full bg-white/10 overflow-hidden"><div class="bar-fill h-full rounded-full bg-gradient-to-r from-cyan-400 to-blue-500" style="--w:35%"></div></div>
+              </div>
+            </div>
+            <div class="flex flex-wrap gap-2 mt-5">
+              <span class="text-xs px-3 py-1.5 rounded-full bg-cyan-500/10 border border-cyan-500/30 text-cyan-300">Leadership</span>
+              <span class="text-xs px-3 py-1.5 rounded-full bg-blue-500/10 border border-blue-500/30 text-blue-300">Gestion de projet</span>
+              <span class="text-xs px-3 py-1.5 rounded-full bg-cyan-500/10 border border-cyan-500/30 text-cyan-300">Entrepreneuriat</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============ PARCOURS & PROJETS ============ -->
+    <section id="parcours" class="py-20 sm:py-28 relative">
+      <div class="max-w-7xl mx-auto px-5 sm:px-8">
+        <div class="text-center max-w-2xl mx-auto mb-12 reveal">
+          <span class="inline-flex items-center gap-2 text-cyan-400 text-xs font-mono font-bold uppercase tracking-widest">
+            <span class="h-px w-8 bg-cyan-400"></span> 03 · parcours <span class="h-px w-8 bg-cyan-400"></span>
+          </span>
+          <h2 class="font-display text-3xl sm:text-4xl font-bold text-white mt-4">Formation &amp; projets</h2>
+          <p class="text-slate-400 mt-4">Filtrez pour explorer le cursus académique ou les réalisations pratiques.</p>
+        </div>
+
+        <!-- Filters -->
+        <div class="flex flex-wrap justify-center gap-2.5 mb-12" id="filters">
+          <button class="chip px-4 py-2 rounded-full text-sm font-medium border border-white/10 bg-white/5 text-slate-300 hover:text-cyan-300 focus-ring" data-filter="all" data-active="true">Tout</button>
+          <button class="chip px-4 py-2 rounded-full text-sm font-medium border border-white/10 bg-white/5 text-slate-300 hover:text-cyan-300 focus-ring" data-filter="academique">Académique</button>
+          <button class="chip px-4 py-2 rounded-full text-sm font-medium border border-white/10 bg-white/5 text-slate-300 hover:text-cyan-300 focus-ring" data-filter="projet">Projets</button>
+        </div>
+
+        <!-- Timeline -->
+        <div class="relative tl">
+          <div class="space-y-10 md:space-y-0">
+
+            <!-- L3 -->
+            <article class="md:grid md:grid-cols-2 md:gap-8 reveal" data-type="academique">
+              <div class="md:text-right md:pr-10 pl-20 md:pl-0 pb-4 md:pb-0">
+                <div class="md:hidden absolute left-0 mt-1 grid place-items-center w-12 h-12 rounded-full bg-cyan-500/15 text-cyan-400 border-4 border-base-950"><i data-lucide="book-open" class="w-5 h-5"></i></div>
+                <span class="font-mono text-xs font-bold uppercase tracking-widest text-cyan-400">2025 — 2026</span>
+                <h3 class="font-display text-xl font-bold text-white mt-2">Licence 3 Réseaux &amp; Télécoms</h3>
+                <p class="text-sm text-slate-500 mt-0.5">ESMT — École Supérieure Multinationale des Télécommunications</p>
+              </div>
+              <div class="hidden md:block"></div>
+              <div class="md:col-start-2 md:pl-10 pl-20 md:pl-10 md:-mt-24 mt-0 relative">
+                <div class="hidden md:grid absolute left-0 top-1 -translate-x-1/2 place-items-center w-12 h-12 rounded-full bg-cyan-500/15 text-cyan-400 border-4 border-base-950" style="left:-1.5rem"><i data-lucide="book-open" class="w-5 h-5"></i></div>
+                <div class="card-hover bg-white/[0.03] rounded-2xl p-6 border border-white/10">
+                  <span class="inline-block px-2.5 py-1 rounded-full bg-emerald-500/15 text-emerald-300 text-xs font-bold mb-2">Obtenu</span>
+                  <p class="text-sm text-slate-400 leading-relaxed">Licence validée — approfondissement des infrastructures télécoms, transmission, fibre optique et architectures opérateurs.</p>
+                </div>
+              </div>
+            </article>
+
+            <!-- Projet fibre -->
+            <article class="md:grid md:grid-cols-2 md:gap-8 reveal" data-type="projet">
+              <div class="md:text-right md:pr-10 pl-20 md:pl-0 md:order-2 pb-4 md:pb-0">
+                <div class="md:hidden absolute left-0 mt-1 grid place-items-center w-12 h-12 rounded-full bg-blue-500/15 text-blue-400 border-4 border-base-950"><i data-lucide="cable" class="w-5 h-5"></i></div>
+                <span class="font-mono text-xs font-bold uppercase tracking-widest text-cyan-400">Projet académique · ESMT</span>
+                <h3 class="font-display text-xl font-bold text-white mt-2">Fibre optique — liaisons &amp; mesures</h3>
+                <p class="text-sm text-slate-500 mt-0.5">Réalisation pratique</p>
+              </div>
+              <div class="hidden md:block md:order-1"></div>
+              <div class="md:col-start-1 md:row-start-1 md:pr-10 pl-20 md:pl-0 md:text-right relative md:-mt-24">
+                <div class="hidden md:grid absolute right-0 top-1 translate-x-1/2 place-items-center w-12 h-12 rounded-full bg-blue-500/15 text-blue-400 border-4 border-base-950" style="right:-1.5rem"><i data-lucide="cable" class="w-5 h-5"></i></div>
+                <div class="card-hover bg-white/[0.03] rounded-2xl p-6 border border-white/10 md:ml-auto md:max-w-md">
+                  <ul class="space-y-2.5 text-sm text-slate-400">
+                    <li class="flex gap-2.5 md:flex-row-reverse md:text-right"><i data-lucide="check-circle-2" class="w-4.5 h-4.5 text-cyan-400 shrink-0 mt-0.5"></i> Étude théorique des liaisons optiques.</li>
+                    <li class="flex gap-2.5 md:flex-row-reverse md:text-right"><i data-lucide="check-circle-2" class="w-4.5 h-4.5 text-cyan-400 shrink-0 mt-0.5"></i> Raccordement et soudures de fibres optiques.</li>
+                    <li class="flex gap-2.5 md:flex-row-reverse md:text-right"><i data-lucide="check-circle-2" class="w-4.5 h-4.5 text-cyan-400 shrink-0 mt-0.5"></i> Mesures, tests et analyse de l'atténuation et de la qualité du lien.</li>
+                  </ul>
+                </div>
+              </div>
+            </article>
+
+            <!-- Certifs BB -->
+            <article class="md:grid md:grid-cols-2 md:gap-8 reveal" data-type="projet">
+              <div class="md:text-right md:pr-10 pl-20 md:pl-0 pb-4 md:pb-0">
+                <div class="md:hidden absolute left-0 mt-1 grid place-items-center w-12 h-12 rounded-full bg-cyan-500/15 text-cyan-400 border-4 border-base-950"><i data-lucide="award" class="w-5 h-5"></i></div>
+                <span class="font-mono text-xs font-bold uppercase tracking-widest text-cyan-400">2026</span>
+                <h3 class="font-display text-xl font-bold text-white mt-2">Building Business — Certifications</h3>
+                <p class="text-sm text-slate-500 mt-0.5">Formation certifiante</p>
+              </div>
+              <div class="hidden md:block"></div>
+              <div class="md:col-start-2 md:pl-10 pl-20 md:pl-10 md:-mt-24 mt-0 relative">
+                <div class="hidden md:grid absolute left-0 top-1 -translate-x-1/2 place-items-center w-12 h-12 rounded-full bg-cyan-500/15 text-cyan-400 border-4 border-base-950" style="left:-1.5rem"><i data-lucide="award" class="w-5 h-5"></i></div>
+                <div class="card-hover bg-white/[0.03] rounded-2xl p-6 border border-white/10">
+                  <div class="space-y-3 text-sm">
+                    <div class="flex items-start gap-3 p-3 rounded-lg bg-white/5">
+                      <i data-lucide="badge-check" class="w-5 h-5 text-cyan-400 shrink-0 mt-0.5"></i>
+                      <div>
+                        <p class="text-white font-semibold">Leadership, coaching &amp; gestion de projet</p>
+                        <p class="font-mono text-xs text-slate-500 mt-0.5">Certificat N° 195/BB/DG/SFQ/2026</p>
+                      </div>
+                    </div>
+                    <div class="flex items-start gap-3 p-3 rounded-lg bg-white/5">
+                      <i data-lucide="badge-check" class="w-5 h-5 text-blue-400 shrink-0 mt-0.5"></i>
+                      <div>
+                        <p class="text-white font-semibold">Entrepreneuriat &amp; création d'entreprise</p>
+                        <p class="font-mono text-xs text-slate-500 mt-0.5">Certificat N° 324/BB/DG/SFQ/2026</p>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </article>
+
+            <!-- L2 -->
+            <article class="md:grid md:grid-cols-2 md:gap-8 reveal" data-type="academique">
+              <div class="md:text-right md:pr-10 pl-20 md:pl-0 md:order-2 pb-4 md:pb-0">
+                <div class="md:hidden absolute left-0 mt-1 grid place-items-center w-12 h-12 rounded-full bg-blue-500/15 text-blue-400 border-4 border-base-950"><i data-lucide="book-open" class="w-5 h-5"></i></div>
+                <span class="font-mono text-xs font-bold uppercase tracking-widest text-cyan-400">2024 — 2025</span>
+                <h3 class="font-display text-xl font-bold text-white mt-2">Licence 2 Réseaux &amp; Télécoms</h3>
+                <p class="text-sm text-slate-500 mt-0.5">ESMT</p>
+              </div>
+              <div class="hidden md:block md:order-1"></div>
+              <div class="md:col-start-1 md:row-start-1 md:pr-10 pl-20 md:pl-0 md:text-right relative md:-mt-24">
+                <div class="hidden md:grid absolute right-0 top-1 translate-x-1/2 place-items-center w-12 h-12 rounded-full bg-blue-500/15 text-blue-400 border-4 border-base-950" style="right:-1.5rem"><i data-lucide="book-open" class="w-5 h-5"></i></div>
+                <div class="card-hover bg-white/[0.03] rounded-2xl p-6 border border-white/10 md:ml-auto md:max-w-md">
+                  <p class="text-sm text-slate-400 leading-relaxed">Fondamentaux des réseaux, protocoles et introduction aux systèmes de transmission.</p>
+                </div>
+              </div>
+            </article>
+
+            <!-- L1 -->
+            <article class="md:grid md:grid-cols-2 md:gap-8 reveal" data-type="academique">
+              <div class="md:text-right md:pr-10 pl-20 md:pl-0 pb-4 md:pb-0">
+                <div class="md:hidden absolute left-0 mt-1 grid place-items-center w-12 h-12 rounded-full bg-cyan-500/15 text-cyan-400 border-4 border-base-950"><i data-lucide="cpu" class="w-5 h-5"></i></div>
+                <span class="font-mono text-xs font-bold uppercase tracking-widest text-cyan-400">2023 — 2024</span>
+                <h3 class="font-display text-xl font-bold text-white mt-2">Licence 1 Génie Informatique</h3>
+                <p class="text-sm text-slate-500 mt-0.5">Université Nongo Conakry</p>
+              </div>
+              <div class="hidden md:block"></div>
+              <div class="md:col-start-2 md:pl-10 pl-20 md:pl-10 md:-mt-24 mt-0 relative">
+                <div class="hidden md:grid absolute left-0 top-1 -translate-x-1/2 place-items-center w-12 h-12 rounded-full bg-cyan-500/15 text-cyan-400 border-4 border-base-950" style="left:-1.5rem"><i data-lucide="cpu" class="w-5 h-5"></i></div>
+                <div class="card-hover bg-white/[0.03] rounded-2xl p-6 border border-white/10">
+                  <p class="text-sm text-slate-400 leading-relaxed">Université Nongo Conakry (UNC)</p>
+                </div>
+              </div>
+            </article>
+
+            <!-- Bac -->
+            <article class="md:grid md:grid-cols-2 md:gap-8 reveal" data-type="academique">
+              <div class="md:text-right md:pr-10 pl-20 md:pl-0 md:order-2 pb-4 md:pb-0">
+                <div class="md:hidden absolute left-0 mt-1 grid place-items-center w-12 h-12 rounded-full bg-blue-500/15 text-blue-400 border-4 border-base-950"><i data-lucide="graduation-cap" class="w-5 h-5"></i></div>
+                <span class="font-mono text-xs font-bold uppercase tracking-widest text-cyan-400">2023</span>
+                <h3 class="font-display text-xl font-bold text-white mt-2">Baccalauréat Sciences Mathématiques</h3>
+                <p class="text-sm text-slate-500 mt-0.5">Guinée</p>
+              </div>
+              <div class="hidden md:block md:order-1"></div>
+              <div class="md:col-start-1 md:row-start-1 md:pr-10 pl-20 md:pl-0 md:text-right relative md:-mt-24">
+                <div class="hidden md:grid absolute right-0 top-1 translate-x-1/2 place-items-center w-12 h-12 rounded-full bg-blue-500/15 text-blue-400 border-4 border-base-950" style="right:-1.5rem"><i data-lucide="graduation-cap" class="w-5 h-5"></i></div>
+                <div class="card-hover bg-white/[0.03] rounded-2xl p-6 border border-white/10 md:ml-auto md:max-w-md">
+                  <p class="text-sm text-slate-400 leading-relaxed">Baccalauréat scientifique — socle mathématique pour les études d'ingénierie.</p>
+                </div>
+              </div>
+            </article>
+
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============ REFERENCES ============ -->
+    <section id="references" class="py-20 sm:py-28 relative">
+      <div class="max-w-7xl mx-auto px-5 sm:px-8">
+        <div class="text-center max-w-2xl mx-auto mb-14 reveal">
+          <span class="inline-flex items-center gap-2 text-cyan-400 text-xs font-mono font-bold uppercase tracking-widest">
+            <span class="h-px w-8 bg-cyan-400"></span> 04 · références <span class="h-px w-8 bg-cyan-400"></span>
+          </span>
+          <h2 class="font-display text-3xl sm:text-4xl font-bold text-white mt-4">Références &amp; réseau</h2>
+        </div>
+
+        <div class="grid md:grid-cols-2 gap-5 max-w-4xl mx-auto">
+          <div class="reveal card-hover bg-white/[0.03] rounded-2xl p-6 border border-white/10">
+            <div class="flex items-center gap-4">
+              <span class="grid place-items-center w-14 h-14 rounded-xl bg-gradient-to-br from-cyan-500/20 to-blue-500/20 text-cyan-400 border border-white/10"><i data-lucide="building" class="w-6 h-6"></i></span>
+              <div>
+                <h3 class="font-display font-bold text-white text-lg">ESMT Conakry</h3>
+                <p class="text-sm text-slate-400">Licence Informatique &amp; Télécoms</p>
+              </div>
+            </div>
+            <p class="text-sm text-slate-400 mt-4 leading-relaxed">École Supérieure Multinationale des Télécommunications — établissement de référence pour la formation aux métiers des télécommunications.</p>
+          </div>
+
+          <div class="reveal rd1 card-hover bg-white/[0.03] rounded-2xl p-6 border border-white/10">
+            <div class="flex items-center gap-4">
+              <span class="grid place-items-center w-14 h-14 rounded-xl bg-gradient-to-br from-blue-500/20 to-cyan-500/20 text-blue-400 border border-white/10"><i data-lucide="user-check" class="w-6 h-6"></i></span>
+              <div>
+                <h3 class="font-display font-bold text-white text-lg">Alpha Mamadou Sylla</h3>
+                <p class="text-sm text-slate-400">Ingénieur MBA en Télécoms</p>
+              </div>
+            </div>
+            <p class="text-sm text-slate-400 mt-4 leading-relaxed">Expert Télécoms &amp; gouvernance IT — référence professionnelle.</p>
+            <a href="tel:+224622378875" class="mt-4 inline-flex items-center gap-2 text-sm font-mono text-cyan-400 hover:text-cyan-300 transition focus-ring">
+              <i data-lucide="phone" class="w-4 h-4"></i> +224 622-37-88-75
+            </a>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============ CONTACT ============ -->
+    <section id="contact" class="py-20 sm:py-28 relative">
+      <div class="max-w-7xl mx-auto px-5 sm:px-8">
+        <div class="grid lg:grid-cols-2 gap-12 items-start">
+          <div class="reveal">
+            <span class="inline-flex items-center gap-2 text-cyan-400 text-xs font-mono font-bold uppercase tracking-widest">
+              <span class="h-px w-8 bg-cyan-400"></span> 05 · contact
+            </span>
+            <h2 class="font-display text-3xl sm:text-4xl font-bold text-white mt-4 leading-tight">Discutons d'une opportunité en télécoms.</h2>
+            <p class="text-slate-400 mt-5 leading-relaxed max-w-md">Ouvert aux stages, projets d'installation et missions de maintenance d'infrastructures réseaux &amp; télécoms à Conakry.</p>
+
+            <div class="mt-8 space-y-3">
+              <a href="tel:+224610187986" class="card-hover flex items-center gap-4 p-4 rounded-2xl border border-white/10 bg-white/[0.03] group">
+                <span class="grid place-items-center w-11 h-11 rounded-xl bg-cyan-500/15 text-cyan-400 group-hover:bg-cyan-500 group-hover:text-base-950 transition"><i data-lucide="phone" class="w-5 h-5"></i></span>
+                <div><div class="font-mono text-[11px] text-slate-500 uppercase tracking-wider">téléphone</div><div class="text-sm font-bold text-white">+224 610-18-79-86</div></div>
+              </a>
+              <a href="https://wa.me/224610187986?text=Bonjour%20Mamadou%2C%20je%20vous%20contacte%20depuis%20votre%20portfolio." target="_blank" rel="noopener" class="card-hover flex items-center gap-4 p-4 rounded-2xl border border-white/10 bg-white/[0.03] group">
+                <span class="grid place-items-center w-11 h-11 rounded-xl bg-cyan-500/15 text-cyan-400 group-hover:bg-[#25D366] group-hover:text-base-950 transition"><i data-lucide="message-square" class="w-5 h-5"></i></span>
+                <div><div class="font-mono text-[11px] text-slate-500 uppercase tracking-wider">whatsapp</div><div class="text-sm font-bold text-white">+224 610-18-79-86</div></div>
+              </a>
+              <a href="mailto:mamadouthiam646@gmail.com" class="card-hover flex items-center gap-4 p-4 rounded-2xl border border-white/10 bg-white/[0.03] group">
+                <span class="grid place-items-center w-11 h-11 rounded-xl bg-blue-500/15 text-blue-400 group-hover:bg-blue-500 group-hover:text-base-950 transition"><i data-lucide="mail" class="w-5 h-5"></i></span>
+                <div><div class="font-mono text-[11px] text-slate-500 uppercase tracking-wider">e-mail</div><div class="text-sm font-bold text-white break-all">mamadouthiam646@gmail.com</div></div>
+              </a>
+              <a href="https://linkedin.com/in/mamadou-thiam-709002368" target="_blank" rel="noopener" class="card-hover flex items-center gap-4 p-4 rounded-2xl border border-white/10 bg-white/[0.03] group">
+                <span class="grid place-items-center w-11 h-11 rounded-xl bg-blue-500/15 text-blue-400 group-hover:bg-[#0A66C2] group-hover:text-white transition"><i data-lucide="linkedin" class="w-5 h-5"></i></span>
+                <div><div class="font-mono text-[11px] text-slate-500 uppercase tracking-wider">linkedin</div><div class="text-sm font-bold text-white">mamadou-thiam-709002368</div></div>
+              </a>
+              <a href="https://www.facebook.com/profile.php?id=100067116497992" target="_blank" rel="noopener" class="card-hover flex items-center gap-4 p-4 rounded-2xl border border-white/10 bg-white/[0.03] group">
+                <span class="grid place-items-center w-11 h-11 rounded-xl bg-blue-500/15 text-blue-400 group-hover:bg-[#1877F2] group-hover:text-white transition"><i data-lucide="facebook" class="w-5 h-5"></i></span>
+                <div><div class="font-mono text-[11px] text-slate-500 uppercase tracking-wider">facebook</div><div class="text-sm font-bold text-white">Mamadou Thiam</div></div>
+              </a>
+              <div class="flex items-center gap-4 p-4 rounded-2xl border border-white/10 bg-white/[0.03]">
+                <span class="grid place-items-center w-11 h-11 rounded-xl bg-white/5 text-slate-300"><i data-lucide="map-pin" class="w-5 h-5"></i></span>
+                <div><div class="font-mono text-[11px] text-slate-500 uppercase tracking-wider">localisation</div><div class="text-sm font-bold text-white">Conakry, Guinée</div></div>
+              </div>
+            </div>
+          </div>
+
+          <form id="contact-form" class="reveal rd1 bg-white/[0.03] rounded-3xl border border-white/10 p-6 sm:p-8 shadow-card" novalidate>
+            <div class="grid sm:grid-cols-2 gap-4">
+              <div>
+                <label for="name" class="block text-sm font-medium text-slate-300 mb-1.5">Nom</label>
+                <input id="name" name="name" type="text" required placeholder="Votre nom" class="w-full px-4 py-3 rounded-xl border border-white/10 bg-base-900/60 text-sm text-white placeholder-slate-600 focus:border-cyan-500 focus:ring-2 focus:ring-cyan-500/20 outline-none transition" />
+              </div>
+              <div>
+                <label for="email" class="block text-sm font-medium text-slate-300 mb-1.5">E-mail</label>
+                <input id="email" name="email" type="email" required placeholder="vous@email.com" class="w-full px-4 py-3 rounded-xl border border-white/10 bg-base-900/60 text-sm text-white placeholder-slate-600 focus:border-cyan-500 focus:ring-2 focus:ring-cyan-500/20 outline-none transition" />
+              </div>
+            </div>
+            <div class="mt-4">
+              <label for="subject" class="block text-sm font-medium text-slate-300 mb-1.5">Sujet</label>
+              <input id="subject" name="subject" type="text" required placeholder="Ex : Stage en télécoms" class="w-full px-4 py-3 rounded-xl border border-white/10 bg-base-900/60 text-sm text-white placeholder-slate-600 focus:border-cyan-500 focus:ring-2 focus:ring-cyan-500/20 outline-none transition" />
+            </div>
+            <div class="mt-4">
+              <label for="message" class="block text-sm font-medium text-slate-300 mb-1.5">Message</label>
+              <textarea id="message" name="message" rows="5" required placeholder="Votre message..." class="w-full px-4 py-3 rounded-xl border border-white/10 bg-base-900/60 text-sm text-white placeholder-slate-600 focus:border-cyan-500 focus:ring-2 focus:ring-cyan-500/20 outline-none transition resize-none"></textarea>
+            </div>
+            <button type="submit" class="mt-6 w-full inline-flex items-center justify-center gap-2 px-6 py-3.5 rounded-full bg-gradient-to-r from-cyan-400 to-blue-500 text-base-950 font-bold hover:shadow-glow transition focus-ring">
+              <i data-lucide="send" class="w-4.5 h-4.5"></i> Envoyer
+            </button>
+            <p id="form-msg" class="mt-4 text-sm text-center text-cyan-300 font-medium hidden flex items-center justify-center gap-2">
+              <i data-lucide="check-circle-2" class="w-4.5 h-4.5"></i> Message prêt — vérifiez votre client mail.
+            </p>
+          </form>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <!-- WhatsApp FAB -->
+  <a href="https://wa.me/224610187986?text=Bonjour%20Mamadou%2C%20je%20vous%20contacte%20depuis%20votre%20portfolio."
+     target="_blank" rel="noopener" id="wa-fab" aria-label="Discuter sur WhatsApp"
+     class="fixed bottom-5 right-5 z-50 flex items-center gap-3 group">
+    <span class="hidden sm:flex items-center px-4 py-2.5 rounded-full bg-base-900/90 text-white text-sm font-medium shadow-card border border-white/10 opacity-0 translate-x-2 group-hover:opacity-100 group-hover:translate-x-0 transition-all duration-300 backdrop-blur">Discuter sur WhatsApp</span>
+    <span class="relative grid place-items-center w-14 h-14 rounded-full bg-[#25D366] text-base-950 shadow-card hover:scale-110 active:scale-95 transition focus-ring">
+      <span class="absolute inset-0 rounded-full bg-[#25D366] animate-ping opacity-30"></span>
+      <svg class="relative w-7 h-7" viewBox="0 0 32 32" fill="currentColor" aria-hidden="true"><path d="M16.004 2.667c-7.36 0-13.334 5.973-13.334 13.333 0 2.35.616 4.648 1.786 6.682L2.667 29.333l6.81-1.786a13.27 13.27 0 0 0 6.527 1.7h.005c7.357 0 13.333-5.974 13.333-13.334S23.363 2.667 16.004 2.667zm0 24.24h-.004a11.06 11.06 0 0 1-5.637-1.54l-.404-.24-4.043 1.06 1.08-3.94-.263-.41a11.04 11.04 0 0 1-1.692-5.892c0-6.107 4.97-11.077 11.08-11.077 2.96 0 5.74 1.154 7.83 3.246a11.01 11.01 0 0 1 3.246 7.834c0 6.107-4.97 11.077-11.077 11.077zm6.077-8.27c-.333-.167-1.97-.973-2.277-1.083-.305-.112-.527-.167-.75.166-.222.333-.86 1.083-1.055 1.305-.195.222-.39.25-.722.083-.333-.166-1.402-.517-2.67-1.65-.987-.88-1.65-1.967-1.845-2.3-.194-.333-.02-.513.146-.68.15-.15.333-.39.5-.583.166-.195.222-.333.333-.556.112-.222.056-.416-.028-.583-.083-.166-.747-1.802-1.022-2.468-.27-.648-.543-.56-.747-.57-.194-.01-.416-.01-.64-.01-.222 0-.583.083-.888.416-.305.333-1.166 1.14-1.166 2.776 0 1.638 1.194 3.22 1.36 3.443.166.222 2.347 3.58 5.682 5.018.794.343 1.414.548 1.898.7.797.254 1.523.218 2.096.132.638-.095 1.97-.805 2.247-1.583.277-.778.277-1.444.194-1.583-.083-.139-.305-.222-.638-.389z"/></svg>
+    </span>
+  </a>
+
+  <!-- Footer -->
+  <footer class="border-t border-white/5 bg-base-950/80 relative">
+    <div class="max-w-7xl mx-auto px-5 sm:px-8 py-12">
+      <div class="grid md:grid-cols-3 gap-8">
+        <div>
+          <div class="flex items-center gap-2.5 mb-4">
+            <span class="grid place-items-center w-9 h-9 rounded-lg bg-gradient-to-br from-cyan-400 to-blue-500 text-base-950 font-display font-bold text-sm">MT</span>
+            <span class="font-display font-semibold text-white">Mamadou Thiam</span>
+          </div>
+          <p class="text-sm text-slate-500 leading-relaxed max-w-xs">Technicien / Ingénieur Junior en Réseaux &amp; Télécommunications — fibre optique, réseaux mobiles &amp; protocoles.</p>
+        </div>
+        <div>
+          <h4 class="text-white font-semibold text-sm uppercase tracking-wider mb-4 font-mono">navigation</h4>
+          <ul class="space-y-2 text-sm text-slate-500">
+            <li><a href="#about" class="hover:text-cyan-400 transition">À propos</a></li>
+            <li><a href="#skills" class="hover:text-cyan-400 transition">Compétences</a></li>
+            <li><a href="#parcours" class="hover:text-cyan-400 transition">Parcours</a></li>
+            <li><a href="#contact" class="hover:text-cyan-400 transition">Contact</a></li>
+          </ul>
+        </div>
+        <div>
+          <h4 class="text-white font-semibold text-sm uppercase tracking-wider mb-4 font-mono">contact</h4>
+          <ul class="space-y-2 text-sm text-slate-500">
+            <li class="flex items-center gap-2"><i data-lucide="phone" class="w-4 h-4 text-cyan-400"></i> +224 610-18-79-86</li>
+            <li class="flex items-center gap-2"><i data-lucide="mail" class="w-4 h-4 text-cyan-400"></i> mamadouthiam646@gmail.com</li>
+            <li class="flex items-center gap-2"><i data-lucide="linkedin" class="w-4 h-4 text-cyan-400"></i> mamadou-thiam-709002368</li>
+            <li class="flex items-center gap-2"><i data-lucide="facebook" class="w-4 h-4 text-cyan-400"></i> Mamadou Thiam</li>
+            <li class="flex items-center gap-2"><i data-lucide="map-pin" class="w-4 h-4 text-cyan-400"></i> Conakry, Guinée</li>
+          </ul>
+        </div>
+      </div>
+      <div class="mt-10 pt-6 border-t border-white/5 flex flex-col sm:flex-row items-center justify-between gap-3 text-xs text-slate-600 font-mono">
+        <p>© <span id="year"></span> Mamadou Thiam — Réseaux &amp; Télécommunications.</p>
+        <p>Built with precision · Conakry, GN</p>
+      </div>
+    </div>
+  </footer>
+
+  <!-- Scripts -->
+  <script>
+    lucide.createIcons();
+    document.getElementById('year').textContent = new Date().getFullYear();
+
+    const navbar = document.getElementById('navbar');
+    const waFab = document.getElementById('wa-fab');
+    waFab.style.opacity = '0'; waFab.style.transform = 'translateY(12px)'; waFab.style.transition = 'opacity .4s ease, transform .4s ease';
+    const onScroll = () => {
+      navbar.classList.toggle('shadow-card', window.scrollY > 20);
+      const show = window.scrollY > 400;
+      waFab.style.opacity = show ? '1' : '0'; waFab.style.transform = show ? 'translateY(0)' : 'translateY(12px)';
+    };
+    window.addEventListener('scroll', onScroll, { passive: true }); onScroll();
+
+    const menuBtn = document.getElementById('menu-btn');
+    const mobileMenu = document.getElementById('mobile-menu');
+    menuBtn.addEventListener('click', () => mobileMenu.classList.toggle('hidden'));
+    mobileMenu.querySelectorAll('a').forEach(a => a.addEventListener('click', () => mobileMenu.classList.add('hidden')));
+
+    const io = new IntersectionObserver((entries) => {
+      entries.forEach(e => {
+        if (e.isIntersecting) {
+          e.target.classList.add('is-visible');
+          e.target.querySelectorAll?.('.bar-fill').forEach(b => b.classList.add('is-visible'));
+          io.unobserve(e.target);
+        }
+      });
+    }, { threshold: 0.12, rootMargin: '0px 0px -40px 0px' });
+    document.querySelectorAll('.reveal').forEach(el => io.observe(el));
+
+    // Filters
+    const filters = document.querySelectorAll('#filters .chip');
+    const items = document.querySelectorAll('#parcours article[data-type]');
+    filters.forEach(btn => {
+      btn.addEventListener('click', () => {
+        filters.forEach(b => b.setAttribute('data-active', 'false'));
+        btn.setAttribute('data-active', 'true');
+        const f = btn.dataset.filter;
+        items.forEach(it => {
+          const show = (f === 'all' || it.dataset.type === f);
+          it.style.display = show ? '' : 'none';
+          if (show) { it.classList.remove('is-visible'); requestAnimationFrame(() => it.classList.add('is-visible')); }
+        });
+      });
+    });
+
+    // Form -> mailto
+    const form = document.getElementById('contact-form');
+    const msg = document.getElementById('form-msg');
+    form.addEventListener('submit', (e) => {
+      e.preventDefault();
+      const name = form.name.value.trim(), email = form.email.value.trim(), subject = form.subject.value.trim(), message = form.message.value.trim();
+      if (!name || !email || !subject || !message) return;
+      const body = `Nom: ${name}%0D%0AEmail: ${email}%0D%0A%0D%0A${encodeURIComponent(message)}`;
+      window.location.href = `mailto:mamadouthiam646@gmail.com?subject=${encodeURIComponent(subject)}&body=${body}`;
+      msg.classList.remove('hidden'); msg.classList.add('flex'); form.reset();
+      setTimeout(() => { msg.classList.add('hidden'); msg.classList.remove('flex'); }, 5000);
+    });
+
+    // CV placeholder
+    document.getElementById('cv-btn').addEventListener('click', (e) => {
+      e.preventDefault();
+      alert('📄 Placez le fichier CV (ex: assets/cv-mamadou-thiam.pdf) et remplacez le lien du bouton par son chemin.');
+    });
+
+    // Smooth anchor offset
+    document.querySelectorAll('a[href^="#"]').forEach(a => {
+      a.addEventListener('click', (e) => {
+        const id = a.getAttribute('href');
+        if (id.length > 1) {
+          const t = document.querySelector(id);
+          if (t) { e.preventDefault(); window.scrollTo({ top: t.getBoundingClientRect().top + window.scrollY - 70, behavior: 'smooth' }); }
+        }
+      });
+    });
+  </script>
+</body>
+</html>
