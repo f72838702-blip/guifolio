@@ -206,10 +206,7 @@
             </p>
 
             <div class="mt-8 flex flex-wrap items-center gap-3.5">
-              <a href="#" id="cv-btn" class="inline-flex items-center gap-2 px-6 py-3.5 rounded-full bg-gradient-to-r from-cyan-400 to-blue-500 text-base-950 font-bold hover:shadow-glow transition focus-ring">
-                <i data-lucide="download" class="w-4 h-4"></i> Télécharger le CV
-              </a>
-              <a href="#contact" class="inline-flex items-center gap-2 px-6 py-3.5 rounded-full bg-white/5 text-white font-semibold border border-white/10 hover:border-cyan-500/50 hover:text-cyan-300 transition focus-ring">
+              <a href="#contact" class="inline-flex items-center gap-2 px-6 py-3.5 rounded-full bg-gradient-to-r from-cyan-400 to-blue-500 text-base-950 font-bold hover:shadow-glow transition focus-ring">
                 <i data-lucide="mail" class="w-4 h-4"></i> Me contacter
               </a>
               <a href="carte.html" class="inline-flex items-center gap-2 px-6 py-3.5 rounded-full bg-white/5 text-white font-semibold border border-white/10 hover:border-cyan-500/50 hover:text-cyan-300 transition focus-ring">
@@ -788,12 +785,6 @@
       window.location.href = `mailto:mamadouthiam646@gmail.com?subject=${encodeURIComponent(subject)}&body=${body}`;
       msg.classList.remove('hidden'); msg.classList.add('flex'); form.reset();
       setTimeout(() => { msg.classList.add('hidden'); msg.classList.remove('flex'); }, 5000);
-    });
-
-    // CV placeholder
-    document.getElementById('cv-btn').addEventListener('click', (e) => {
-      e.preventDefault();
-      alert('📄 Placez le fichier CV (ex: assets/cv-mamadou-thiam.pdf) et remplacez le lien du bouton par son chemin.');
     });
 
     // Smooth anchor offset
